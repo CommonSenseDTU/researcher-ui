@@ -1,0 +1,6 @@
+/* Keep header visible even on small screens */
+@media screen and (max-width: 1024px) {
+  .mdl-layout__header {
+    display: block;
+  }
+}

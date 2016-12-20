@@ -1,0 +1,22 @@
+doctype html
+html(lang="en")
+  head
+    title Surveys
+    link(rel='stylesheet', href='/node_modules/material-design-lite/material.min.css')
+    link(rel='stylesheet', href='/public/stylesheet/material.green-teal.min.css')
+    script(src='/node_modules/material-design-lite/material.min.js')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    link(rel='stylesheet', href='/public/stylesheet/static-header.css')
+    script(src='/node_modules/whatwg-fetch/fetch.js')
+    script(src='/public/javascript/textcontent-polyfill.js')
+    script(src='/node_modules/cookies-js/dist/cookies.min.js')
+    script var clientAuth = '#{clientAuth}';
+  body
+    .mdl-layout.mdl-js-layout
+      header.mdl-layout__header
+        .mdl-layout__header-row
+          span.mdl-layout-title
+            h5.mdl-color-text--white My Studies
+          .mdl-layout-spacer
+      main.mdl-layout__content
+        p No studies yet

@@ -2,15 +2,9 @@ doctype html
 html(lang="en")
   head
     title Create a new survey
-    link(rel='stylesheet', href='/node_modules/material-design-lite/material.min.css')
-    link(rel='stylesheet', href='/public/stylesheet/material.green-teal.min.css')
-    script(src='/node_modules/material-design-lite/material.min.js')
-    link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
-    script(src='/node_modules/whatwg-fetch/fetch.js')
-    script(src='/public/javascript/textcontent-polyfill.js')
-    script(src='/node_modules/cookies-js/dist/cookies.min.js')
-    script(src='/node_modules/url-search-params/build/url-search-params.js')
-    script var clientAuth = '#{clientAuth}';
+    include /ios.pug
+    include /mdl.pug
+    include /common.pug
     script(src='/src/join/assets/submit.js')
     style.
       .mdl-layout {
@@ -25,7 +19,7 @@ html(lang="en")
     .mdl-layout.mdl-js-layout.mdl-color--white-100
       main.mdl-layout__content
         .mdl-card.mdl-shadow--2dp
-          .mdl-card__title.mdl-color--primary.mdl-color-text--white
+          .mdl-card__title.mdl-color--primary
             h2.mdl-card__title-text Create Survey
           form(action='', onsubmit='return formValidator.create()')
             .mdl-card__supporting-text

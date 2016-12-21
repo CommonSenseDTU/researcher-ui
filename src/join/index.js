@@ -1,7 +1,4 @@
 import Base from '../base.router.js';
-import router from 'koa-router';
-import pug from 'pug';
-import PugPluginNg from 'pug-plugin-ng';
 
 export default class extends Base {
   

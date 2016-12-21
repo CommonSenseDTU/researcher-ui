@@ -1,29 +1,39 @@
+import Base from '../base.router.js';
 import router from 'koa-router';
 import pug from 'pug';
 import PugPluginNg from 'pug-plugin-ng';
 
-export default class {
+export default class extends Base {
   
   constructor(opts) {
-    this.opts = opts || {};
-    this.router = router();
-    
-    this.template = pug.compileFile('./src/studies/index.pug', { 
-      plugins: [PugPluginNg] 
-    });
+    super('./src/studies', opts);
     
     var self = this;
     this.router.get('/', function (ctx, next) {
-      opts.referer = ctx.headers.referer;
-      ctx.body = self.template(opts);
+      var copy = self.naiveShallowCopy(self.opts);
+      // TODO: load data from service instead of mockup
+      copy.studies = [
+        {
+          title: 'Mood study',
+          icon: '/src/studies/assets/app-icon.png',
+          participantIds: [1, 2, 3],
+          consentDocument: {
+            sections: [
+              {
+                title: 'Introduction'
+              }
+            ]
+          },
+          task: {
+            steps: [
+              {
+                question: 'How are you feeling?'
+              }
+            ]
+          }
+        }
+      ];
+      ctx.body = self.template(copy);
     });
-  }
-  
-  routes() {
-    return this.router.routes();
-  }
-  
-  allowedMethods() {
-    return this.router.allowedMethods();
   }
 }

@@ -1,0 +1,42 @@
+img.study-icon {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 120pt;
+  height: auto;
+}
+.study-card {
+  width: 200pt;
+  height: 230pt;
+  padding: 15pt;
+}
+.study-card h5 {
+  font-weight: lighter;
+}
+.red {
+  color: red;
+}
+.green {
+  color: green;
+}
+.blue {
+  color: blue;
+}
+.yellow {
+  color: yellow;
+}
+.dot {
+  font-size: 150%;
+  vertical-align: middle;
+}
+.dot::after {
+  content: '\25CF';
+  padding-right: 4pt;
+}
+.dot-text {
+  vertical-align: middle;
+}
+.study-text {
+  font-size: 0.95em;
+  opacity: 0.5;
+}

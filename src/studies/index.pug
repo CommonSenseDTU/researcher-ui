@@ -6,12 +6,40 @@ html(lang="en")
     include /mdl.pug
     include /common.pug
     link(rel='stylesheet', href='/public/stylesheet/static-header.css')
+    style
+      include studies.css
   body
     .mdl-layout.mdl-js-layout
       header.mdl-layout__header
-        .mdl-layout__header-row
+        .mdl-layout__header-row(style='padding-left: 15pt;')
           span.mdl-layout-title
-            h5.mdl-color-text--white My Studies
+            h5 My Studies
           .mdl-layout-spacer
       main.mdl-layout__content
-        p No studies yet
+        .mdl-grid
+          .mdl-cell
+            .study-card.mdl-card.mdl-shadow--2dp
+              a(href='#')
+                img.study-icon(src='/src/studies/assets/app-icon.png')
+                h5 Create new study
+                div
+                  span.blue.dot
+                  span.dot-text Prepare consent document
+                .study-text(style='padding-top: 5pt;') 0 participants
+          each study in studies
+            .mdl-cell
+              .study-card.mdl-card.mdl-shadow--2dp
+                a(href='#')
+                  img.study-icon(src='/src/studies/assets/app-icon.png')
+                  h5= study.title
+                  div
+                    if study.task.steps.length == 0
+                      span.blue.dot
+                      span.dot-text Prepare consent document
+                    else if study.participantIds.length == 0
+                      span.blue.dot
+                      span.dot-text Publish study
+                    else
+                      span.green.dot
+                      span.dot-text Active
+                  .study-text(style='padding-top: 5pt;') #{study.participantIds.length} participants

@@ -40,3 +40,9 @@ img.study-icon {
   font-size: 0.95em;
   opacity: 0.5;
 }
+.menu {
+  cursor: context-menu;
+}
+.menu:hover, a li.mdl-menu__item:hover {
+  color: rgb(127, 176, 255);
+}

@@ -15,6 +15,11 @@ html(lang="en")
           span.mdl-layout-title
             h5 My Studies
           .mdl-layout-spacer
+          span.mdl-layout-title
+            h6.menu(id='account') Logged in
+            ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu(for='account')
+              a(href='#'): li.mdl-menu__item User Information
+              a(href='/logout'): li.mdl-menu__item Log out
       main.mdl-layout__content
         .mdl-grid
           .mdl-cell
@@ -30,7 +35,7 @@ html(lang="en")
             .mdl-cell
               .study-card.mdl-card.mdl-shadow--2dp
                 a(href='#')
-                  img.study-icon(src='/src/studies/assets/app-icon.png')
+                  img.study-icon(src=study.icon)
                   h5= study.title
                   div
                     if study.task.steps.length == 0

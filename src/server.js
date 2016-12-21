@@ -4,6 +4,7 @@ import serve from 'koa-static-folder';
 import convert from 'koa-convert';
 
 import Join from './join';
+import Logout from './logout';
 import Studies from './studies';
 
 var opts = {
@@ -47,6 +48,7 @@ export default function() {
   app.use(convert(serve('./public')));
 
   addRouter(app, new Join(opts), 'join/assets');
+  addRouter(app, new Logout(opts), 'logout/assets');
   
   app.use(bearerAuth);
 

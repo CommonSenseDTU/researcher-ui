@@ -1,8 +1,27 @@
+// @flow
+'use strict';
+
+/**
+ * Module dependencies.
+ */
 import Base from '../base.router.js';
 
-export default class extends Base {
+/**
+ * Type declarations.
+ */
+import type { Options } from '../options.type';
+
+/**
+ * Class for '/join' route.
+ */
+class Join extends Base {
   
-  constructor(opts) {
+  /**
+   * Create a Join instance.
+   * 
+   * @param {Options} opts - The options passed to pug when compiling 
+   */
+  constructor(opts: Options) {
     super('./src/join', opts);
     
     var self = this;
@@ -11,3 +30,5 @@ export default class extends Base {
     });
   }
 }
+
+export default Join;

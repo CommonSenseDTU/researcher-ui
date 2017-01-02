@@ -1,8 +1,28 @@
-import Base from '../base.router.js';
+// @flow
+'use strict';
 
-export default class extends Base {
+/**
+ * Module dependencies.
+ */
+import Base from '../base.router.js';
+import request from 'request-promise';
+
+/**
+ * Type declarations.
+ */
+import type { Options } from '../options.type';
+
+/**
+ * Class for '/studies' route.
+ */
+class Studies extends Base {
   
-  constructor(opts) {
+  /**
+   * Create a Studies instance.
+   * 
+   * @param {Options} opts - The options passed to pug when compiling 
+   */
+  constructor(opts: Options) {
     super('./src/studies', opts);
     
     var self = this;
@@ -34,3 +54,5 @@ export default class extends Base {
     });
   }
 }
+
+export default Studies;

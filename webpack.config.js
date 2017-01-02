@@ -33,7 +33,12 @@ module.exports = {
             query: {
               cacheDirectory: '/tmp',
               presets: ['es2015'],
-              plugins: ["transform-function-bind"]
+              plugins: [
+                "syntax-flow",
+                "tcomb",
+                "transform-flow-strip-types",
+                "transform-async-to-generator"
+              ]
             }
         }]
     },

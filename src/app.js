@@ -1,3 +1,5 @@
+'use strict';
+
 import server from './server';
 
 exports.handler = function(event, context) {

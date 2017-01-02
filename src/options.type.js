@@ -2,6 +2,7 @@
 'use strict';
 
 export type Options = {
-  clientAuth?: ?string,
+  clientAuth: ?string,
+  resourceServer: string,
   bearer?: string
 };

@@ -21,8 +21,12 @@ import Studies from './studies';
  */
 import type { Options } from './options.type';
 
+/**
+ * Global options to be passed to all routes 
+ */
 var opts: Options = {
-  clientAuth: process.env.CLIENT_AUTH,
+  clientAuth: process.env.CLIENT_AUTH || "no:auth",
+  resourceServer: process.env.RESOURCE_SERVER || "localhost:8083"
 };
 
 /**
@@ -76,16 +80,21 @@ export default function() {
   
   const app: Koa = new Koa();
 
+  // Use request timer for all requests
   app.use(requestTimer);
 
+  // Statically serve public and node modules
   app.use(convert(serve('./node_modules')));
   app.use(convert(serve('./public')));
 
+  // Add unauthorized routes for login
   addRouter(app, new Join(opts), 'join/assets');
-  addRouter(app, new Logout(opts), 'logout/assets');
   
+  // Add authorization filter for all following routes
   app.use(bearerAuth);
 
+  // Add routes which require authorization
+  addRouter(app, new Logout(opts), 'logout/assets');
   addRouter(app, new Studies(opts), 'studies/assets');
   
   app.listen(port);

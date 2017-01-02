@@ -4,7 +4,7 @@
 /**
  * Module dependencies.
  */
-import Base from '../base.router.js';
+import Base from '../base.router';
 import request from 'request-promise';
 
 /**
@@ -29,7 +29,7 @@ class Studies extends Base {
     this.router.get('/', async (ctx, next) => {
       var bearer = ctx.cookies.get('bearer');
       await request({
-        uri: 'http://localhost:8083/v1.0.M1/surveys/my',
+        uri: 'http://' + opts.resourceServer + '/v1.0.M1/surveys/my',
         qs: {
           schema_version: '1.0'
         },

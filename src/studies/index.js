@@ -26,31 +26,30 @@ class Studies extends Base {
     super('./src/studies', opts);
     
     var self = this;
-    this.router.get('/', function (ctx, next) {
-      var copy = self.naiveShallowCopy(self.opts);
-      // TODO: load data from service instead of mockup
-      copy.studies = [
-        {
-          title: 'Mood study',
-          icon: '/src/studies/assets/app-icon.png',
-          participantIds: [1, 2, 3],
-          consentDocument: {
-            sections: [
-              {
-                title: 'Introduction'
-              }
-            ]
-          },
-          task: {
-            steps: [
-              {
-                question: 'How are you feeling?'
-              }
-            ]
-          }
-        }
-      ];
-      ctx.body = self.template(copy);
+    this.router.get('/', async (ctx, next) => {
+      var bearer = ctx.cookies.get('bearer');
+      await request({
+        uri: 'http://localhost:8083/v1.0.M1/surveys/my',
+        qs: {
+          schema_version: '1.0'
+        },
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + bearer,
+        },
+        json: true
+      }).then(function (surveys) {
+        var copy = self.naiveShallowCopy(self.opts);
+        copy.studies = surveys;
+        console.log('User has %d surveys', surveys.length);
+        ctx.body = self.template(copy);
+      }).catch(function (err) {
+        var copy = self.naiveShallowCopy(self.opts);
+        console.log('Call failed: ' + err);
+        copy.error = err;
+        copy.studies = [];
+        ctx.body = self.template(copy);
+      });
     });
   }
 }

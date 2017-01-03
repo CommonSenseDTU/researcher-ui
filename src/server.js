@@ -63,6 +63,7 @@ function requestTimer(ctx: any, next: any) {
  */
 function bearerAuth(ctx, next) {
   opts.bearer = ctx.cookies.get('bearer');
+  
   if (!opts.bearer) {
     // TODO: attempt to use refresh token
     ctx.redirect('/join?return=' + ctx.url);
@@ -75,6 +76,11 @@ function bearerAuth(ctx, next) {
  * Create a Koa instance, add routes and start listening on given port.
  */
 export default function() {
+  if (!process.env.CLIENT_AUTH) {
+    console.log("No CLIENT_AUTH specified!");
+    return;
+  }
+  
   const port = process.env.PORT || 3000;
 	console.log("Listening on port " + port);
   

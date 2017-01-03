@@ -29,6 +29,8 @@ var formValidator = (function () {
           if (response.status == 409) {
             var username = form.elements['username'];
             username.parentNode.classList.add('is-invalid');
+            // Attempt login to handle user pressing create in stead of login
+            login();
             return;
           }
           
@@ -39,11 +41,9 @@ var formValidator = (function () {
           }
         
           console.log('Created user');
-        
-          // Examine the text in the response
-          response.json().then(function(data) {
-            console.log(data);
-          });
+          
+          // Immediately send login request to get bearer token
+          login();
         }
     ).catch(function(err) {  
       console.log('Fetch Error :-S', err);
@@ -74,10 +74,7 @@ var formValidator = (function () {
         function(response) {
           if (response.status !== 200) {
             var form = document.querySelector('form');
-            var username = form.elements['username'];
             var userpass = form.elements['userpass'];
-            var usererror = document.getElementById("usererror");
-            username.parentNode.classList.remove('is-invalid');
             var passerror = document.getElementById("passerror");
             passerror.textContent = 'Username and password do not match!';
             userpass.parentNode.classList.add('is-invalid');
@@ -90,8 +87,11 @@ var formValidator = (function () {
           console.log('Authenticated');
         
           response.json().then(function(data) {
+            var form = document.querySelector('form');
+            console.log('data: ' + JSON.stringify(data));
             Cookies.set('bearer', data.access_token, { expires: data.expires_in });
             Cookies.set('refresh', data.refresh_token, { expires: Infinity });
+            Cookies.set('userid', form.elements['username'].value, { expires: data.expires_in });
             var urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('return')) {
               window.location.replace(urlParams.get('return'));

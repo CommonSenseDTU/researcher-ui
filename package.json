@@ -14,11 +14,13 @@
   "dependencies": {
     "babel-polyfill": "^6.20.0",
     "cookies-js": "^1.2.3",
+    "getmdl-select": "^1.0.4",
     "koa": "^2.0.0",
     "koa-convert": "^1.2.0",
     "koa-router": "^7.0.1",
     "koa-static-folder": "^0.1.6",
     "material-design-lite": "^1.2.1",
+    "node-uuid": "^1.4.7",
     "pug": "^2.0.0-beta6",
     "pug-plugin-ng": "0.0.2",
     "request": "^2.79.0",

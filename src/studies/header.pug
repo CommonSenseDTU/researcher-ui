@@ -1,0 +1,12 @@
+header.mdl-layout__header
+  .mdl-layout__header-row(style='padding-left: 15pt;')
+    span.mdl-layout-title
+      h5 Create New Study
+    .mdl-layout-spacer
+    span.mdl-layout-title
+      h6.menu(id='account')
+        span Logged in
+        span.chevron
+      ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu(for='account')
+        a(href='#'): li.mdl-menu__item User Information
+        a(href='/logout'): li.mdl-menu__item Log out

@@ -6,27 +6,19 @@ html(lang="en")
     include /mdl.pug
     include /common.pug
     link(rel='stylesheet', href='/public/stylesheet/static-header.css')
+    script(src='/src/studies/assets/submit.js')
     style
       include studies.css
   body
     .mdl-layout.mdl-js-layout
-      header.mdl-layout__header
-        .mdl-layout__header-row(style='padding-left: 15pt;')
-          span.mdl-layout-title
-            h5 My Studies
-          .mdl-layout-spacer
-          span.mdl-layout-title
-            h6.menu(id='account') Logged in
-            ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu(for='account')
-              a(href='#'): li.mdl-menu__item User Information
-              a(href='/logout'): li.mdl-menu__item Log out
+      include ./header.pug
       main.mdl-layout__content
         .mdl-grid
           .mdl-cell
             .study-card.mdl-card.mdl-shadow--2dp
-              a(href='#')
+              a(href='#' onclick='survey.create()')
                 img.study-icon(src='/src/studies/assets/app-icon.png')
-                h5 Create new study
+                h5 Surveys
                 div
                   span.blue.dot
                   span.dot-text Prepare consent document
@@ -47,4 +39,4 @@ html(lang="en")
                     else
                       span.green.dot
                       span.dot-text Active
-                  .study-text(style='padding-top: 5pt;') #{study.participantIds.length} participants
+                  .study-text(style='padding-top: 5pt;') #{study.participant_ids.length} participants

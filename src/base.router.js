@@ -38,7 +38,17 @@ class Base {
     this.opts = opts || {};
     this.router = router();
     
-    this.template = pug.compileFile(dirname + '/index.pug', {
+    this.template = this.compileFile(dirname, 'index.pug');
+  }
+  
+  /**
+   * Compile file template into a function which can generate html with given options.
+   *
+   * @param {string} dirname - directory which the file lives in
+   * @return {Template} A function for generating html from the given template
+   */
+  compileFile(dirname: string, filename: string) {
+    return pug.compileFile(dirname + '/' + filename, {
       basedir: process.cwd() + '/src/lib/pug',
       plugins: [PugPluginNg] 
     });

@@ -71,6 +71,7 @@ class Studies extends Base {
    * @param {Function} next - The next handler to proceed to after processing is complete
    */
   async root(ctx: any, next: Function) {
+    var self = this;
     var bearer: string = ctx.cookies.get('bearer');
     await request({
       uri: 'http://' + this.opts.resourceServer + '/v1.0.M1/surveys/my',
@@ -83,17 +84,17 @@ class Studies extends Base {
       },
       json: true
     }).then(function (surveys) {
-      var copy = this.naiveShallowCopy(this.opts);
+      var copy = self.naiveShallowCopy(self.opts);
       copy.studies = surveys;
       copy.title = 'Surveys';
       console.log('User has %d surveys', surveys.length);
-      ctx.body = this.template(copy);
+      ctx.body = self.template(copy);
     }).catch(function (err) {
-      var copy = this.naiveShallowCopy(this.opts);
+      var copy = self.naiveShallowCopy(self.opts);
       console.log('Call failed: ' + err);
       copy.error = err;
       copy.studies = [];
-      ctx.body = this.template(copy);
+      ctx.body = self.template(copy);
     });
   }
 

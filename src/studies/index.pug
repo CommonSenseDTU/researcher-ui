@@ -6,7 +6,7 @@ html(lang="en")
     include /mdl.pug
     include /common.pug
     link(rel='stylesheet', href='/public/stylesheet/static-header.css')
-    script(src='/src/studies/assets/submit.js')
+    script(src='/src/studies/assets/study.js')
     style
       include studies.css
   body
@@ -26,7 +26,7 @@ html(lang="en")
           each study in studies
             .mdl-cell
               .study-card.mdl-card.mdl-shadow--2dp
-                a(href='#')
+                a(href='/studies/' + study.id)
                   img.study-icon(src=study.icon)
                   h5= study.title
                   div

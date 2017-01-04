@@ -1,6 +1,6 @@
 var nav = (function () {
 
-  var setContent = function (url) {
+  var setContent = function (url, completion) {
     fetch(url).then(
         function(response) {
           if (response.status >= 400) {
@@ -23,6 +23,9 @@ var nav = (function () {
             
             // Re-init mdlSelect component to ensure functional dropdown
             getmdlSelect.init('.getmdl-select');
+            
+            // Perform completion
+            completion();
           });
         }
     ).catch(function(err) {  

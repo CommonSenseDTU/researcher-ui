@@ -7,19 +7,29 @@ html(lang="en")
     include /common.pug
     link(rel='stylesheet', href='/public/stylesheet/static-header.css')
     link(rel='stylesheet', href='/node_modules/getmdl-select/getmdl-select.min.css')
-    script(src='/node_modules/getmdl-select/getmdl-select.min.js', defer)
     script(src='/src/studies/assets/getmdl-select.js')
     script(src='/src/studies/assets/nav.js')
+    script var currentStudy = !{json};
+    script var noCompletion = function () {}
+    script(src='/src/studies/assets/edit.js')
+    script.
+      var load = function () {
+        getmdlSelect.init('.getmdl-select');
+        document.addEventListener("DOMNodeInserted", function (ev) {
+            componentHandler.upgradeDom();
+        }, false);
+        edit.showInfoForm();
+      };
     style
       include studies.css
       include edit.css
-  body
+  body(onload='load()')
     .mdl-layout.mdl-js-layout
       include header.pug
       span.sidebar
-        a.navigation-link(href='#' onclick='nav.setContent("/studies/info/' + surveyId + '")') Survey Information
-        a.navigation-link(href='#' onclick='nav.setContent("/studies/icon/' + surveyId + '")') Icons
-        a.navigation-link(href='#' onclick='nav.setContent("/studies/consent/' + surveyId + '")') Consent Forms
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/info/' + survey.id + '", edit.showInfoForm)') Survey Information
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/icon/' + survey.id + '", noCompletion)') Icons
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/consent/' + survey.id + '", noCompletion)') Consent Forms
       main.frame
         content(id='content')
           include edit.info.pug

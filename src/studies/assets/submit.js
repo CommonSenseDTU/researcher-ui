@@ -1,13 +1,13 @@
-var survey = (function () {
+var study = (function () {
 
-  var save = function (survey) {
+  var save = function (study) {
     fetch('/surveys', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + Cookies.get('bearer')
       },
-      body: JSON.stringify(survey)
+      body: JSON.stringify(study)
     }).then(
         function(response) {
           if (response.status >= 400) {
@@ -16,12 +16,7 @@ var survey = (function () {
             return;
           }
         
-          console.log('Saved survey');
-          
-          // Examine the text in the response
-          response.json().then(function(data) {
-            console.log(data);
-          });
+          document.location.assign('/studies/' + study.id);
         }
     ).catch(function(err) {  
       console.log('Fetch Error :-S', err);
@@ -50,7 +45,7 @@ var survey = (function () {
             save(data);
           });
         }
-    ).catch(function(err) {  
+    ).catch(function(err) {
       console.log('Fetch Error :-S', err);
     });
     return false;

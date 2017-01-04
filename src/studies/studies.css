@@ -1,3 +1,7 @@
+.mdl-layout__header {
+  box-shadow: none;
+  border-bottom: 1px solid rgb(217, 220, 226);
+}
 img.study-icon {
   display: block;
   margin-left: auto;

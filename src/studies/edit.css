@@ -10,8 +10,13 @@
   font-size: 0.95em;
   opacity: 0.5;
 }
-main {
-  margin-left: 224px;
+main.frame {
+  position: absolute;
+  top: 64px;
+  left: 200px;
+  bottom: 0;
+  right: 0;
+  margin: auto;
 }
 span.sidebar {
   border-right: 1px solid rgb(217, 220, 226);
@@ -20,6 +25,17 @@ span.sidebar {
   top: 64px;
   bottom: 0;
   margin: auto;
+}
+main content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  padding-left: 24px;
+  display: block;
+  overflow: scroll;
 }
 .navigation-link {
   color: #424242;

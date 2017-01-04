@@ -1,13 +1,15 @@
 doctype html
 html(lang="en")
   head
-    title Create New Survey
+    title Edit Survey
     include /ios.pug
     include /mdl.pug
     include /common.pug
     link(rel='stylesheet', href='/public/stylesheet/static-header.css')
     link(rel='stylesheet', href='/node_modules/getmdl-select/getmdl-select.min.css')
     script(src='/node_modules/getmdl-select/getmdl-select.min.js', defer)
+    script(src='/src/studies/assets/getmdl-select.js')
+    script(src='/src/studies/assets/nav.js')
     style
       include studies.css
       include edit.css
@@ -15,25 +17,9 @@ html(lang="en")
     .mdl-layout.mdl-js-layout
       include header.pug
       span.sidebar
-        a.navigation-link(href='#') Survey Information
-        a.navigation-link(href='#') Icons
-        a.navigation-link(href='#') Consent Forms
-      main
-        form(action='', onsubmit='return formValidator.create()')
-          p: .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-            input.mdl-textfield__input(type='text', id='surveyname')
-            label.mdl-textfield__label(for='surveyname') Name
-            span.mdl-textfield__error(id='surveyerror') Name already exists!
-          p: .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.getmdl-select
-            input.mdl-textfield__input(type='text', id='language', name='language', value='Choose Language', readonly, tabIndex='-1', data-val='none')
-            label.mdl-textfield__label(for='language') Language
-            ul.mdl-menu.mdl-menu--bottom-left.mdl-js-menu(for='language')
-              include language.pug
-          p: .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-            input.mdl-textfield__input(type='text', id='bundleid', pattern='[^ *.]+\\.[^ *]+')
-            label.mdl-textfield__label(for='bundleid') Bundle ID
-            span.mdl-textfield__error(id='bundleid') Please use a reverse-domain name style string!
-          p: .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-            input.mdl-textfield__input(type='text', id='sku')
-            label.mdl-textfield__label(for='sku') SKU
-          button.mdl-button.mdl-button--colored.mdl-js-button(onclick='formValidator.create()') Create
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/info/' + surveyId + '")') Survey Information
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/icon/' + surveyId + '")') Icons
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/consent/' + surveyId + '")') Consent Forms
+      main.frame
+        content(id='content')
+          include edit.info.pug

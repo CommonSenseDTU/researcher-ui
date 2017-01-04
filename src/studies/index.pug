@@ -16,13 +16,13 @@ html(lang="en")
         .mdl-grid
           .mdl-cell
             .study-card.mdl-card.mdl-shadow--2dp
-              a(href='#' onclick='survey.create()')
+              a(href='#' onclick='study.create()')
                 img.study-icon(src='/src/studies/assets/app-icon.png')
-                h5 Surveys
+                h5 Create New Survey
                 div
                   span.blue.dot
-                  span.dot-text Prepare consent document
-                .study-text(style='padding-top: 5pt;') 0 participants
+                  span.dot-text Start new survey
+                .study-text(style='padding-top: 5pt;') No participants yet
           each study in studies
             .mdl-cell
               .study-card.mdl-card.mdl-shadow--2dp

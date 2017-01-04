@@ -1,0 +1,18 @@
+form(action='', onsubmit='return study.updateInfo()')
+  p: .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+    input.mdl-textfield__input(type='text', id='surveyname')
+    label.mdl-textfield__label(for='surveyname') Name
+    span.mdl-textfield__error(id='surveyerror') Name already exists!
+  p: .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.getmdl-select
+    input.mdl-textfield__input(type='text', id='language', name='language', value='Choose Language', readonly, tabIndex='-1', data-val='none', onchange='document.getElementById("content").scrollTop = 0; study.updateInfo()')
+    label.mdl-textfield__label(for='language') Language
+    ul.mdl-menu.mdl-menu--bottom-left.mdl-js-menu(for='language')
+      include language.pug
+  p: .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+    input.mdl-textfield__input(type='text', id='bundleid', pattern='[^ *.]+\\.[^ *]+')
+    label.mdl-textfield__label(for='bundleid') Bundle ID
+    span.mdl-textfield__error(id='bundleid') Please use a reverse-domain name style string!
+  p: .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+    input.mdl-textfield__input(type='text', id='sku')
+    label.mdl-textfield__label(for='sku') SKU
+  button(style='opacity: 0')

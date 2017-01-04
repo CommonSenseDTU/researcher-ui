@@ -21,6 +21,8 @@ import type { Survey } from './survey.type';
 class Studies extends Base {
   
   editTemplate: Template;
+  editInfoTemplate: Template;
+  editIconTemplate: Template;
   
   /**
    * Create a Studies instance.
@@ -35,6 +37,8 @@ class Studies extends Base {
     console.log("Using resource server: " + opts.resourceServer);
 
     this.editTemplate = this.compileFile(dirname, 'edit.pug');
+    this.editInfoTemplate = this.compileFile(dirname, 'edit.info.pug');
+    this.editIconTemplate = this.compileFile(dirname, 'edit.icon.pug');
     
     var self = this;
     this.router.get('/', async (ctx, next) => {
@@ -52,6 +56,7 @@ class Studies extends Base {
       }).then(function (surveys) {
         var copy = self.naiveShallowCopy(self.opts);
         copy.studies = surveys;
+        copy.title = 'Surveys';
         console.log('User has %d surveys', surveys.length);
         ctx.body = self.template(copy);
       }).catch(function (err) {
@@ -88,6 +93,26 @@ class Studies extends Base {
       ctx.type = 'application/json';
       ctx.body = JSON.stringify(survey);
     });
+    
+    this.router.get('/studies/:id', function (ctx, next) {
+      var copy = self.naiveShallowCopy(self.opts);
+      copy.title = 'Edit Survey';
+      copy.surveyId = ctx.params.id;
+      ctx.body = self.editTemplate(copy);
+    });
+
+    this.router.get('/studies/info/:id', function (ctx, next) {
+      var copy = self.naiveShallowCopy(self.opts);
+      copy.surveyId = ctx.params.id;
+      ctx.body = self.editInfoTemplate(copy);
+    });
+
+    this.router.get('/studies/icon/:id', function (ctx, next) {
+      var copy = self.naiveShallowCopy(self.opts);
+      copy.surveyId = ctx.params.id;
+      ctx.body = self.editIconTemplate(copy);
+    });
+
   }
 }
 

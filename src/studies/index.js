@@ -43,15 +43,15 @@ class Studies extends Base {
     
     var self = this;
     this.router.get('/', async (ctx, next) => {
-      self.root(ctx, next);
+      await self.root(ctx, next);
     });
     
     this.router.post('/studies/create', function (ctx, next) {
       self.createStudy(ctx, next);
     });
     
-    this.router.get('/studies/:id', function (ctx, next) {
-      self.readStudy(ctx, next);
+    this.router.get('/studies/:id', async (ctx, next) => {
+      await self.readStudy(ctx, next);
     });
 
     this.router.get('/studies/info/:id', function (ctx, next) {
@@ -132,17 +132,37 @@ class Studies extends Base {
   }
 
   /**
-   * Serve edit survey UI
+   * Asynchronously serve edit survey UI
    * Handle /studies/:id GET requests
    *
    * @param {Context} ctx - Koa context
    * @param {Function} next - The next handler to proceed to after processing is complete
    */
-  readStudy(ctx: any, next: Function) {
-    var copy = this.naiveShallowCopy(this.opts);
-    copy.title = 'Edit Survey';
-    copy.surveyId = ctx.params.id;
-    ctx.body = this.editTemplate(copy);
+  async readStudy(ctx: any, next: Function) {
+    var self = this;
+    var bearer: string = ctx.cookies.get('bearer');
+    await request({
+      uri: 'http://' + self.opts.resourceServer + '/v1.0.M1/surveys/' + ctx.params.id,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + bearer,
+      },
+      json: true
+    }).then(function (survey) {
+      var copy = self.naiveShallowCopy(self.opts);
+      copy.title = 'Edit Survey';
+      copy.survey = survey;
+      copy.json = JSON.stringify(survey);
+      ctx.body = self.editTemplate(copy);
+    }).catch(function (err) {
+      console.log('Something went wrong: ' + err);
+      var copy = self.naiveShallowCopy(self.opts);
+      copy.title = 'Edit Survey';
+      copy.survey = {};
+      copy.json = '{}';
+      copy.error = err;
+      ctx.body = self.editTemplate(copy);
+    });
   }
   
   /**

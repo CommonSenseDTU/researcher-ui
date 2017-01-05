@@ -10,9 +10,9 @@ html(lang="en")
     script(src='/src/studies/assets/getmdl-select.js')
     script(src='/src/studies/assets/nav.js')
     script var currentStudy = !{json};
-    script var noCompletion = function () {}
     script(src='/src/studies/assets/edit.js')
     script.
+      var noCompletion = function () {}
       var load = function () {
         getmdlSelect.init('.getmdl-select');
         document.addEventListener("DOMNodeInserted", function (ev) {
@@ -28,7 +28,7 @@ html(lang="en")
       include header.pug
       span.sidebar
         a.navigation-link(href='#' onclick='nav.setContent("/studies/info/' + survey.id + '", edit.showInfoForm)') Survey Information
-        a.navigation-link(href='#' onclick='nav.setContent("/studies/icon/' + survey.id + '", noCompletion)') Icons
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/icon/' + survey.id + '", edit.showIconForm)') Icons
         a.navigation-link(href='#' onclick='nav.setContent("/studies/consent/' + survey.id + '", noCompletion)') Consent Forms
       main.frame
         content(id='content')

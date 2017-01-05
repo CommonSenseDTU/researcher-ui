@@ -187,7 +187,7 @@ class Studies extends Base {
    */
   icon(ctx: any, next: Function) {
     var copy = this.naiveShallowCopy(this.opts);
-    copy.surveyId = ctx.params.id;
+    copy.studyId = ctx.params.id;
     ctx.body = this.editIconTemplate(copy);
   }
 }

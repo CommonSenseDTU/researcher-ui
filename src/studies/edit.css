@@ -59,3 +59,9 @@ main content {
 .navigation-link:hover {
   background-color: #e0e0e0;
 }
+.iconimg {
+  display: block;
+  width: 192px;
+  height: 192px;
+  margin-left: 24px;
+}

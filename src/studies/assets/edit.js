@@ -46,7 +46,7 @@ var edit = (function () {
       e.preventDefault(); // prevent navigation to "#"
     }, false);
     
-    var dropbox = document.getElementById("iconcard").parentElement;
+    var dropbox = document.querySelector('body');
     dropbox.addEventListener("dragenter", dragenter, false);
     dropbox.addEventListener("dragover", dragover, false);
     dropbox.addEventListener("drop", drop, false);

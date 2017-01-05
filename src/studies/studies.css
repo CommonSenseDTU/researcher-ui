@@ -13,6 +13,7 @@ img.study-icon {
   width: 200pt;
   height: 230pt;
   padding: 15pt;
+  border: 1px solid rgb(217, 220, 226);
 }
 .study-card h5 {
   font-weight: lighter;
@@ -49,4 +50,13 @@ img.study-icon {
 }
 .menu:hover, a li.mdl-menu__item:hover {
   color: rgb(127, 176, 255);
+}
+.centered {
+  text-align: center;
+}
+.no-studies-callout {
+  margin-top: 50px;
+}
+.no-studies-callout a {
+  font-weight: lighter;
 }

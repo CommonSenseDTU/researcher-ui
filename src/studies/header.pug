@@ -1,17 +1,23 @@
-header.mdl-layout__header
-  .mdl-layout__header-row(style='padding-left: 15pt;')
-    span.mdl-layout-title
-      if hasBackButton
-        h5
-          a(href='javascript: history.go(-1)') &lt;&nbsp;
-          = title
-      else
-        h5 #{title}
-    .mdl-layout-spacer
-    span.mdl-layout-title
-      h6.menu(id='account')
-        span Logged in
-        span.chevron
-      ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu(for='account')
-        a(href='#'): li.mdl-menu__item User Information
-        a(href='/logout'): li.mdl-menu__item Log out
+mixin header(hasBackButton)
+  header.mdl-layout__header
+    .mdl-layout__header-row(style='padding-left: 15pt;')
+      span.mdl-layout-title
+        if hasBackButton
+          h5
+            a(href='javascript:  window.location = document.referrer') &lt;&nbsp;
+            = title
+            != '&nbsp;'
+        else
+          h5 #{title} &nbsp;
+      if block
+        span.mdl-layout-title
+          h3.menu(id='extra') +
+          block
+      .mdl-layout-spacer
+      span.mdl-layout-title
+        h6.menu(id='account')
+          span Logged in
+          span.chevron
+        ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu(for='account')
+          a(href='#'): li.mdl-menu__item User Information
+          a(href='/logout'): li.mdl-menu__item Log out

@@ -11,21 +11,18 @@ html(lang="en")
       include studies.css
   body
     .mdl-layout.mdl-js-layout
-      include ./header.pug
+      include header.pug
+      +header(false)
+        ul.mdl-menu.mdl-menu--bottom.mdl-js-menu(for='extra')
+          a(href='#', onclick='study.create()'): li.mdl-menu__item Create New Study
       main.mdl-layout__content
+        if studies.length == 0
+          h4.centered.no-studies-callout
+            a(href='#', onclick='study.create()') No studies yet. Create one now!
         .mdl-grid
-          .mdl-cell
-            .study-card.mdl-card.mdl-shadow--2dp
-              a(href='#' onclick='study.create()')
-                img.study-icon(src='/src/studies/assets/app-icon.png')
-                h5 Create New Survey
-                div
-                  span.blue.dot
-                  span.dot-text Start new survey
-                .study-text(style='padding-top: 5pt;') No participants yet
           each study in studies
             .mdl-cell
-              .study-card.mdl-card.mdl-shadow--2dp
+              .study-card.mdl-card
                 a(href='/studies/' + study.id)
                   img.study-icon(src=study.icon)
                   h5= study.title

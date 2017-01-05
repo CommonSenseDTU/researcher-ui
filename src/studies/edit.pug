@@ -26,6 +26,7 @@ html(lang="en")
   body(onload='load()')
     .mdl-layout.mdl-js-layout
       include header.pug
+      +header(true)
       span.sidebar
         a.navigation-link(href='#' onclick='nav.setContent("/studies/info/' + survey.id + '", edit.showInfoForm)') Survey Information
         a.navigation-link(href='#' onclick='nav.setContent("/studies/icon/' + survey.id + '", edit.showIconForm)') Icons

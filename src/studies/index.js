@@ -152,7 +152,6 @@ class Studies extends Base {
       var copy = self.naiveShallowCopy(self.opts);
       copy.title = 'Edit Survey';
       copy.survey = survey;
-      copy.hasBackButton = true;
       copy.json = JSON.stringify(survey);
       ctx.body = self.editTemplate(copy);
     }).catch(function (err) {
@@ -160,7 +159,6 @@ class Studies extends Base {
       var copy = self.naiveShallowCopy(self.opts);
       copy.title = 'Edit Survey';
       copy.survey = {};
-      copy.hasBackButton = true;
       copy.json = '{}';
       copy.error = err;
       ctx.body = self.editTemplate(copy);

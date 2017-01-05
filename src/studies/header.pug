@@ -1,7 +1,12 @@
 header.mdl-layout__header
   .mdl-layout__header-row(style='padding-left: 15pt;')
     span.mdl-layout-title
-      h5 #{title}
+      if hasBackButton
+        h5
+          a(href='javascript: history.go(-1)') &lt;&nbsp;
+          = title
+      else
+        h5 #{title}
     .mdl-layout-spacer
     span.mdl-layout-title
       h6.menu(id='account')

@@ -3,6 +3,10 @@ var nav = (function () {
   var setContent = function (url, completion) {
     fetch(url).then(
         function(response) {
+          if (!Cookies.get('bearer')) {
+            window.location.assign('/join?return=' + document.location.pathname);
+          }
+          
           if (response.status >= 400) {
             console.log('Looks like there was a problem. Status Code: ' +
               response.status);

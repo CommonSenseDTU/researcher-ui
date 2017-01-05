@@ -1,6 +1,9 @@
 var edit = (function () {
 
   var updateCurrentStudy = function () {
+    if (!Cookies.get('bearer')) {
+      window.location.assign('/join?return=' + window.location.pathname);
+    }
     fetch('/surveys', {
       method: 'POST',
       headers: {

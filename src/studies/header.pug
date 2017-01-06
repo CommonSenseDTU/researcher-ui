@@ -4,7 +4,7 @@ mixin header(hasBackButton)
       span.mdl-layout-title
         if hasBackButton
           h5
-            a(href='javascript:  window.location = document.referrer') &lt;&nbsp;
+            a(href='javascript: header.back()') &lt;&nbsp;
             = title
             != '&nbsp;'
         else

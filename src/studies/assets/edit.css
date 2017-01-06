@@ -59,9 +59,28 @@ main content {
 .navigation-link:hover {
   background-color: #e0e0e0;
 }
+img.centered {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
 .iconimg {
   display: block;
   width: 192px;
   height: 192px;
   margin-left: 24px;
+}
+.drop-container {
+  position: fixed;
+  top: 68;
+  left: 204;
+  right: -6;
+  bottom: -6;
+  margin: auto;
+  z-index: -1;
+  display: block;
+}
+.dropover {
+  border: 3px dashed rgb(156, 166, 183);
+  background-color: rgb(222, 226, 232);
 }

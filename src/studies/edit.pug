@@ -7,10 +7,11 @@ html(lang="en")
     include /common.pug
     link(rel='stylesheet', href='/public/stylesheet/static-header.css')
     link(rel='stylesheet', href='/node_modules/getmdl-select/getmdl-select.min.css')
-    script(src='/src/studies/assets/getmdl-select.js')
-    script(src='/src/studies/assets/nav.js')
+    script
+      include assets/getmdl-select.js
+      include assets/nav.js
+      include assets/edit.js
     script var currentStudy = !{json};
-    script(src='/src/studies/assets/edit.js')
     script.
       var noCompletion = function () {}
       var load = function () {
@@ -21,8 +22,8 @@ html(lang="en")
         edit.showInfoForm();
       };
     style
-      include studies.css
-      include edit.css
+      include assets/studies.css
+      include assets/edit.css
   body(onload='load()')
     .mdl-layout.mdl-js-layout
       include header.pug

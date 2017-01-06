@@ -51,6 +51,9 @@ img.study-icon {
 .menu:hover, a li.mdl-menu__item:hover {
   color: rgb(127, 176, 255);
 }
+.chevron {
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAYCAYAAAD+vg1LAAABE0lEQVR4Ae3UT0rDUBSF8UvAmToQ02qKViVo1YHuwNd1uBG3ILgMl+HfNTiwtjQ1jQbdhPoNzuAiEkwcCTnwo7Tv3cOFwovMZeHiM0Ef1kCKGAaL3EGP7lvcYRt1sod73KAD8xsvYRlbKt/BbzLQQonmF78XjxBQYlPlKapyoHvryDWf+WJTnjDEKzY0tIufcqhNu5jhRJ/mi33GulSgp+EBfI70ewcZAnJYVbGRKQLmSFSyr7NjXCHGxN1TKoqVTJs/Y03lp7jGKsYYooDVKTaVBszQxSVWMHL/hdUuVnJtPtX3R5WWsMbFSoGAM5W+wf5crLzgHO+wWsUf84cEfVgDKWIYLHIH7VvRvhXtW/Hv34ovmpTB87ZdMU0AAAAASUVORK5CYII=") top left;
+}
 .centered {
   text-align: center;
 }

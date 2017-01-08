@@ -1,10 +1,9 @@
-.mdl-card(id='iconcard')
-  h4 Survey Icon
-  form.iconupload(enctype='multipart/form-data' action='/studies/icon/' + studyId)
-    p.
-      The survey icon will be used as an App Store icon, iOS application icon,
-      and web application icon. The icon must be 1024x1024 pixel size.
-      You can also drag and drop files anywhere on this page to start uploading.
-    img.iconimg(id='iconimg', src='/src/studies/assets/app-icon.png')
-    input(id='fileElement', type='file', name='file', accept='image/png', style='opacity: 0', onchange="edit.handleFiles(this.files)")
-    button.mdl-button.mdl-button--colored.mdl-js-button(id='fileSelect', action='/studies/' + studyId) Choose file
+h4 Survey Icon
+form.iconupload(enctype='multipart/form-data' action='/studies/icon/' + studyId)
+  p.
+    The survey icon will be used as an App Store icon, iOS application icon,
+    and web application icon. The icon must be 1024x1024 pixel size.
+    You can also drag and drop files anywhere on this page to start uploading.
+  img.centered.iconimg(id='iconimg', src='/src/studies/assets/app-icon.png')
+  button.left.mdl-button.mdl-button--colored.mdl-js-button(id='fileSelect', action='/studies/' + studyId) Choose file
+  input(id='fileElement', type='file', name='file', accept='image/png,application/pdf', style='opacity: 0', onchange="edit.handleFiles(this.files)")

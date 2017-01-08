@@ -1,5 +1,8 @@
 h4 Survey Information
-form(action='', onsubmit='return edit.readInfoForm()')
+p.
+  Basic survey app information will be used to identify the survey app in the
+  iOS and Android app stores.
+form.centered(action='', onsubmit='return edit.readInfoForm()')
   p: .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
     input.mdl-textfield__input(type='text', id='surveyname', pattern='.{1,}', onblur='edit.readInfoForm()')
     label.mdl-textfield__label(for='surveyname') Name

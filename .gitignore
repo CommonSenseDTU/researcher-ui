@@ -36,3 +36,6 @@ node_modules
 
 # Webpack generated files
 dist
+
+# Runtime configuration
+app.config.json

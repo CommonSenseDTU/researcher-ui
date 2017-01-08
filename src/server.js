@@ -7,6 +7,7 @@
 import Koa from 'koa';
 import serve from 'koa-static-folder';
 import convert from 'koa-convert';
+import fs from 'fs';
 
 /**
  * Routes.
@@ -26,7 +27,8 @@ import type { Options } from './options.type';
  */
 var opts: Options = {
   clientAuth: process.env.CLIENT_AUTH || "no:auth",
-  resourceServer: process.env.RESOURCE_SERVER || "localhost:8083"
+  resourceServer: process.env.RESOURCE_SERVER || "localhost:8083",
+  port: parseInt(process.env.PORT, 10) || 3000
 };
 
 /**
@@ -76,13 +78,21 @@ function bearerAuth(ctx, next) {
  * Create a Koa instance, add routes and start listening on given port.
  */
 export default function() {
-  if (!process.env.CLIENT_AUTH) {
+  if (fs.existsSync('app.config.json')) {
+    console.log('Reading configuration from app.config.json');
+    var readOpts: Options = JSON.parse(fs.readFileSync('app.config.json').toString());
+    var key: string;
+    for (key in readOpts) {
+      opts[key] = readOpts[key];
+    }
+  }
+  
+  if (opts.clientAuth == "no:auth") {
     console.log("No CLIENT_AUTH specified!");
     return;
   }
   
-  const port = process.env.PORT || 3000;
-	console.log("Listening on port " + port);
+	console.log("Listening on port " + opts.port);
   
   const app: Koa = new Koa();
 
@@ -103,5 +113,6 @@ export default function() {
   addRouter(app, new Logout(opts), 'logout/assets');
   addRouter(app, new Studies(opts), 'studies/assets');
   
-  app.listen(port);
+  console.log('Ready and accepting connections!');
+  app.listen(opts.port);
 }

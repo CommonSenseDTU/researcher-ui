@@ -4,5 +4,6 @@
 export type Options = {
   clientAuth: ?string,
   resourceServer: string,
-  bearer?: string
+  bearer?: string,
+  port: number
 };

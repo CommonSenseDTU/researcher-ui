@@ -34,7 +34,7 @@ var consent = (function () {
             return response.text();
           }).then(
             function(text) {
-              var content = document.getElementById("steps");
+              var content = document.getElementById("consent-sections");
               var parser = new DOMParser();
               var fetched = parser.parseFromString(text, "text/html");
               if (fetched.querySelector("body")) {

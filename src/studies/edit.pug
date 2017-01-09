@@ -7,6 +7,8 @@ html(lang="en")
     include /common.pug
     link(rel='stylesheet', href='/public/stylesheet/static-header.css')
     link(rel='stylesheet', href='/node_modules/getmdl-select/getmdl-select.min.css')
+    link(rel='stylesheet', href='/node_modules/dialog-polyfill/dialog-polyfill.css')
+    script(src='/node_modules/dialog-polyfill/dialog-polyfill.js')
     script
       include assets/getmdl-select.js
       include assets/nav.js
@@ -30,9 +32,12 @@ html(lang="en")
       include header.pug
       +header(true)
       span.sidebar
-        a.navigation-link(href='#' onclick='nav.setContent("/studies/info/' + survey.id + '", edit.showInfoForm)') Survey Information
-        a.navigation-link(href='#' onclick='nav.setContent("/studies/icon/' + survey.id + '", edit.showIconForm)') Icons
-        a.navigation-link(href='#' onclick='nav.setContent("/studies/consent/' + survey.id + '", noCompletion)') Consent Forms
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/info", edit.showInfoForm)') Survey Information
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/icon", edit.showIconForm)') Icons
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/consent", noCompletion)') Consent Forms
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/tasks", noCompletion)') Survey Tasks
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/test", noCompletion)') Test
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/appstore", noCompletion)') App Store
       main.frame
         content(id='content')
           include edit.info.pug

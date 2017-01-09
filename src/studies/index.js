@@ -23,6 +23,7 @@ class Studies extends Base {
   editTemplate: Template;
   editInfoTemplate: Template;
   editIconTemplate: Template;
+  editConsentTemplate: Template;
   
   /**
    * Create a Studies instance.
@@ -40,6 +41,7 @@ class Studies extends Base {
     this.editTemplate = this.compileFile(dirname, 'edit.pug');
     this.editInfoTemplate = this.compileFile(dirname, 'edit.info.pug');
     this.editIconTemplate = this.compileFile(dirname, 'edit.icon.pug');
+    this.editConsentTemplate = this.compileFile(dirname, 'edit.consent.pug');
     
     var self = this;
     this.router.get('/', async (ctx, next) => {
@@ -54,12 +56,28 @@ class Studies extends Base {
       await self.readStudy(ctx, next);
     });
 
-    this.router.get('/studies/info/:id', function (ctx, next) {
+    this.router.get('/studies/:id/info', function (ctx, next) {
       self.info(ctx, next);
     });
 
-    this.router.get('/studies/icon/:id', function (ctx, next) {
+    this.router.get('/studies/:id/icon', function (ctx, next) {
       self.icon(ctx, next);
+    });
+
+    this.router.get('/studies/:id/consent', function (ctx, next) {
+      self.consent(ctx, next);
+    });
+
+    this.router.get('/studies/:id/tasks', function (ctx, next) {
+      ctx.body = 'Task info here';
+    });
+
+    this.router.get('/studies/:id/test', function (ctx, next) {
+      ctx.body = 'Test flight info here';
+    });
+
+    this.router.get('/studies/:id/appstore', function (ctx, next) {
+      ctx.body = 'App store flight info here';
     });
   }
 
@@ -189,6 +207,19 @@ class Studies extends Base {
     var copy = this.naiveShallowCopy(this.opts);
     copy.studyId = ctx.params.id;
     ctx.body = this.editIconTemplate(copy);
+  }
+  
+  /**
+   * Serve edit survey consent UI
+   * Handle /studies/consent/:id GET requests
+   *
+   * @param {Context} ctx - Koa context
+   * @param {Function} next - The next handler to proceed to after processing is complete
+   */
+  consent(ctx: any, next: Function) {
+    var copy = this.naiveShallowCopy(this.opts);
+    copy.studyId = ctx.params.id;
+    ctx.body = this.editConsentTemplate(copy);
   }
 }
 

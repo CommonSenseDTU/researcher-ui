@@ -91,12 +91,42 @@ var edit = (function () {
     // TODO: upload image and set icon property of currentStudy
   }
 
+  var showDialog = function (dialogId) {
+    var dialog = document.getElementById(dialogId);
+    if (!dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+    }
+    dialog.querySelector('.close').addEventListener('click', function() {
+      dialog.close();
+    });
+    dialog.showModal();
+    dialog.show();
+  }
+  
+  var addConsentStep = function (type) {
+    fetch('/studies/' + currentStudy.id + '/consent/step/add?type=' + type, {
+      method: 'POST',
+      body: ''
+    }).then(function(response) {
+      if (response.status >= 400) {
+        throw response.statusText;
+      }
+      return response.json();
+    }).then(function(json) {
+      currentStudy.consent_document.sections.push(json);
+      
+    }).catch(function(err) {  
+      console.log('Fetch Error :-S', err);
+    });
+  }
+
   return {
     readInfoForm: readInfoForm,
     showInfoForm: showInfoForm,
     showIconForm: showIconForm,
     updateCurrentStudy: updateCurrentStudy,
-    handleFiles: handleFiles
+    handleFiles: handleFiles,
+    showDialog: showDialog
   }
 })();
 

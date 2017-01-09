@@ -109,7 +109,8 @@ var edit = (function () {
     showIconForm: showIconForm,
     updateCurrentStudy: updateCurrentStudy,
     handleFiles: handleFiles,
-    showDialog: showDialog
+    showDialog: showDialog,
+    updateCurrentStudy: updateCurrentStudy
   }
 })();
 

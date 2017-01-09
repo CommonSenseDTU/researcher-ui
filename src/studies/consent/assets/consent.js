@@ -26,30 +26,8 @@ var consent = (function () {
     ).then(
       function(json) {
         currentStudy.consent_document.sections.push(json);
-        fetch('/studies/consent/steps/template/' + type + '?id=' + json.id).then(
-          function(response) {
-            if (response.status >= 400) {
-              throw response.statusText;
-            }
-            return response.text();
-          }).then(
-            function(text) {
-              var content = document.getElementById("consent-sections");
-              var parser = new DOMParser();
-              var fetched = parser.parseFromString(text, "text/html");
-              if (fetched.querySelector("body")) {
-                fetched = fetched.querySelector("body");
-              }
-              
-              fetched.querySelector('.title').textContent = json.title;
-              fetched.querySelector('.summary').textContent = json.summary;
-              fetched.querySelector('textarea').textContent = json.content;
-              
-              while (fetched.childNodes.length > 0) {
-                content.appendChild(fetched.childNodes[0]);
-              }
-          }
-        );
+        edit.updateCurrentStudy();
+        showConsentStep(json, false);
       }
     ).catch(
       function(err) {  
@@ -57,9 +35,52 @@ var consent = (function () {
       }
     );
   }
+  
+  var showConsentStep = function (step, recursive) {
+    fetch('/studies/consent/steps/template/' + step.type + '?id=' + step.id).then(
+      function(response) {
+        if (response.status >= 400) {
+          throw response.statusText;
+        }
+        return response.text();
+      }).then(
+        function(text) {
+          var content = document.getElementById("consent-sections");
+          var parser = new DOMParser();
+          var fetched = parser.parseFromString(text, "text/html");
+          if (fetched.querySelector("body")) {
+            fetched = fetched.querySelector("body");
+          }
+          
+          fetched.querySelector('.title').textContent = step.title;
+          fetched.querySelector('.summary').textContent = step.summary;
+          fetched.querySelector('textarea').textContent = step.content;
+          
+          while (fetched.childNodes.length > 0) {
+            content.appendChild(fetched.childNodes[0]);
+          }
+          
+          if (recursive) {
+            showCurrentConsentSteps(false);
+          }
+      }
+    );
+  }
+
+  var completedStepCount = 0;
+  var showCurrentConsentSteps = function (first) {
+    if (first) {
+      completedStepCount = 0;
+    }
+    if (currentStudy.consent_document.sections.length > completedStepCount) {
+      completedStepCount += 1;
+      showConsentStep(currentStudy.consent_document.sections[completedStepCount - 1], true);
+    }
+  }
 
   return {
-    addConsentStep: addConsentStep
+    addConsentStep: addConsentStep,
+    showCurrentConsentSteps: showCurrentConsentSteps
     //createMediumEditor: createMediumEditor
   }
 })();

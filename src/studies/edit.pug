@@ -36,7 +36,7 @@ html(lang="en")
       span.sidebar
         a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/info", edit.showInfoForm)') Survey Information
         a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/icon", edit.showIconForm)') Icons
-        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/consent", noCompletion)') Consent Forms
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/consent", consent.showCurrentConsentSteps(true))') Consent Forms
         a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/tasks", noCompletion)') Survey Tasks
         a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/test", noCompletion)') Test
         a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/appstore", noCompletion)') App Store

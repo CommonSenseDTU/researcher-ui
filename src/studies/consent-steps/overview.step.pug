@@ -1,0 +1,27 @@
+.mdl-cell.step
+  .statusbar Carrier &bull;&bull;&bull;&bull;&bull;
+  .statusbar(style='text-align: center; right: 5px') 3:30 PM
+  .statusbar(style='text-align: right; right: 5px; text-align: right')
+    i.material-icons(style='font-size: 1.5em; transform: rotate(90deg)') battery_std
+  .content
+    .title
+    .summary(contenteditable='true')
+    .more: a(href='#', onclick='edit.showDialog("step-more-' + stepId + '")') Learn more about this study first
+  .next Get Started
+dialog.mdl-dialog(id='step-more-' + stepId)
+  h4.mdl-dialog__title Learn more
+  .mdl-dialog__content
+    p.
+      The learn more page is shown when the user presses the "learn more" link below
+      the summary at a given step in a consent document. It should provide comprehensive
+      documentation of everything involved in consenting to this step in the consent
+      document.
+    p.
+      The content of this step of the consent document can take the form of plain text
+      or #[a(href='https://en.wikipedia.org/wiki/Markdown', target='_blank') markdown] 
+      #[i.material-icons(style='font-size: 1em') launch] syntax.
+    textarea(id='step-content-' + stepId, style='width: 100%; min-height: 200px')
+    //- div(id='step-editor-stepId', style='width: 100%; min-height: 200px')
+    .mdl-dialog__actions
+      button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Done
+script dialogPolyfill.registerDialog(document.getElementbyId("step-more-stepId"));

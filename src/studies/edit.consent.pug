@@ -6,7 +6,7 @@ p.
   the same structure by adding consent document steps below.
 button.mdl-button.mdl-button--colored.mdl-js-button(id='addstep') Add new step
 ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu(for='addstep')
-  a(href='#'): li.mdl-menu__item Overview
+  a(href='#', onclick='edit.addConsentStep("overview")'): li.mdl-menu__item Overview
   a(href='#'): li.mdl-menu__item Data Gathering
   a(href='#'): li.mdl-menu__item Privacy
   a(href='#'): li.mdl-menu__item Data Use
@@ -34,40 +34,6 @@ dialog.mdl-dialog(id='consent-info')
       button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') OK
   script dialogPolyfill.registerDialog(document.getElementbyId('consent-info'));
 .mdl-grid(id='steps')
-  .mdl-cell.step
-    .statusbar Carrier &bull;&bull;&bull;&bull;&bull;
-    .statusbar(style='text-align: center; right: 5px') 3:30 PM
-    .statusbar(style='text-align: right; right: 5px; text-align: right')
-      i.material-icons(style='font-size: 1.5em; transform: rotate(90deg)') battery_std
-    .content
-      .title Welcome
-      .summary(contenteditable='true').
-        Replace this with an introduction to the survey which the users are joining.
-        This should be a short explanation of the consent flow which will follow. The
-        in-depth explanation can go in the full description which is accessible from the
-        "learn more" link below.
-      .more: a(href='#', onclick='edit.showDialog("step-more-stepId")') Learn more about this study first
-    .next Get Started
-  dialog.mdl-dialog(id='step-more-stepId')
-    h4.mdl-dialog__title Learn more
-    .mdl-dialog__content
-      p.
-        The learn more page is shown when the user presses the "learn more" link below
-        the summary at a given step in a consent document. It should provide comprehensive
-        documentation of everything involved in consenting to this step in the consent
-        document.
-      p.
-        The content of this step of the consent document can take the form of plain text
-        or #[a(href='https://en.wikipedia.org/wiki/Markdown', target='_blank') markdown] 
-        #[i.material-icons(style='font-size: 1em') launch] syntax.
-      textarea(id='step-content-stepId', style='width: 100%; min-height: 200px').
-        # Welcome
-
-        Replace this with complete documentation of everything involved in consenting to this step in the consent document.
-      //- div(id='step-editor-stepId', style='width: 100%; min-height: 200px')
-      .mdl-dialog__actions
-        button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Done
-  script dialogPolyfill.registerDialog(document.getElementbyId("step-more-stepId"));
       
 div(id='steps-models', style='display: none')
   div(id='overview')

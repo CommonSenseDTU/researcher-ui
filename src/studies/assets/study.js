@@ -24,13 +24,7 @@ var study = (function () {
   }
   
   var create = function () {
-    fetch('/studies/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: ''
-    }).then(
+    fetch('/studies/create').then(
         function(response) {
           if (response.status !== 201) {
             console.log('Looks like there was a problem. Status Code: ' +

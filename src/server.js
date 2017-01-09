@@ -16,6 +16,7 @@ import Base from './base.router';
 import Join from './join';
 import Logout from './logout';
 import Studies from './studies';
+import ConsentSections from './studies/consent';
 
 /**
  * Type declarations.
@@ -105,13 +106,14 @@ export default function() {
 
   // Add unauthorized routes for login
   addRouter(app, new Join(opts), 'join/assets');
+  addRouter(app, new Logout(opts), 'logout/assets');
   
-  // Add authorization filter for all following routes
+  // Add authorization filter
   app.use(bearerAuth);
 
   // Add routes which require authorization
-  addRouter(app, new Logout(opts), 'logout/assets');
   addRouter(app, new Studies(opts), 'studies/assets');
+  addRouter(app, new ConsentSections(opts), 'studies/consent/assets');
   
   console.log('Ready and accepting connections!');
   app.listen(opts.port);

@@ -14,6 +14,7 @@ html(lang="en")
       include assets/nav.js
       include assets/edit.js
       include assets/header.js
+      include consent/assets/consent.js
     script var currentStudy = !{json};
     script.
       var noCompletion = function () {}
@@ -27,6 +28,7 @@ html(lang="en")
     style
       include assets/studies.css
       include assets/edit.css
+      include consent/assets/consent.css
   body(onload='load()')
     .mdl-layout.mdl-js-layout
       include header.pug

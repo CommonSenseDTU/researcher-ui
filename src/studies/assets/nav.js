@@ -20,6 +20,9 @@ var nav = (function () {
             }
             var parser = new DOMParser();
             var fetched = parser.parseFromString(text, "text/html");
+            if (fetched.querySelector("body")) {
+              fetched = fetched.querySelector("body");
+            }
             
             while (fetched.childNodes.length > 0) {
                 content.appendChild(fetched.childNodes[0]);

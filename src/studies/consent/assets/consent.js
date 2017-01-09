@@ -37,6 +37,9 @@ var consent = (function () {
               var content = document.getElementById("steps");
               var parser = new DOMParser();
               var fetched = parser.parseFromString(text, "text/html");
+              if (fetched.querySelector("body")) {
+                fetched = fetched.querySelector("body");
+              }
               
               fetched.querySelector('.title').textContent = json.title;
               fetched.querySelector('.summary').textContent = json.summary;

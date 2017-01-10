@@ -38,7 +38,7 @@ class Base {
     this.opts = opts || {};
     this.router = router();
     
-    this.template = this.compileFile(dirname, 'index.pug');
+    this.template = Base.compileFile(dirname, 'index.pug');
   }
   
   /**
@@ -47,7 +47,7 @@ class Base {
    * @param {string} dirname - directory which the file lives in
    * @return {Template} A function for generating html from the given template
    */
-  compileFile(dirname: string, filename: string) {
+  static compileFile(dirname: string, filename: string) {
     return pug.compileFile(dirname + '/' + filename, {
       basedir: process.cwd() + '/src/lib/pug',
       plugins: [PugPluginNg] 
@@ -76,7 +76,7 @@ class Base {
    * @param {any} original - an object to be copied
    * @return {any} A shallow copy of the original
    */
-  naiveShallowCopy(original: any) {
+  static naiveShallowCopy(original: any) {
     // First create an empty object
     // that will receive copies of properties
     var clone: any = {};

@@ -37,9 +37,9 @@ class Studies extends Base {
 
     console.log("Using resource server: " + opts.resourceServer);
 
-    this.editTemplate = this.compileFile(dirname, 'edit.pug');
-    this.editInfoTemplate = this.compileFile(dirname, 'edit.info.pug');
-    this.editIconTemplate = this.compileFile(dirname, 'edit.icon.pug');
+    this.editTemplate = Base.compileFile(dirname, 'edit.pug');
+    this.editInfoTemplate = Base.compileFile(dirname, 'edit.info.pug');
+    this.editIconTemplate = Base.compileFile(dirname, 'edit.icon.pug');
     
     var self = this;
     this.router.get('/', async (ctx, next) => {
@@ -96,13 +96,13 @@ class Studies extends Base {
       },
       json: true
     }).then(function (surveys) {
-      var copy = self.naiveShallowCopy(self.opts);
+      var copy = Base.naiveShallowCopy(self.opts);
       copy.studies = surveys;
       copy.title = 'Surveys';
       console.log('User has %d surveys', surveys.length);
       ctx.body = self.template(copy);
     }).catch(function (err) {
-      var copy = self.naiveShallowCopy(self.opts);
+      var copy = Base.naiveShallowCopy(self.opts);
       console.log('Call failed: ' + err);
       copy.error = err;
       copy.studies = [];
@@ -161,14 +161,14 @@ class Studies extends Base {
       },
       json: true
     }).then(function (survey) {
-      var copy = self.naiveShallowCopy(self.opts);
+      var copy = Base.naiveShallowCopy(self.opts);
       copy.title = 'Edit Survey';
       copy.survey = survey;
       copy.json = JSON.stringify(survey);
       ctx.body = self.editTemplate(copy);
     }).catch(function (err) {
       console.log('Something went wrong: ' + err);
-      var copy = self.naiveShallowCopy(self.opts);
+      var copy = Base.naiveShallowCopy(self.opts);
       copy.title = 'Edit Survey';
       copy.survey = {};
       copy.json = '{}';
@@ -185,7 +185,7 @@ class Studies extends Base {
    * @param {Function} next - The next handler to proceed to after processing is complete
    */
   info(ctx: any, next: Function) {
-    var copy = this.naiveShallowCopy(this.opts);
+    var copy = Base.naiveShallowCopy(this.opts);
     copy.surveyId = ctx.params.id;
     ctx.body = this.editInfoTemplate(copy);
   }
@@ -198,7 +198,7 @@ class Studies extends Base {
    * @param {Function} next - The next handler to proceed to after processing is complete
    */
   icon(ctx: any, next: Function) {
-    var copy = this.naiveShallowCopy(this.opts);
+    var copy = Base.naiveShallowCopy(this.opts);
     copy.studyId = ctx.params.id;
     ctx.body = this.editIconTemplate(copy);
   }

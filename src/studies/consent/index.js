@@ -33,7 +33,7 @@ class ConsentSections extends Base {
     
     super(dirname, opts);
 
-    this.overviewTemplate = this.compileFile(dirname, 'overview.step.pug');
+    this.overviewTemplate = Base.compileFile(dirname, 'overview.step.pug');
     
     var self = this;
     this.router.get('/studies/:id/consent', function (ctx, next) {
@@ -57,7 +57,7 @@ class ConsentSections extends Base {
    * @param {Function} next - The next handler to proceed to after processing is complete
    */
   consent(ctx: any, next: Function) {
-    var copy = this.naiveShallowCopy(this.opts);
+    var copy = Base.naiveShallowCopy(this.opts);
     copy.studyId = ctx.params.id;
     ctx.body = this.template(copy);
   }
@@ -115,7 +115,7 @@ class ConsentSections extends Base {
   consentStepTemplate(ctx: any, next: Function) {
     switch (ctx.params.type) {
     case 'overview':
-      var copy = this.naiveShallowCopy(this.opts);
+      var copy = Base.naiveShallowCopy(this.opts);
       copy.stepId = ctx.query.id;
       ctx.body = this.overviewTemplate(copy);
       break;

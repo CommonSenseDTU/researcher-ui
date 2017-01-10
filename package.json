@@ -6,7 +6,7 @@
     "deploy": "forever node dist/study-gen.js",
     "start": "node dist/study-gen.js",
     "build": "flow && webpack --config webpack.config.js  --progress --colors --bail",
-    "test": "mocha --compilers js:node_modules/babel-core/register --harmony -R spec -t 5000 test/*.js"
+    "test": "mocha --compilers js:node_modules/babel-core/register --harmony -R spec -t 5000 test/*.spec.js"
   },
   "main": "dist/study-gen.js",
   "author": "Anders Borch <anders@cyborch.com>",

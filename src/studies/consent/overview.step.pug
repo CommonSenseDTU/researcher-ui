@@ -24,4 +24,4 @@ dialog.mdl-dialog(id='step-more-' + stepId)
     //- div(id='step-editor-stepId', style='width: 100%; min-height: 200px')
     .mdl-dialog__actions
       button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Done
-script dialogPolyfill.registerDialog(document.getElementbyId("step-more-stepId"));
+script dialogPolyfill.registerDialog(document.getElementbyId("step-more-#{stedId}"));

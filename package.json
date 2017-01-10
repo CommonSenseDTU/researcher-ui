@@ -6,6 +6,7 @@
     "deploy": "forever node dist/study-gen.js",
     "start": "node dist/study-gen.js",
     "build": "flow && webpack --config webpack.config.js  --progress --colors --bail",
+    "build-client": "babel src --only='**assets/*' -d dist/public",
     "test": "mocha --compilers js:node_modules/babel-core/register --harmony -R spec -t 5000 --sort test/*.spec.js"
   },
   "main": "dist/study-gen.js",
@@ -30,6 +31,7 @@
     "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
     "babel-core": "^6.7.0",
     "babel-loader": "^6.2.4",
     "babel-plugin-syntax-flow": "^6.18.0",

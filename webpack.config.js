@@ -28,7 +28,7 @@ module.exports = {
     module: {
         loaders: [{
             test: /\.js$/,
-            exclude: /(node_modules|test|views)/,
+            exclude: /(node_modules|test|assets)/,
             loader: 'babel',
             query: {
               cacheDirectory: '/tmp',

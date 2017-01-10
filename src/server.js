@@ -39,7 +39,6 @@ var opts: Options = {
  * @param {string} assetPath - path to the public assets to be served
  */
 function addRouter(app: Koa, koaRouter: Base, assetPath: string) {
-  app.use(convert(serve('./src/' + assetPath)));
   app.use(koaRouter.routes());
   app.use(koaRouter.allowedMethods());
 }
@@ -101,8 +100,7 @@ export function server() {
   app.use(requestTimer);
 
   // Statically serve public and node modules
-  app.use(convert(serve('./node_modules')));
-  app.use(convert(serve('./public')));
+  app.use(convert(serve('./dist/public')));
 
   // Add unauthorized routes for login
   addRouter(app, new Join(opts), 'join/assets');

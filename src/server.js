@@ -64,7 +64,7 @@ function requestTimer(ctx: any, next: any) {
  * @param {Context} ctx - the Koa context
  * @param {Function} - the next handler to yield control to before logging passed time
  */
-function bearerAuth(ctx, next) {
+export function bearerAuth(ctx: any, next: Function) {
   opts.bearer = ctx.cookies.get('bearer');
   
   if (!opts.bearer) {
@@ -78,7 +78,7 @@ function bearerAuth(ctx, next) {
 /**
  * Create a Koa instance, add routes and start listening on given port.
  */
-export default function() {
+export function server() {
   if (fs.existsSync('app.config.json')) {
     console.log('Reading configuration from app.config.json');
     var readOpts: Options = JSON.parse(fs.readFileSync('app.config.json').toString());

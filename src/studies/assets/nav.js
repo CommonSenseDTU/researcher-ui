@@ -30,8 +30,7 @@ var nav = (function () {
             
             // Re-init mdlSelect component to ensure functional dropdown
             getmdlSelect.init('.getmdl-select');
-            
-            // Perform completion
+
             completion();
           });
         }

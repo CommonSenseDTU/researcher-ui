@@ -77,10 +77,15 @@ var consent = (function () {
       showConsentStep(currentStudy.consent_document.sections[completedStepCount - 1], true);
     }
   }
+  
+  var showConsentNavigationCompletion = function () {
+    showCurrentConsentSteps(true);
+  }
 
   return {
     addConsentStep: addConsentStep,
-    showCurrentConsentSteps: showCurrentConsentSteps
+    showCurrentConsentSteps: showCurrentConsentSteps,
+    showConsentNavigationCompletion: showConsentNavigationCompletion
     //createMediumEditor: createMediumEditor
   }
 })();

@@ -4,7 +4,6 @@ logs
 
 # Local editor configuration
 .editorconfig
-.eslintrc
 .jscsrc
 .jshintrc
 

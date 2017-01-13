@@ -1,7 +1,7 @@
 // @flow
 'use strict';
 
-class Header {
+export class Header {
   back() {
     if (document.referrer.indexOf('/join')) {
       window.location.assign('/');

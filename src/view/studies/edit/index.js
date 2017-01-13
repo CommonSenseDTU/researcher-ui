@@ -4,6 +4,11 @@
 import { Cookies } from '../../lib/cookies';
 import type { Survey } from '../../../control/studies/survey.type';
 
+/**
+ * Ensure that global header variable is defined.
+ */
+import '../header';
+
 declare var currentStudy: Survey;
 declare var dialogPolyfill: any;
 

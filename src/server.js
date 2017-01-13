@@ -13,7 +13,7 @@ import fs from 'fs';
  * Routes.
  */
 import Base from './base.router';
-import Join from './join';
+import Join from './control/join';
 import Logout from './logout';
 import Studies from './studies';
 import ConsentSections from './studies/consent';
@@ -24,7 +24,7 @@ import ConsentSections from './studies/consent';
 import type { Options } from './options.type';
 
 /**
- * Global options to be passed to all routes 
+ * Global options to be passed to all routes
  */
 var opts: Options = {
   clientAuth: process.env.CLIENT_AUTH || "no:auth",
@@ -36,9 +36,8 @@ var opts: Options = {
  * Add a koa-router and a static asset path from a Base router to koa.
  * @param {Koa} app - the Koa app instance to add routes to
  * @param {Base} koaRouter - the Base router specialization which contains the router
- * @param {string} assetPath - path to the public assets to be served
  */
-function addRouter(app: Koa, koaRouter: Base, assetPath: string) {
+function addRouter(app: Koa, koaRouter: any) {
   app.use(koaRouter.routes());
   app.use(koaRouter.allowedMethods());
 }
@@ -65,7 +64,7 @@ function requestTimer(ctx: any, next: any) {
  */
 export function bearerAuth(ctx: any, next: Function) {
   opts.bearer = ctx.cookies.get('bearer');
-  
+
   if (!opts.bearer) {
     // TODO: attempt to use refresh token
     ctx.redirect('/join?return=' + ctx.url);
@@ -86,33 +85,33 @@ export function server() {
       opts[key] = readOpts[key];
     }
   }
-  
+
   if (opts.clientAuth == "no:auth") {
     console.log("No CLIENT_AUTH specified!");
     return;
   }
-  
+
 	console.log("Listening on port " + opts.port);
-  
+
   const app: Koa = new Koa();
 
   // Use request timer for all requests
   app.use(requestTimer);
 
-  // Statically serve public and node modules
+  // Statically serve public
   app.use(convert(serve('./dist/public')));
 
   // Add unauthorized routes for login
-  addRouter(app, new Join(opts), 'join/assets');
-  addRouter(app, new Logout(opts), 'logout/assets');
-  
+  addRouter(app, new Join(opts));
+  addRouter(app, new Logout(opts));
+
   // Add authorization filter
   app.use(bearerAuth);
 
   // Add routes which require authorization
-  addRouter(app, new Studies(opts), 'studies/assets');
-  addRouter(app, new ConsentSections(opts), 'studies/consent/assets');
-  
+  addRouter(app, new Studies(opts));
+  addRouter(app, new ConsentSections(opts));
+
   console.log('Ready and accepting connections!');
   app.listen(opts.port);
 }

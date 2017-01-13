@@ -1,7 +1,7 @@
 'use strict'
 
 import assert from 'assert';
-import Base from '../src/base.router';
+import Controller from '../src/base.controller';
 
 /**
  * Test if an object is a function
@@ -13,42 +13,32 @@ function isFunction(functionToCheck) {
  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
 
-describe('## Base class', () => {
+describe('## Base controller class', () => {
   describe('# Router ', () => {
     it('initializes', function(done) {
       assert.doesNotThrow(function() {
-        new Base('./src/join', {});
+        new Controller('./test/0004.controller/view', {});
       });
       done();
     });
 
     it('forwards allowedMethods', function(done) {
-      var allowedMethods: Function = new Base('./test/assets', {}).allowedMethods();
+      var allowedMethods: Function = new Controller('./test/0004.controller/view', {}).allowedMethods();
       assert.ok(isFunction(allowedMethods) == true);
       done();
     });
 
     it('forwards routes', function(done) {
-      var routes: Function = new Base('./test/assets', {}).routes();
+      var routes: Function = new Controller('./test/0004.controller/view', {}).routes();
       assert.ok(isFunction(routes) == true);
       done();
     });
   });
 
   describe('# Utility ', () => {
-    it('performs shallow copy', function(done) {
-      var original = {
-        clientAuth: "some:auth",
-      }
-      
-      var copy = new Base.naiveShallowCopy(original);
-      assert.ok(copy !== original);
-      assert.ok(copy.clientAuth === original.clientAuth);
-      done();
-    });
-
     it('compiles a pug file', function(done) {
-      var template: Function = Base.compileFile('./test/assets', 'index.pug');
+      var controller: Controller = new Controller('./test/0004.controller/view', {});
+      var template: Function = controller.compileFile('index.pug');
       assert.ok(isFunction(template) == true);
       done();
     });

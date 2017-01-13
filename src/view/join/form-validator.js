@@ -3,7 +3,7 @@
 
 declare var clientAuth: string;
 
-import { Cookies } from '../../lib/cookies/assets/cookies.type';
+import { Cookies } from '../lib/cookies';
 
 class FormValidator {
 

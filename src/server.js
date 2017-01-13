@@ -12,11 +12,12 @@ import fs from 'fs';
 /**
  * Routes.
  */
-import Base from './base.router';
+import Controller from './base.controller';
 import Join from './control/join';
-import Logout from './logout';
-import Studies from './studies';
-import ConsentSections from './studies/consent';
+import Logout from './control/logout';
+import Studies from './control/studies';
+import Edit from './control/studies/edit';
+import ConsentSections from './control/studies/edit/consent';
 
 /**
  * Type declarations.
@@ -37,7 +38,7 @@ var opts: Options = {
  * @param {Koa} app - the Koa app instance to add routes to
  * @param {Base} koaRouter - the Base router specialization which contains the router
  */
-function addRouter(app: Koa, koaRouter: any) {
+function addRouter(app: Koa, koaRouter: Controller) {
   app.use(koaRouter.routes());
   app.use(koaRouter.allowedMethods());
 }
@@ -110,6 +111,7 @@ export function server() {
 
   // Add routes which require authorization
   addRouter(app, new Studies(opts));
+  addRouter(app, new Edit(opts));
   addRouter(app, new ConsentSections(opts));
 
   console.log('Ready and accepting connections!');

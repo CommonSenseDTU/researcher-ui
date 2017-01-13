@@ -1,6 +1,11 @@
-var study = (function () {
+// @flow
+'use strict';
 
-  var save = function (study) {
+import { Cookies } from '../lib/cookies';
+import type { Survey } from '../../control/studies/survey.type';
+
+class Study {
+  save(study: Survey) {
     fetch('/surveys', {
       method: 'POST',
       headers: {
@@ -11,19 +16,18 @@ var study = (function () {
     }).then(
         function(response) {
           if (response.status >= 400) {
-            console.log('Looks like there was a problem. Status Code: ' +
-              response.status);
-            return;
+            throw "Looks like there was a problem. Status Code: " + response.status;
           }
-        
+
           document.location.assign('/studies/' + study.id);
         }
-    ).catch(function(err) {  
-      console.log('Fetch Error :-S', err);
+    ).catch(function(err) {
+      console.log('Fetch error: ' + err);
     });
   }
-  
-  var create = function () {
+
+  create(): boolean {
+    var self: Study = this;
     fetch('/studies/create').then(
         function(response) {
           if (response.status !== 201) {
@@ -31,23 +35,19 @@ var study = (function () {
               response.status);
             return;
           }
-          
+
           console.log('Created survey');
-          
+
           // Immediately save the newly created survey
           response.json().then(function(data) {
-            save(data);
+            self.save(data);
           });
         }
     ).catch(function(err) {
-      console.log('Fetch Error :-S', err);
+      console.log('Fetch error: ' + err);
     });
     return false;
-  }
+    }
+}
 
-  return {
-    create: create,
-    save: save
-  }
-})();
-
+window.study = new Study();

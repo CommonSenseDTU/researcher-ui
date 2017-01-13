@@ -4,37 +4,36 @@
 /**
  * Module dependencies.
  */
-import Base from '../../base.router';
+import Controller from '../../../../base.controller';
 import request from 'request-promise';
 import uuid from 'node-uuid';
+import { naiveShallowCopy } from '../../../../lib/shallow-copy';
 
 /**
  * Type declarations.
  */
-import type { Options } from '../../options.type';
-import type { Template } from '../../template.type';
-import type { ConsentSection } from '../survey.type';
+import type { Options } from '../../../../options.type';
+import type { Template } from '../../../../template.type';
+import type { ConsentSection } from '../../survey.type';
 
 /**
  * Class for '/studies/consent' routes.
  */
-class ConsentSections extends Base {
-  
+class ConsentSections extends Controller {
+
   overviewTemplate: Template;
-  
+
   /**
    * Create a ConsentSections instance.
    * Configure routes.
-   * 
-   * @param {Options} opts - The options passed to pug when compiling 
+   *
+   * @param {Options} opts - The options passed to pug when compiling
    */
   constructor(opts: Options) {
-    const dirname: string = './src/studies/consent';
-    
-    super(dirname, opts);
+    super("./src/view/studies/edit/consent", opts);
 
-    this.overviewTemplate = Base.compileFile(dirname, 'overview.step.pug');
-    
+    this.overviewTemplate = this.compileFile('overview.step.pug');
+
     var self = this;
     this.router.get('/studies/:id/consent', function (ctx, next) {
       self.consent(ctx, next);
@@ -57,11 +56,11 @@ class ConsentSections extends Base {
    * @param {Function} next - The next handler to proceed to after processing is complete
    */
   consent(ctx: any, next: Function) {
-    var copy = Base.naiveShallowCopy(this.opts);
+    var copy = naiveShallowCopy(this.opts);
     copy.studyId = ctx.params.id;
     ctx.body = this.template(copy);
   }
-  
+
   /**
    * Create a new consent section.
    * Handle /studies/consent/step/create/:type GET requests.
@@ -83,7 +82,7 @@ class ConsentSections extends Base {
     ctx.status = 201;
     ctx.type = 'application/json';
   }
-  
+
   /**
    * Create a new overview consent section.
    */
@@ -104,7 +103,7 @@ class ConsentSections extends Base {
     };
     return step;
   }
-  
+
   /**
    * Serve new consent section template UI
    * Handle /studies/consent/steps/template/:type GET requests
@@ -115,7 +114,7 @@ class ConsentSections extends Base {
   consentStepTemplate(ctx: any, next: Function) {
     switch (ctx.params.type) {
     case 'overview':
-      var copy = Base.naiveShallowCopy(this.opts);
+      var copy = naiveShallowCopy(this.opts);
       copy.stepId = ctx.query.id;
       ctx.body = this.overviewTemplate(copy);
       break;
@@ -126,7 +125,7 @@ class ConsentSections extends Base {
       return;
     }
   }
-  
+
 }
 
 export default ConsentSections;

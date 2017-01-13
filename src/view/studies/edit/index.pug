@@ -9,12 +9,8 @@ html(lang="en")
     link(rel='stylesheet', href='/dist/public/node_modules/getmdl-select/getmdl-select.min.css')
     link(rel='stylesheet', href='/dist/public/node_modules/dialog-polyfill/dialog-polyfill.css')
     script(src='/dist/public/node_modules/dialog-polyfill/dialog-polyfill.js')
-    script
-      include assets/getmdl-select.js
-      include assets/nav.js
-      include assets/edit.js
-      include assets/header.js
-      include consent/assets/consent.js
+    script(src='/dist/public/studies/edit/index.js')
+    script(src='/dist/public/studies/edit/consent/index.js')
     script var currentStudy = !{json};
     script.
       var noCompletion = function () {}
@@ -26,12 +22,12 @@ html(lang="en")
         edit.showInfoForm();
       };
     style
-      include assets/studies.css
-      include assets/edit.css
-      include consent/assets/consent.css
+      include ../index.css
+      include index.css
+      include consent/index.css
   body(onload='load()')
     .mdl-layout.mdl-js-layout
-      include header.pug
+      include ../header.pug
       +header(true)
       span.sidebar
         a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/info", edit.showInfoForm)') Survey Information
@@ -42,4 +38,4 @@ html(lang="en")
         a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/appstore", noCompletion)') App Store
       main.frame
         content(id='content')
-          include edit.info.pug
+          include info.pug

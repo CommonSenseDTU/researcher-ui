@@ -10,9 +10,8 @@ exports.handler = function(event, context) {
 if (!module.parent) {
   exports.handler(
     {},
-    { done: (err, x) => 
-      console.log(`${err}, ${x}`) 
+    { done: (err, x) =>
+      console.log(`${err}, ${x}`)
     }
   );
 }
-

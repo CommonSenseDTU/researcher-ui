@@ -1,15 +1,14 @@
-var header = (function () {
+// @flow
+'use strict';
 
-  var back = function () {
+class Header {
+  back() {
     if (document.referrer.indexOf('/join')) {
       window.location.assign('/');
     } else {
       window.location.assign(document.referrer);
     }
   }
-  
-  return {
-    back: back
-  }
-})();
+}
 
+window.header = new Header();

@@ -4,26 +4,26 @@
 /**
  * Module dependencies.
  */
-import Base from '../base.router.js';
+import Controller from '../../base.controller';
 
 /**
  * Type declarations.
  */
-import type { Options } from '../options.type';
+import type { Options } from '../../options.type';
 
 /**
  * Class for '/logout' route.
  */
-class Logout extends Base {
-  
+class Logout extends Controller {
+
   /**
    * Create a Logout instance.
-   * 
-   * @param {Options} opts - The options passed to pug when compiling 
+   *
+   * @param {Options} opts - The options passed to pug when compiling
    */
   constructor(opts: Options) {
-    super('./src/logout', opts);
-    
+    super("./src/view/logout", opts);
+
     var self = this;
     this.router.get('/logout', function (ctx, next) {
       ctx.body = self.template(opts);

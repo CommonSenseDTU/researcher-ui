@@ -22,7 +22,7 @@ class Join extends Controller {
    * @param {Options} opts - The options passed to pug when compiling
    */
   constructor(opts: Options) {
-    super(opts);
+    super("./src/view/join", opts);
 
     var self = this;
     this.router.get('/join', function (ctx, next) {

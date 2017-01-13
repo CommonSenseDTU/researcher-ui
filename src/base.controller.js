@@ -24,6 +24,7 @@ import type { Template } from './template.type';
  */
 class Controller {
 
+  dirname: string
   opts: Options;
   router: any;
   template: Template;
@@ -31,25 +32,24 @@ class Controller {
   /**
    * Create a Controller instance.
    *
+   * @param {string} dirname - The directory which contains the view files
    * @param {Options} opts - The options passed to pug when compiling
    */
-  constructor(opts: Options) {
+  constructor(dirname: string, opts: Options) {
     this.opts = opts || {};
     this.router = router();
+    this.dirname = dirname;
 
-    var dirname: string = './src/view/' + this.constructor.name.toLowerCase();
-
-    this.template = Controller.compileFile(dirname, 'index.pug');
+    this.template = this.compileFile('index.pug');
   }
 
   /**
    * Compile file template into a function which can generate html with given options.
    *
-   * @param {string} dirname - directory which the file lives in
    * @return {Template} A function for generating html from the given template
    */
-  static compileFile(dirname: string, filename: string) {
-    return pug.compileFile(dirname + '/' + filename, {
+  compileFile(filename: string): Template {
+    return pug.compileFile(this.dirname + '/' + filename, {
       basedir: process.cwd() + '/src/lib/pug',
       plugins: [PugPluginNg]
     });

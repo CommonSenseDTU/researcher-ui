@@ -53,23 +53,23 @@ $(TARGET): node_modules $(SOURCES)
 
 dist/public/join/index.js: $(wildcard src/view/join/*.js)
 	mkdir -p $(shell dirname $@)
-	$(browserify) $< -o $@ -t babelify
+	$(browserify) $^ -o $@ -t babelify
 
 dist/public/logout/index.js: $(wildcard src/view/logout/*.js)
 	mkdir -p $(shell dirname $@)
-	$(browserify) $< -o $@ -t babelify
+	$(browserify) $^ -o $@ -t babelify
 
 dist/public/studies/index.js: $(wildcard src/view/studies/*.js)
 	mkdir -p $(shell dirname $@)
-	$(browserify) $< -o $@ -t babelify
+	$(browserify) $^ -o $@ -t babelify
 
 dist/public/studies/edit/index.js: $(wildcard src/view/studies/edit/*.js)
 	mkdir -p $(shell dirname $@)
-	$(browserify) $< -o $@ -t babelify
+	$(browserify) $^ -o $@ -t babelify
 
 dist/public/studies/edit/consent/index.js: $(wildcard src/view/studies/edit/consent/*.js)
 	mkdir -p $(shell dirname $@)
-	$(browserify) $< -o $@ -t babelify
+	$(browserify) $^ -o $@ -t babelify
 
 $(ASSETS_DIST): $(ASSETS)
 	rsync -mrv --include='*/' --include='*.png' --include='*.css' --exclude='*' src/ dist/public/

@@ -88,7 +88,7 @@ class Studies extends Controller {
       id: uuid.v1(),
       user_id: userId,
       title: 'Unnamed Survey',
-      icon: '/dist/public/studies/assets/app-icon.png',
+      icon: '/dist/public/view/studies/app-icon.png',
       creation_date_time: (new Date()).toJSON(),
       consent_document: {
         id: uuid.v1(),

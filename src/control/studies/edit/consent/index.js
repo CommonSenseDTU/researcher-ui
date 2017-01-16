@@ -21,7 +21,7 @@ import type { ConsentSection } from '../../survey.type';
  */
 class ConsentSections extends Controller {
 
-  overviewTemplate: Template;
+  stepTemplate: Template;
 
   /**
    * Create a ConsentSections instance.
@@ -32,7 +32,7 @@ class ConsentSections extends Controller {
   constructor(opts: Options) {
     super("./src/view/studies/edit/consent", opts);
 
-    this.overviewTemplate = this.compileFile('overview.step.pug');
+    this.stepTemplate = this.compileFile('step.pug');
 
     var self = this;
     this.router.get('/studies/:id/consent', function (ctx, next) {
@@ -73,6 +73,9 @@ class ConsentSections extends Controller {
     case 'overview':
       ctx.body = this.createOverviewSection();
       break;
+    case 'datagathering':
+      ctx.body = this.createDataGatheringSection();
+      break;
     default:
       ctx.status = 406;
       ctx.type = 'application/json';
@@ -105,6 +108,25 @@ class ConsentSections extends Controller {
   }
 
   /**
+   * Create a new data gathering consent section.
+   */
+  createDataGatheringSection() {
+    var step: ConsentSection = {
+      id: uuid.v1(),
+      creation_date_time: (new Date()).toJSON(),
+      modification_date_time: (new Date()).toJSON(),
+      type: 'datagathering',
+      title: 'Data Gathering',
+      summary: 'Replace this with a description of the types of data which is being' +
+        'gathered during this study.',
+      content: '# Welcome\r\n\r\n' +
+        'Replace this with complete documentation of type of data being gathered ' +
+        'in the study.'
+    };
+    return step;
+  }
+
+  /**
    * Serve new consent section template UI
    * Handle /studies/consent/steps/template/:type GET requests
    *
@@ -112,12 +134,17 @@ class ConsentSections extends Controller {
    * @param {Function} next - The next handler to proceed to after processing is complete
    */
   consentStepTemplate(ctx: any, next: Function) {
+    var copy = naiveShallowCopy(this.opts);
+    copy.stepId = ctx.query.id;
     switch (ctx.params.type) {
     case 'overview':
-      var copy = naiveShallowCopy(this.opts);
-      copy.stepId = ctx.query.id;
-      ctx.body = this.overviewTemplate(copy);
+      copy.image = '/dist/public/transparent.png';
+      ctx.body = this.stepTemplate(copy);
       break;
+    case 'datagathering':
+      copy.image = '/dist/public/view/studies/edit/consent/data-gathering.png';
+      ctx.body = this.stepTemplate(copy);
+    break;
     default:
       ctx.status = 406;
       ctx.type = 'application/json';

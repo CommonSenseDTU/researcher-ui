@@ -10,12 +10,27 @@
   left: 5px;
   position: absolute;
 }
+.step .clock {
+  text-align: center;
+  right: 5px;
+}
+.step .battery {
+  text-align: right;
+  right: 5px;
+}
+.step .battery i {
+  font-size: 1.5em;
+  transform: rotate(90deg);
+}
 .step .content {
   position: absolute;
   top: 45%;
   left: 0;
   right: 0;
   transform: translateY(-50%);
+}
+.step img {
+  max-width: 220px;
 }
 .step .title {
   font-size: 20pt;

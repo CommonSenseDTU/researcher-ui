@@ -71,6 +71,14 @@ class Consent {
           if (!textarea) throw "Could not find textarea element";
           textarea.textContent = step.content;
 
+          var next: ?HTMLElement = fetched.querySelector('.next');
+          if (!next) throw "Could not find next element";
+          if (self.completedStepCount == 1) {
+            next.textContent = "Get Started";
+          } else {
+            next.textContent = "Next";
+          }
+
           while (fetched.childNodes.length > 0) {
             content.appendChild(fetched.childNodes[0]);
           }

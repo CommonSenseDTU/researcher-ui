@@ -30,9 +30,9 @@ html(lang="en")
       include ../header.pug
       +header(true)
       span.sidebar
-        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/info", edit.showInfoForm)') Survey Information
-        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/icon", edit.showIconForm)') Icons
-        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/consent", consent.showConsentNavigationCompletion)') Consent Forms
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/info", function() {edit.showInfoForm()})') Survey Information
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/icon", function() {edit.showIconForm()})') Icons
+        a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/consent", function() {consent.showConsentNavigationCompletion()})') Consent Forms
         a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/tasks", noCompletion)') Survey Tasks
         a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/test", noCompletion)') Test
         a.navigation-link(href='#' onclick='nav.setContent("/studies/' + survey.id + '/appstore", noCompletion)') App Store

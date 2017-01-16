@@ -16,6 +16,7 @@ CLIENT_DIST = dist/public/join/index.js \
 	dist/public/studies/edit/consent/index.js
 
 browserify = node_modules/browserify/bin/cmd.js
+flow = npm run flow
 
 .PHONY: all
 all: $(TARGET) $(CLIENT_DIST) $(ASSETS_DIST) $(PUBLIC_NODE_MODULES_DIST) $(PUBLIC_DIST)
@@ -53,23 +54,23 @@ $(TARGET): node_modules $(SOURCES)
 
 dist/public/join/index.js: $(wildcard src/view/join/*.js)
 	mkdir -p $(shell dirname $@)
-	$(browserify) $^ -o $@ -t babelify
+	$(flow) && $(browserify) $^ -o $@ -t babelify
 
 dist/public/logout/index.js: $(wildcard src/view/logout/*.js)
 	mkdir -p $(shell dirname $@)
-	$(browserify) $^ -o $@ -t babelify
+	$(flow) && $(browserify) $^ -o $@ -t babelify
 
 dist/public/studies/index.js: $(wildcard src/view/studies/*.js)
 	mkdir -p $(shell dirname $@)
-	$(browserify) $^ -o $@ -t babelify
+	$(flow) && $(browserify) $^ -o $@ -t babelify
 
 dist/public/studies/edit/index.js: $(wildcard src/view/studies/edit/*.js)
 	mkdir -p $(shell dirname $@)
-	$(browserify) $^ -o $@ -t babelify
+	$(flow) && $(browserify) $^ -o $@ -t babelify
 
 dist/public/studies/edit/consent/index.js: $(wildcard src/view/studies/edit/consent/*.js)
 	mkdir -p $(shell dirname $@)
-	$(browserify) $^ -o $@ -t babelify
+	$(flow) && $(browserify) $^ -o $@ -t babelify
 
 $(ASSETS_DIST): $(ASSETS)
 	rsync -mrv --include='*/' --include='*.png' --include='*.css' --exclude='*' src/ dist/public/

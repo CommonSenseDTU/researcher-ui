@@ -22,7 +22,7 @@ html(lang="en")
             a(href='#', onclick='study.create()') No studies yet. Create one now!
         .mdl-grid
           each study in studies
-            .mdl-cell
+            .mdl-cell.study-cell
               .study-card.mdl-card
                 a(href='/studies/' + study.id)
                   img.study-icon(src=study.icon)

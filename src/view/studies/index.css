@@ -9,9 +9,12 @@ img.study-icon {
   max-width: 120pt;
   height: auto;
 }
+.study-cell {
+  margin-right: 60pt;
+}
 .study-card {
-  width: 200pt;
-  height: 230pt;
+  min-width: 200pt;
+  min-height: 230pt;
   padding: 15pt;
   border: 1px solid rgb(217, 220, 226);
 }

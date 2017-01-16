@@ -11,6 +11,7 @@ html(lang="en")
       include index.css
   body
     .mdl-layout.mdl-js-layout
+      //- /* Show header with no back button, but with a dropdown menu as a block */
       include header.pug
       +header(false)
         ul.mdl-menu.mdl-menu--bottom.mdl-js-menu(for='extra')

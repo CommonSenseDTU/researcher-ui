@@ -5,14 +5,27 @@ declare var clientAuth: string;
 
 import { Cookies } from '../lib/cookies';
 
+/**
+ * Join/Create account form validation.
+ */
 class FormValidator {
 
+  /**
+   * Guard against multiple submit actions.
+   */
   submitted: boolean;
 
+  /**
+   * Create a new Edit instance.
+   */
   constructor() {
     this.submitted = false;
   }
 
+  /**
+   * Send a create account request
+   * @return {boolean} always false because the form action should be ignored
+   */
   create(): boolean {
     if (this.submitted) {
       return false;
@@ -143,6 +156,9 @@ class FormValidator {
     return false;
   }
 
+  /**
+   * Validate form elements when focus changes.
+   */
   passwordFocus() {
     var form: ?HTMLFormElement = ((document.querySelector('form'): ?any): ?HTMLFormElement);
     if (!form) {

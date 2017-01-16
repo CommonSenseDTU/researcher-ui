@@ -12,7 +12,15 @@ import '../header';
 declare var currentStudy: Survey;
 declare var dialogPolyfill: any;
 
+/**
+ * Study management class.
+ */
 class Edit {
+
+  /**
+   * Send current study to backend, and redirect to login screen if session
+   * is invalid.
+   */
   updateCurrentStudy() {
     if (!Cookies.get('bearer')) {
       window.location.assign('/join?return=' + window.location.pathname);
@@ -29,6 +37,9 @@ class Edit {
     });
   }
 
+  /**
+   * Read data from info form and send it to backend.
+   */
   readInfoForm(): boolean {
     var form: ?HTMLFormElement = ((document.querySelector('form'): ?any): ?HTMLFormElement);
     if (!form) {
@@ -48,6 +59,9 @@ class Edit {
     return false;
   }
 
+  /**
+   * Set fields in info form to the values in current study.
+   */
   showInfoForm() {
     var studyname: ?HTMLElement = document.getElementById('surveyname');
     if (!studyname) {
@@ -62,6 +76,11 @@ class Edit {
     // TODO: read other attributes from survey
   }
 
+  /**
+   * Set icon image to the one specified in current study.
+   *
+   * Also, set drag and drop handler to update icon.
+   */
   showIconForm() {
     var self: Edit = this;
     var iconimg: ?HTMLImageElement = ((document.getElementById('iconimg'): ?any): ?HTMLImageElement);
@@ -95,16 +114,25 @@ class Edit {
     }, false);
   }
 
+  /**
+   * Stop drag events from propagating.
+   */
   dragenter(event: MouseEvent) {
     event.stopPropagation();
     event.preventDefault();
   }
 
+  /**
+   * Stop drag events from propagating.
+   */
   dragover(event: MouseEvent) {
     event.stopPropagation();
     event.preventDefault();
   }
 
+  /**
+   * Handle drop events.
+   */
   drop(event: MouseEvent) {
     event.stopPropagation();
     event.preventDefault();
@@ -115,6 +143,11 @@ class Edit {
     this.handleFiles(files);
   }
 
+  /**
+   * Handle files sent using drag and drop or using file selection dialog.
+   *
+   * @param {files} - The list of selected or dropped files.
+   */
   handleFiles(files: FileList) {
     if (files.length == 0) {
       return;
@@ -137,6 +170,11 @@ class Edit {
     // TODO: upload image and set icon property of currentStudy
   }
 
+  /**
+   * Show a dialog element modally.
+   *
+   * @param {string} dialogId - The id of the dialog element.
+   */
   showDialog(dialogId: string) {
     var dialog: ?any = document.getElementById(dialogId);
     if (!dialog) {

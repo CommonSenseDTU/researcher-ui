@@ -3,7 +3,7 @@
 
 import type { Survey, ConsentSection } from '../../../../control/studies/survey.type';
 
-import { Edit } from '../index';
+import Edit from '../index';
 
 declare var currentStudy: Survey;
 

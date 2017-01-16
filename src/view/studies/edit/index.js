@@ -12,7 +12,7 @@ import '../header';
 declare var currentStudy: Survey;
 declare var dialogPolyfill: any;
 
-export class Edit {
+class Edit {
   updateCurrentStudy() {
     if (!Cookies.get('bearer')) {
       window.location.assign('/join?return=' + window.location.pathname);
@@ -41,6 +41,7 @@ export class Edit {
       return false;
     }
     currentStudy.title = surveyname.value;
+
     // TODO: add other fields to survey
 
     this.updateCurrentStudy();
@@ -62,6 +63,7 @@ export class Edit {
   }
 
   showIconForm() {
+    var self: Edit = this;
     var iconimg: ?HTMLImageElement = ((document.getElementById('iconimg'): ?any): ?HTMLImageElement);
     if (!iconimg) {
       throw "Could not find iconimg element";
@@ -74,20 +76,23 @@ export class Edit {
       throw "Could not find file elements";
     }
 
-    fileSelect.addEventListener("click", function (e: MouseEvent) {
+    (fileSelect: any).addEventListener("click", function (event: MouseEvent) {
       if (fileElement) {
         fileElement.click();
       }
-      e.preventDefault(); // prevent navigation to "#"
+      event.preventDefault(); // prevent navigation to "#"
     }, false);
 
-    var dropbox: ?HTMLElement = document.querySelector('body');
-    if (!dropbox) {
-      throw "Could not find the body element";
-    }
-    (dropbox: any).addEventListener("dragenter", this.dragenter, false);
-    (dropbox: any).addEventListener("dragover", this.dragover, false);
-    (dropbox: any).addEventListener("drop", this.drop, false);
+    var dropbox = document.querySelector('body');
+    (dropbox: any).addEventListener("dragenter", function (event: MouseEvent) {
+      self.dragenter(event);
+    }, false);
+    (dropbox: any).addEventListener("dragover", function (event: MouseEvent) {
+      self.dragover(event);
+    }, false);
+    (dropbox: any).addEventListener("drop", function (event: MouseEvent) {
+      self.drop(event);
+    }, false);
   }
 
   dragenter(event: MouseEvent) {
@@ -124,7 +129,7 @@ export class Edit {
     var reader: FileReader = new FileReader();
     reader.onload = (function(img: HTMLImageElement) {
       return function(e) {
-        img.src = e.target.result;
+        (img: any).src = e.target.result;
       };
     })(iconimg);
     reader.readAsDataURL(files[0]);
@@ -149,9 +154,11 @@ export class Edit {
         dialog.close();
       });
     }
-    dialog.showModal();
-    dialog.show();
+    (dialog: any).showModal();
+    (dialog: any).show();
   }
 }
+
+export default Edit;
 
 window.edit = new Edit();

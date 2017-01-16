@@ -70,6 +70,12 @@ class Controller {
   allowedMethods() {
     return this.router.allowedMethods();
   }
+
+  static setNoCacheHeaders(ctx: any) {
+    ctx.set("Cache-Control", "no-cache, no-store, must-revalidate");
+    ctx.set("Pragma", "no-cache");
+    ctx.set("Expires", "0");
+  }
 }
 
 export default Controller;

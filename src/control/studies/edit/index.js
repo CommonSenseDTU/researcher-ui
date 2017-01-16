@@ -72,7 +72,7 @@ class Edit extends Controller {
    * @param {Function} next - The next handler to proceed to after processing is complete
    */
   async readStudy(ctx: any, next: Function) {
-    var self = this;
+    var self: Edit = this;
     var bearer: string = ctx.cookies.get('bearer');
     await request({
       uri: 'http://' + self.opts.resourceServer + '/v1.0.M1/surveys/' + ctx.params.id,
@@ -83,6 +83,7 @@ class Edit extends Controller {
       json: true
     }).then(function (survey) {
       var copy = naiveShallowCopy(self.opts);
+      Controller.setNoCacheHeaders(ctx);
       copy.title = 'Edit Survey';
       copy.survey = survey;
       copy.json = JSON.stringify(survey);
@@ -90,6 +91,7 @@ class Edit extends Controller {
     }).catch(function (err) {
       console.log('Something went wrong: ' + err);
       var copy = naiveShallowCopy(self.opts);
+      Controller.setNoCacheHeaders(ctx);
       copy.title = 'Edit Survey';
       copy.survey = {};
       copy.json = '{}';

@@ -62,6 +62,7 @@ class Studies extends Controller {
       json: true
     }).then(function (surveys) {
       var copy = naiveShallowCopy(self.opts);
+      Controller.setNoCacheHeaders(ctx);
       copy.studies = surveys;
       copy.title = 'Surveys';
       console.log('User has %d surveys', surveys.length);
@@ -69,6 +70,7 @@ class Studies extends Controller {
     }).catch(function (err) {
       var copy = naiveShallowCopy(self.opts);
       console.log('Call failed: ' + err);
+      Controller.setNoCacheHeaders(ctx);
       copy.error = err;
       copy.studies = [];
       ctx.body = self.template(copy);
@@ -103,6 +105,7 @@ class Studies extends Controller {
       participant_ids: []
     };
 
+    Controller.setNoCacheHeaders(ctx);
     ctx.status = 201;
     ctx.type = 'application/json';
     ctx.body = JSON.stringify(survey);

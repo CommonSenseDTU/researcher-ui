@@ -76,6 +76,9 @@ class ConsentSections extends Controller {
     case 'datagathering':
       ctx.body = this.createDataGatheringSection();
       break;
+    case 'privacy':
+      ctx.body = this.createPrivacySection()
+      break;
     default:
       ctx.status = 406;
       ctx.type = 'application/json';
@@ -127,6 +130,24 @@ class ConsentSections extends Controller {
   }
 
   /**
+   * Create a new privacy consent section.
+   */
+  createPrivacySection() {
+    var step: ConsentSection = {
+      id: uuid.v1(),
+      creation_date_time: (new Date()).toJSON(),
+      modification_date_time: (new Date()).toJSON(),
+      type: 'privacy',
+      title: 'Privacy',
+      summary: 'Replace this with a description of the measures being taken to ' +
+        'ensure the privacy of the users.',
+      content: '# Welcome\r\n\r\n' +
+        'Replace this with complete documentation of privacy policy.'
+    };
+    return step;
+  }
+
+  /**
    * Serve new consent section template UI
    * Handle /studies/consent/steps/template/:type GET requests
    *
@@ -144,7 +165,11 @@ class ConsentSections extends Controller {
     case 'datagathering':
       copy.image = '/dist/public/view/studies/edit/consent/data-gathering.png';
       ctx.body = this.stepTemplate(copy);
-    break;
+      break;
+    case 'privacy':
+      copy.image = '/dist/public/view/studies/edit/consent/privacy.png';
+      ctx.body = this.stepTemplate(copy);
+      break;
     default:
       ctx.status = 406;
       ctx.type = 'application/json';

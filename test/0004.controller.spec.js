@@ -1,6 +1,8 @@
 'use strict'
 
 import assert from 'assert';
+import winston from 'winston';
+
 import Controller from '../src/base.controller';
 import Join from '../src/control/join';
 import Logout from '../src/control/logout';
@@ -17,6 +19,8 @@ function isFunction(functionToCheck) {
  var getType = {};
  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
+
+winston.level = 'error';
 
 describe('## Controller classes', () => {
   describe('# Router ', () => {

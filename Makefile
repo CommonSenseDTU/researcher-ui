@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-SOURCES = $(shell find src/control -name '*.js')
+SOURCES = $(wildcard src/*.js) $(shell find src/control -name '*.js')
 ASSETS = $(shell find src/view -name '*.png' -or -name '*.css')
 ASSETS_DIST = $(shell echo $(ASSETS) | sed 's/src/dist\/public/g')
 PUBLIC = $(shell find public)

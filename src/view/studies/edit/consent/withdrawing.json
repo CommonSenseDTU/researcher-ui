@@ -1,0 +1,6 @@
+{
+  "type": "withdrawing",
+  "title": "Withdrawing",
+  "summary": "Replace this with a description of how to withdraw from the study.",
+  "content": "# Withdrawing\r\n\r\nThis section can describe the policies that govern the collected data if the user decides to withdraw."
+}

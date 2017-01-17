@@ -1,0 +1,9 @@
+{
+  "type": "review",
+  "title": "Review",
+  "summary": "Replace this with a description of sharing options.",
+  "options": [
+      "Replace with description of some sharing option",
+      "Replace with description of another sharing option"
+    ]
+}

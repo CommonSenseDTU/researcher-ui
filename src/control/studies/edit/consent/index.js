@@ -86,7 +86,9 @@ class ConsentSections extends Controller {
       case 'studysurvey':
       case 'studytasks':
       case 'withdrawing':
-      case 'onlyindocument':
+      case 'sharingoptions':
+      case 'review':
+      case 'signature':
         const filename: string = this.dirname + "/" + ctx.params.type + ".json";
         await access(filename, fs.R_OK).then(
           async () => {
@@ -134,8 +136,9 @@ class ConsentSections extends Controller {
     var copy = naiveShallowCopy(this.opts);
     copy.stepId = ctx.query.id;
     switch (ctx.params.type) {
-    case 'overview':
+    case 'signature':
       copy.image = '/dist/public/transparent.png';
+      ctx.body = this.stepTemplate(copy);
       break;
     case 'datagathering':
     case 'privacy':
@@ -144,16 +147,22 @@ class ConsentSections extends Controller {
     case 'studysurvey':
     case 'studytasks':
     case 'withdrawing':
-    case 'onlyindocument':
       copy.image = "/dist/public/view/studies/edit/consent/" + ctx.params.type + ".png";
+      ctx.body = this.stepTemplate(copy);
       break;
+    case 'overview':
+      // TODO: add special case for this step type here
+    case 'sharingoptions':
+      // TODO: add special case for this step type here
+    case 'review':
+      // TODO: add special case for this step type here
     default:
       ctx.status = 406;
       ctx.type = 'application/json';
       ctx.body = JSON.stringify({ error: 'Unknown type: ' + ctx.params.type });
       return;
     }
-    ctx.body = this.stepTemplate(copy);
+
   }
 
 }

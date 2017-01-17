@@ -1,0 +1,6 @@
+{
+  "type": "review",
+  "title": "Review",
+  "summary": "Replace this with a complete review of the consent document.",
+  "popup": "A short message to present to the user when \"agree\" is pressed."
+}

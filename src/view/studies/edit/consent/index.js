@@ -104,6 +104,40 @@ class Consent {
     this.showCurrentConsentSteps(true);
   }
 
+  /**
+   * Read summary from consent step and send it to backend.
+   *
+   * @param {HTMLElement} summary - The DOM element which holds the summary
+   */
+  readConsentStepSummary(summary: HTMLElement) {
+    for (var section: ConsentSection of currentStudy.consent_document.sections) {
+      var currentStepId: string = summary.attributes.getNamedItem("step-id").value;
+      if (section.id == currentStepId) {
+        section.summary = summary.textContent;
+        break;
+      }
+    }
+
+    this.edit.updateCurrentStudy();
+  }
+
+  /**
+   * Read content from consent step and send it to backend.
+   *
+   * @param {HTMLTextAreaElement} textarea - The DOM element which holds the content
+   */
+  readConsentStepContent(textarea: HTMLTextAreaElement) {
+    var stepId: string = textarea.attributes.getNamedItem("step-id").value;
+    for (var section: ConsentSection of currentStudy.consent_document.sections) {
+      if (section.id == stepId) {
+        section.content = textarea.value;
+        break;
+      }
+    }
+
+    this.edit.updateCurrentStudy();
+  }
+
 }
 
 window.consent = new Consent();

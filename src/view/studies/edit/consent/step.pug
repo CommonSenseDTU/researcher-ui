@@ -6,7 +6,7 @@
   .content
     img.centered(src=image)
     .title
-    .summary(contenteditable='true')
+    .summary(step-id=stepId, contenteditable='true', onblur='consent.readConsentStepSummary(this)')
     .more: a(href='#', onclick='edit.showDialog("step-more-' + stepId + '")') Learn more about this study first
   .next
 dialog.mdl-dialog(id='step-more-' + stepId)
@@ -21,7 +21,7 @@ dialog.mdl-dialog(id='step-more-' + stepId)
       The content of this step of the consent document can take the form of plain text
       or #[a(href='https://en.wikipedia.org/wiki/Markdown', target='_blank') markdown]
       #[i.material-icons(style='font-size: 1em') launch] syntax.
-    textarea(id='step-content-' + stepId, style='width: 100%; min-height: 200px')
+    textarea(step-id=stepId, style='width: 100%; min-height: 200px', onblur='consent.readConsentStepContent(this)')
     //- div(id='step-editor-stepId', style='width: 100%; min-height: 200px')
     .mdl-dialog__actions
       button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Done

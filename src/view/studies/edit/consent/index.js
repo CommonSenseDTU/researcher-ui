@@ -75,6 +75,8 @@ class Consent {
           if (!next) throw "Could not find next element";
           if (self.completedStepCount == 1) {
             next.textContent = "Get Started";
+          } else if (self.completedStepCount == currentStudy.consent_document.sections.length) {
+            next.textContent = "Done";
           } else {
             next.textContent = "Next";
           }

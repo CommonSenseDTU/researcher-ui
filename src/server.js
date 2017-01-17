@@ -8,6 +8,7 @@ import Koa from 'koa';
 import serve from 'koa-static-folder';
 import convert from 'koa-convert';
 import fs from 'fs';
+import winston from 'winston';
 
 /**
  * Routes.
@@ -53,7 +54,7 @@ function requestTimer(ctx: any, next: any) {
   var start = new Date;
   return next().then(() => {
     var ms = new Date - start;
-    console.log('%s %s - %sms', ctx.method, ctx.url, ms);
+    winston.info('%s %s - %sms', ctx.method, ctx.url, ms);
   });
 }
 
@@ -74,25 +75,47 @@ export function bearerAuth(ctx: any, next: Function) {
   }
 }
 
+function configureLogger() {
+  winston.remove(winston.transports.Console);
+  winston.add(winston.transports.Console, {
+    timestamp: function() {
+      return (new Date()).toJSON();
+    },
+    formatter: function(options) {
+      // Return string will be passed to logger.
+      return options.timestamp() + ' [' + options.level.toUpperCase() + '] ' +
+        (options.message ? options.message : '') +
+        (options.meta && Object.keys(options.meta).length ? '\n\t'+
+        JSON.stringify(options.meta) : '' );
+    }
+  });
+}
+
 /**
  * Create a Koa instance, add routes and start listening on given port.
  */
 export function server() {
+  configureLogger();
+  
   if (fs.existsSync('app.config.json')) {
-    console.log('Reading configuration from app.config.json');
     var readOpts: Options = JSON.parse(fs.readFileSync('app.config.json').toString());
     var key: string;
     for (key in readOpts) {
       opts[key] = readOpts[key];
     }
+    if (opts.logLevel) {
+      winston.level = opts.logLevel;
+    }
+
+    winston.info('Reading configuration from app.config.json');
   }
 
   if (opts.clientAuth == "no:auth") {
-    console.log("No CLIENT_AUTH specified!");
+    winston.error("No CLIENT_AUTH specified!");
     return;
   }
 
-	console.log("Listening on port " + opts.port);
+	winston.info("Listening on port " + opts.port);
 
   const app: Koa = new Koa();
 
@@ -114,6 +137,6 @@ export function server() {
   addRouter(app, new Edit(opts));
   addRouter(app, new ConsentSections(opts));
 
-  console.log('Ready and accepting connections!');
+  winston.info('Ready and accepting connections!');
   app.listen(opts.port);
 }

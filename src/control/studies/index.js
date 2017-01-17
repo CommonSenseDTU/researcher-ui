@@ -8,6 +8,7 @@ import Controller from '../../base.controller';
 import request from 'request-promise';
 import uuid from 'node-uuid';
 import { naiveShallowCopy } from '../../lib/shallow-copy';
+import winston from 'winston';
 
 /**
  * Type declarations.
@@ -65,11 +66,11 @@ class Studies extends Controller {
       Controller.setNoCacheHeaders(ctx);
       copy.studies = surveys;
       copy.title = 'Surveys';
-      console.log('User has %d surveys', surveys.length);
+      winston.debug('User has %d surveys', surveys.length);
       ctx.body = self.template(copy);
     }).catch(function (err) {
       var copy = naiveShallowCopy(self.opts);
-      console.log('Call failed: ' + err);
+      winston.error('Call failed: ' + err);
       Controller.setNoCacheHeaders(ctx);
       copy.error = err;
       copy.studies = [];

@@ -7,6 +7,7 @@
 import Controller from '../../../base.controller';
 import request from 'request-promise';
 import uuid from 'node-uuid';
+import winston from 'winston';
 import { naiveShallowCopy } from '../../../lib/shallow-copy';
 
 /**
@@ -33,7 +34,7 @@ class Edit extends Controller {
   constructor(opts: Options) {
     super("./src/view/studies/edit", opts);
 
-    console.log("Using resource server: " + opts.resourceServer);
+    winston.info("Using resource server: " + opts.resourceServer);
 
     this.infoTemplate = this.compileFile('info.pug');
     this.iconTemplate = this.compileFile('icon.pug');
@@ -89,7 +90,7 @@ class Edit extends Controller {
       copy.json = JSON.stringify(survey);
       ctx.body = self.template(copy);
     }).catch(function (err) {
-      console.log('Something went wrong: ' + err);
+      winston.error('Something went wrong: ' + err);
       var copy = naiveShallowCopy(self.opts);
       Controller.setNoCacheHeaders(ctx);
       copy.title = 'Edit Survey';

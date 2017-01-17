@@ -2,6 +2,11 @@
 
 import assert from 'assert';
 import Controller from '../src/base.controller';
+import Join from '../src/control/join';
+import Logout from '../src/control/logout';
+import Studies from '../src/control/studies';
+import Edit from '../src/control/studies/edit';
+import ConsentSections from '../src/control/studies/edit/consent';
 
 /**
  * Test if an object is a function
@@ -13,7 +18,7 @@ function isFunction(functionToCheck) {
  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
 
-describe('## Base controller class', () => {
+describe('## Controller classes', () => {
   describe('# Router ', () => {
     it('initializes', function(done) {
       assert.doesNotThrow(function() {
@@ -40,6 +45,33 @@ describe('## Base controller class', () => {
       var controller: Controller = new Controller('./test/0004.controller/view', {});
       var template: Function = controller.compileFile('index.pug');
       assert.ok(isFunction(template) == true);
+      done();
+    });
+  });
+
+  describe('# Subclasses ', () => {
+    it('join initializes', function(done) {
+      assert.doesNotThrow(function() { new Join({}) });
+      done();
+    });
+
+    it('logout initializes', function(done) {
+      assert.doesNotThrow(function() { new Logout({}) });
+      done();
+    });
+
+    it('studies initializes', function(done) {
+      assert.doesNotThrow(function() { new Studies({}) });
+      done();
+    });
+
+    it('edit initializes', function(done) {
+      assert.doesNotThrow(function() { new Edit({}) });
+      done();
+    });
+
+    it('consent sections initializes', function(done) {
+      assert.doesNotThrow(function() { new ConsentSections({}) });
       done();
     });
 

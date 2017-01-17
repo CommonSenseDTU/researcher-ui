@@ -145,7 +145,7 @@ class ConsentSections extends Controller {
     case 'studytasks':
     case 'withdrawing':
     case 'onlyindocument':
-      copy.image = this.dirname + "/" + ctx.params.type + ".png";
+      copy.image = "/dist/public/view/studies/edit/consent/" + ctx.params.type + ".png";
       break;
     default:
       ctx.status = 406;

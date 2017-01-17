@@ -3,12 +3,14 @@
   width: 230px;
   height: 400px;
   border: 1px solid rgb(217, 220, 226);
+  overflow-y: scroll;
 }
 .step .statusbar {
   font-size: 7pt;
   top: 0px;
   left: 5px;
   position: absolute;
+  z-index: 2;
 }
 .step .clock {
   text-align: center;

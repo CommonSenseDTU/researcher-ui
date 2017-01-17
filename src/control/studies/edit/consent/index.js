@@ -7,6 +7,8 @@
 import Controller from '../../../../base.controller';
 import request from 'request-promise';
 import uuid from 'node-uuid';
+import fs from 'fs';
+import promisify from 'es6-promisify';
 import { naiveShallowCopy } from '../../../../lib/shallow-copy';
 
 /**
@@ -15,6 +17,12 @@ import { naiveShallowCopy } from '../../../../lib/shallow-copy';
 import type { Options } from '../../../../options.type';
 import type { Template } from '../../../../template.type';
 import type { ConsentSection } from '../../survey.type';
+
+/**
+ * Promise based version of fs methods.
+ */
+const access = promisify(fs.access, {multiArgs: true});
+const readFile = promisify(fs.readFile, {multiArgs: true});
 
 /**
  * Class for '/studies/consent' routes.
@@ -39,8 +47,8 @@ class ConsentSections extends Controller {
       self.consent(ctx, next);
     });
 
-    this.router.get('/studies/consent/step/create/:type', function (ctx, next) {
-      self.createConsentSection(ctx, next);
+    this.router.get('/studies/consent/step/create/:type', async (ctx, next) => {
+      await self.createConsentSection(ctx, next);
     });
 
     this.router.get('/studies/consent/steps/template/:type', function (ctx, next) {
@@ -68,83 +76,51 @@ class ConsentSections extends Controller {
    * @param {Context} ctx - Koa context
    * @param {Function} next - The next handler to proceed to after processing is complete
    */
-  createConsentSection(ctx: any, next: Function) {
+  async createConsentSection(ctx: any, next: Function) {
     switch (ctx.params.type) {
-    case 'overview':
-      ctx.body = this.createOverviewSection();
-      break;
-    case 'datagathering':
-      ctx.body = this.createDataGatheringSection();
-      break;
-    case 'privacy':
-      ctx.body = this.createPrivacySection()
-      break;
-    default:
-      ctx.status = 406;
-      ctx.type = 'application/json';
-      ctx.body = JSON.stringify({ error: 'Unknown type: ' + ctx.params.type });
-      return;
+      case 'overview':
+      case 'datagathering':
+      case 'privacy':
+      case 'datause':
+      case 'timecommitment':
+      case 'studysurvey':
+      case 'studytasks':
+      case 'withdrawing':
+      case 'onlyindocument':
+        const filename: string = this.dirname + "/" + ctx.params.type + ".json";
+        await access(filename, fs.R_OK).then(
+          async () => {
+            await readFile(filename).then(
+              function (data) {
+                return JSON.parse(data);
+              }
+            ).then(
+              function (json) {
+                var section: ConsentSection = json;
+                section.id = uuid.v1();
+                section.creation_date_time = (new Date()).toJSON();
+                section.modification_date_time = (new Date()).toJSON();
+                ctx.body = section;
+                ctx.status = 201;
+                ctx.type = 'application/json';
+              }
+            );
+          }
+        ).catch(function (err) {
+          ctx.status = 500;
+          ctx.type = 'application/json';
+          ctx.body = JSON.stringify({
+            error: err,
+            type: ctx.params.type
+          });
+        });
+        break;
+      default:
+        ctx.status = 406;
+        ctx.type = 'application/json';
+        ctx.body = JSON.stringify({ error: 'Unknown type: ' + ctx.params.type });
+        return;
     }
-    ctx.status = 201;
-    ctx.type = 'application/json';
-  }
-
-  /**
-   * Create a new overview consent section.
-   */
-  createOverviewSection() {
-    var step: ConsentSection = {
-      id: uuid.v1(),
-      creation_date_time: (new Date()).toJSON(),
-      modification_date_time: (new Date()).toJSON(),
-      type: 'overview',
-      title: 'Welcome',
-      summary: 'Replace this with an introduction to the survey which the users are joining.' +
-        'This should be a short explanation of the consent flow which will follow. The' +
-        'in-depth explanation can go in the full description which is accessible from the' +
-        '"learn more" link below.',
-      content: '# Welcome\r\n\r\n' +
-        'Replace this with complete documentation of everything involved in consenting ' +
-        'to this step in the consent document.'
-    };
-    return step;
-  }
-
-  /**
-   * Create a new data gathering consent section.
-   */
-  createDataGatheringSection() {
-    var step: ConsentSection = {
-      id: uuid.v1(),
-      creation_date_time: (new Date()).toJSON(),
-      modification_date_time: (new Date()).toJSON(),
-      type: 'datagathering',
-      title: 'Data Gathering',
-      summary: 'Replace this with a description of the types of data which is being' +
-        'gathered during this study.',
-      content: '# Welcome\r\n\r\n' +
-        'Replace this with complete documentation of type of data being gathered ' +
-        'in the study.'
-    };
-    return step;
-  }
-
-  /**
-   * Create a new privacy consent section.
-   */
-  createPrivacySection() {
-    var step: ConsentSection = {
-      id: uuid.v1(),
-      creation_date_time: (new Date()).toJSON(),
-      modification_date_time: (new Date()).toJSON(),
-      type: 'privacy',
-      title: 'Privacy',
-      summary: 'Replace this with a description of the measures being taken to ' +
-        'ensure the privacy of the users.',
-      content: '# Welcome\r\n\r\n' +
-        'Replace this with complete documentation of privacy policy.'
-    };
-    return step;
   }
 
   /**
@@ -160,15 +136,16 @@ class ConsentSections extends Controller {
     switch (ctx.params.type) {
     case 'overview':
       copy.image = '/dist/public/transparent.png';
-      ctx.body = this.stepTemplate(copy);
       break;
     case 'datagathering':
-      copy.image = '/dist/public/view/studies/edit/consent/data-gathering.png';
-      ctx.body = this.stepTemplate(copy);
-      break;
     case 'privacy':
-      copy.image = '/dist/public/view/studies/edit/consent/privacy.png';
-      ctx.body = this.stepTemplate(copy);
+    case 'datause':
+    case 'timecommitment':
+    case 'studysurvey':
+    case 'studytasks':
+    case 'withdrawing':
+    case 'onlyindocument':
+      copy.image = this.dirname + "/" + ctx.params.type + ".png";
       break;
     default:
       ctx.status = 406;
@@ -176,6 +153,7 @@ class ConsentSections extends Controller {
       ctx.body = JSON.stringify({ error: 'Unknown type: ' + ctx.params.type });
       return;
     }
+    ctx.body = this.stepTemplate(copy);
   }
 
 }

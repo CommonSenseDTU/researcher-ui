@@ -55,6 +55,7 @@ class Context {
 
 const app: Koa = new Koa();
 var server: ?any;
+var virtualConsole = jsdom.createVirtualConsole();
 var scriptLoadingFeatures = {
   FetchExternalResources: ["script", "link"],
   ProcessExternalResources: ["script"],
@@ -77,7 +78,13 @@ function pwdRelativeLoader (resource, callback: Function) {
 describe('## Edit view', () => {
   describe('# Edit ', () => {
     before(function () {
-      winston.level = 'none';
+      winston.level = 'debug';
+      virtualConsole.on("log", function (message) {
+        winston.debug("console.log:", message);
+      });
+      virtualConsole.on("jsdomError", function (error) {
+        winston.error("jsdom:", error.message);
+      });
     });
 
     beforeEach(function() {
@@ -138,6 +145,7 @@ describe('## Edit view', () => {
         jsdom.env({
           html: context.body,
           src: ["edit.showInfoForm()"],
+          virtualConsole: virtualConsole,
           resourceLoader: pwdRelativeLoader,
           features: scriptLoadingFeatures,
           done: function(err, window) {

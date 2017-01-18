@@ -20,9 +20,11 @@ function isFunction(functionToCheck) {
  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
 
-winston.level = 'error';
-
 describe('## Controller classes', () => {
+  before(function () {
+    winston.level = 'error';
+  });
+
   describe('# Router ', () => {
     it('initializes', function(done) {
       assert.doesNotThrow(function() {

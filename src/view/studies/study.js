@@ -51,3 +51,5 @@ class Study {
 }
 
 window.study = new Study();
+
+export default Study;

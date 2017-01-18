@@ -47,6 +47,7 @@
     "babel-regenerator-runtime": "^6.5.0",
     "flow-bin": "^0.37.4",
     "forever": "^0.15.3",
+    "jsdom": "^9.9.1",
     "mocha": "^2.4.5",
     "nodemon": "^1.11.0",
     "path": "^0.12.7",

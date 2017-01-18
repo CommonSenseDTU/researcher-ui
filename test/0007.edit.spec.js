@@ -86,7 +86,7 @@ describe('## Edit view', () => {
           "id" : "4d817460-dd5f-11e6-a353-51c7ab7c347a",
           "title" : "Unnamed Survey",
           "user_id" : "test",
-          "icon" : "/dist/public/view/studies/app-icon.png",
+          "icon" : "custom-icon.png",
           "creation_date_time" : "2017-01-18T09:20:07.334Z",
           "consent_document" : {
             "id" : "4d817461-dd5f-11e6-a353-51c7ab7c347a",
@@ -150,6 +150,48 @@ describe('## Edit view', () => {
             assert.ok(surveyname, "surveyname element not found");
             winston.debug("surveyname: " + surveyname + " has value " + surveyname.value);
             assert.equal(surveyname.value, "Unnamed Survey", "Unexpected survey name");
+            done();
+          }
+        });
+      } catch (err) {
+        done(err);
+      }
+    });
+
+    it('can navigate, set icon image', async function (done) {
+      var opts: Options = {
+        resourceServer: 'localhost:3003'
+      }
+      var context: Context = new Context();
+      context.params.id = "4d817460-dd5f-11e6-a353-51c7ab7c347a";
+
+      try {
+        var edit: Edit = new Edit(opts);
+        await edit.readStudy(context, next);
+
+        jsdom.env({
+          html: context.body,
+          src: [
+            'nav.setContent("/studies/' + context.params.id + '/icon", function() {edit.showIconForm()})'
+          ],
+          resourceLoader: function(resource, callback: Function) {
+            if (resource.url.pathname == '/studies/' + context.params.id + '/icon') {
+              var iconContext: Context = new Context();
+              edit.icon(iconContext, next);
+              assert.ok(iconContext.body, "No body was set");
+              callback(null, iconContext.body);
+            } else {
+              pwdRelativeLoader(resource, callback);
+            }
+          },
+          features: scriptLoadingFeatures,
+          done: function(err, window) {
+            assert.ok(!err, "Error: " + err);
+            assert.ok(window, "Missing window");
+            assert.ok(window.document, "Missing document");
+            var iconimg: ?HTMLImageElement = window.document.getElementById("iconimg");
+            assert.ok(iconimg, "iconimg element not found");
+            assert.equal(iconimg.src, "custom-icon.png", "Did not update icon image");
             done();
           }
         });

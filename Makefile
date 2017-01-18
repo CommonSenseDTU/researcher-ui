@@ -17,6 +17,7 @@ CLIENT_DIST = dist/public/join/index.js \
 
 browserify = node_modules/browserify/bin/cmd.js
 flow = npm run flow
+touch = /usr/bin/touch
 
 .PHONY: all
 all: $(TARGET) $(CLIENT_DIST) $(ASSETS_DIST) $(PUBLIC_NODE_MODULES_DIST) $(PUBLIC_DIST)
@@ -77,7 +78,7 @@ $(ASSETS_DIST): $(ASSETS)
 
 $(PUBLIC_NODE_MODULES_DIST): $(PUBLIC_NODE_MODULES)
 	rsync -mrv --include='*/' --include-from=public.modules.txt --exclude='*' node_modules dist/public/
-	touch $(PUBLIC_NODE_MODULES_DIST)
+	$(touch) $(PUBLIC_NODE_MODULES_DIST)
 
 $(PUBLIC_DIST): $(PUBLIC)
 	rsync -mrv public/ dist/public/

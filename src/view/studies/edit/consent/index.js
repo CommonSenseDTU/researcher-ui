@@ -17,7 +17,9 @@ class Consent {
 
   addConsentStep(type: string) {
     var self: Consent = this;
-    fetch('/studies/consent/step/create/' + type).then(
+    fetch('/studies/consent/step/create/' + type, {
+      credentials: "include"
+    }).then(
       function(response) {
         if (response.status >= 400) {
           throw response.statusText;
@@ -39,7 +41,9 @@ class Consent {
 
   showConsentStep(step: ConsentSection, recursive: boolean) {
     var self: Consent = this;
-    fetch('/studies/consent/steps/template/' + step.type + '?id=' + step.id).then(
+    fetch('/studies/consent/steps/template/' + step.type + '?id=' + step.id, {
+      credentials: "include"
+    }).then(
       function(response) {
         if (response.status >= 400) {
           console.log('got error response: ' + response.status);

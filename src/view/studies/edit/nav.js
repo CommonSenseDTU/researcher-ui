@@ -8,7 +8,9 @@ declare var getmdlSelect: MDLSelect;
 
 class Navigation {
   setContent(url: string, completion: Function) {
-    fetch(url).then(
+    fetch(url, {
+      credentials: "include"
+    }).then(
         function(response) {
           if (!Cookies.get('bearer')) {
             window.location.assign('/join?return=' + document.location.pathname);

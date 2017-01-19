@@ -28,7 +28,9 @@ class Study {
 
   create(): boolean {
     var self: Study = this;
-    fetch('/studies/create').then(
+    fetch('/studies/create', {
+      credentials: "include"
+    }).then(
         function(response) {
           if (response.status !== 201) {
             console.log('Looks like there was a problem. Status Code: ' +

@@ -32,9 +32,11 @@ class Context {
   type: string;
   status: number;
   params: any;
+  query: any;
 
   constructor() {
     this.params = {};
+    this.query = {};
   }
 
   set(header: string, value: string) {
@@ -56,11 +58,29 @@ async function testSectionType(type: string, done: Function) {
   }
 }
 
+function testSectionTemplate(type: string, done: Function) {
+  try {
+    var context: Context = new Context();
+    context.query.id = "some-id";
+    context.params.type = type;
+    var consent: ConsentSections = new ConsentSections({});
+    consent.consentStepTemplate(context, next);
+    var document: Document = jsdom.jsdom(context.body);
+    var list = document.evaluate("//div[contains(@class, 'summary')]", document, null, 4, null);
+    var element = list.iterateNext();
+    assert.ok(element, "Summary not found");
+    done();
+  } catch (error) {
+    done(error);
+  }
+}
+
 describe('## ConsentSections view', () => {
-  describe('# ConsentSections ', () => {
-    before(function () {
-      winston.level = 'none';
-    });
+  before(function () {
+    winston.level = 'none';
+  });
+
+  describe('# Objects ', () => {
 
     it('can create overview section', async function (done) {
       testSectionType("overview", done);
@@ -104,6 +124,42 @@ describe('## ConsentSections view', () => {
 
     it('can create signature section', async function (done) {
       testSectionType("signature", done);
+    });
+
+  });
+
+  describe('# Templates ', () => {
+
+    it('can create overview template', async function (done) {
+      testSectionTemplate("overview", done);
+    });
+
+    it('can create datagathering template', async function (done) {
+      testSectionTemplate("datagathering", done);
+    });
+
+    it('can create privacy template', async function (done) {
+      testSectionTemplate("privacy", done);
+    });
+
+    it('can create datause template', async function (done) {
+      testSectionTemplate("datause", done);
+    });
+
+    it('can create timecommitment template', async function (done) {
+      testSectionTemplate("timecommitment", done);
+    });
+
+    it('can create studysurvey template', async function (done) {
+      testSectionTemplate("studysurvey", done);
+    });
+
+    it('can create studytasks template', async function (done) {
+      testSectionTemplate("studytasks", done);
+    });
+
+    it('can create withdrawing template', async function (done) {
+      testSectionTemplate("withdrawing", done);
     });
 
   });

@@ -57,7 +57,7 @@ const app: Koa = new Koa();
 var server: ?any;
 var virtualConsole = jsdom.createVirtualConsole();
 var scriptLoadingFeatures = {
-  FetchExternalResources: ["script", "link"],
+  FetchExternalResources: ["script"],
   ProcessExternalResources: ["script"],
   SkipExternalResources: false
 };
@@ -69,9 +69,20 @@ var scriptLoadingFeatures = {
  * @param {Function} callback - the function to call with the content of the fetched resource
  */
 function pwdRelativeLoader (resource, callback: Function) {
+  winston.debug("fetching resource:", resource.url.hostname, resource.url.pathname);
   var pathname: string = resource.url.pathname;
-  resource.url.pathname = process.cwd() + pathname;
-  winston.debug("fetching resource:", resource.url.pathname);
+  if (resource.url.hostname == "testhost.localhost") {
+    try {
+      var body = fs.readFileSync(process.cwd() + pathname);
+      callback(null, body);
+      return true;
+    } catch (error) {
+      callback(error);
+      return false;
+    }
+  } else {
+    resource.url.pathname = process.cwd() + pathname;
+  }
   return resource.defaultFetch(callback);
 }
 
@@ -179,9 +190,11 @@ describe('## Edit view', () => {
 
         jsdom.env({
           html: context.body,
+          url: "http://testhost.localhost/",
           src: [
             'nav.setContent("/studies/' + context.params.id + '/icon", function() {edit.showIconForm()})'
           ],
+          virtualConsole: virtualConsole,
           resourceLoader: function(resource, callback: Function) {
             if (resource.url.pathname == '/studies/' + context.params.id + '/icon') {
               var iconContext: Context = new Context();

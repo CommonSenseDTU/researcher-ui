@@ -88,7 +88,6 @@ class ConsentSections extends Controller {
       case 'withdrawing':
       case 'sharingoptions':
       case 'review':
-      case 'signature':
         const filename: string = this.dirname + "/" + ctx.params.type + ".json";
         await access(filename, fs.R_OK).then(
           async () => {
@@ -116,6 +115,18 @@ class ConsentSections extends Controller {
             type: ctx.params.type
           });
         });
+        break;
+      case 'signature':
+        var section: ConsentSection = {
+          id: uuid.v1(),
+          creation_date_time: (new Date()).toJSON(),
+          modification_date_time: (new Date()).toJSON(),
+          type: "signature",
+          title: "Signature",
+        };
+        ctx.body = section;
+        ctx.status = 201;
+        ctx.type = 'application/json';
         break;
       default:
         ctx.status = 406;

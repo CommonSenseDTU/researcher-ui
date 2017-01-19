@@ -7,8 +7,8 @@ export type ConsentSection = {
   modification_date_time: string,
   type: string,
   title: string,
-  summary: string,
-  content: string
+  summary?: string,
+  content?: string
 };
 
 export type ConsentDocument = {

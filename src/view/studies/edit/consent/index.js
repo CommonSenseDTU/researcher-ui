@@ -63,13 +63,17 @@ class Consent {
           if (!title) throw "Could not find title element";
           title.textContent = step.title;
 
-          var summary: ?HTMLElement = fetched.querySelector('.summary');
-          if (!summary) throw "Could not find summary element";
-          summary.textContent = step.summary;
+          if (step.summary) {
+            var summary: ?HTMLElement = fetched.querySelector('.summary');
+            if (!summary) throw "Could not find summary element";
+            summary.textContent = (step: any).summary;
+          }
 
-          var textarea: ?HTMLElement = fetched.querySelector('textarea');
-          if (!textarea) throw "Could not find textarea element";
-          textarea.textContent = step.content;
+          if (step.content) {
+            var textarea: ?HTMLElement = fetched.querySelector('textarea');
+            if (!textarea) throw "Could not find textarea element";
+            textarea.textContent = (step: any).content;
+          }
 
           var next: ?HTMLElement = fetched.querySelector('.next');
           if (!next) throw "Could not find next element";

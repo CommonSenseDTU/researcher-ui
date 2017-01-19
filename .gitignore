@@ -6,6 +6,7 @@ logs
 .editorconfig
 .jscsrc
 .jshintrc
+.tags
 
 # Runtime data
 pids

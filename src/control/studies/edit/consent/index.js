@@ -147,7 +147,7 @@ class ConsentSections extends Controller {
     var copy = naiveShallowCopy(this.opts);
     copy.stepId = ctx.query.id;
     switch (ctx.params.type) {
-    case 'signature':
+    case 'overview':
       copy.image = '/dist/public/transparent.png';
       ctx.body = this.stepTemplate(copy);
       break;
@@ -161,7 +161,7 @@ class ConsentSections extends Controller {
       copy.image = "/dist/public/view/studies/edit/consent/" + ctx.params.type + ".png";
       ctx.body = this.stepTemplate(copy);
       break;
-    case 'overview':
+    case 'signature':
       // TODO: add special case for this step type here
     case 'sharingoptions':
       // TODO: add special case for this step type here

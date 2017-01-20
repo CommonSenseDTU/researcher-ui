@@ -175,7 +175,7 @@ class Consent {
    *
    * @param {HTMLTextAreaElement} textarea - The DOM element which holds the content
    */
-  readConsentStepSummary(summary: HTMLTextAreaElement) {
+  readReviewConsentStepSummary(summary: HTMLTextAreaElement) {
     for (var section: ConsentSection of currentStudy.consent_document.sections) {
       var currentStepId: string = summary.attributes.getNamedItem("step-id").value;
       if (section.id == currentStepId) {

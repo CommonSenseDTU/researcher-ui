@@ -1,0 +1,40 @@
+a.review(href='#', onclick='edit.showDialog("step-more-' + stepId + '")')
+  .mdl-cell.step
+    .statusbar Carrier &bull;&bull;&bull;&bull;&bull;
+    .statusbar.clock 3:30 PM
+    .statusbar.battery
+      i.material-icons battery_std
+    .content
+      img.centered(src=image)
+      .title
+      .summary(step-id=stepId)
+    .next
+dialog.mdl-dialog.mdl-shadow--2dp(id='step-more-' + stepId)
+  h4.mdl-dialog__title Review
+  .mdl-dialog__content
+    p.
+      The review page should contain a complete consent document for review. The user
+      must explicitly agree to this step. Therefore, a dialog will be shown when "agree"
+      is pressed.
+    p.
+      The content of this step of the consent document can take the form of plain text
+      or #[a(href='https://en.wikipedia.org/wiki/Markdown', target='_blank') markdown]
+      #[i.material-icons(style='font-size: 1em') launch] syntax.
+    textarea(step-id=stepId, content-attribute='summary', style='width: 100%; min-height: 200px', onblur='consent.readConsentStepSummary(this)')
+    //- div(id='step-editor-stepId', style='width: 100%; min-height: 200px')
+    .mdl-dialog__actions
+      button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Done
+      span.mdl-layout-spacer
+      button.mdl-button.mdl-button--colored.mdl-js-button(type='button', onclick='edit.showDialog("step-agree-' + stepId + '")') Show agree button
+script dialogPolyfill.registerDialog(document.getElementbyId("step-more-#{stedId}"));
+dialog.mdl-dialog.mdl-dialog-inner.mdl-shadow--2dp(id='step-agree-' + stepId)
+  h4.mdl-dialog__title Agree Dialog
+  .mdl-dialog__content
+    p.
+      This is the contents of the agree dialog which pops up when the user presses
+      the "agree" button.
+    textarea(step-id=stepId, content-attribute='popup', style='width: 100%; min-height: 200px', onblur='consent.readConsentStepPopup(this)')
+    //- div(id='step-editor-stepId', style='width: 100%; min-height: 200px')
+    .mdl-dialog__actions
+      button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Done
+script dialogPolyfill.registerDialog(document.getElementbyId("step-agree-#{stedId}"));

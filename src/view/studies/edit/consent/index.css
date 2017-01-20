@@ -78,3 +78,6 @@
   bottom: 10px;
   left: 75px; /* Half of width of .step minus half of own width */
 }
+a.review {
+  color: inherit;
+}

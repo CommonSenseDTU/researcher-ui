@@ -9,7 +9,7 @@
     .summary(step-id=stepId, contenteditable='true', onblur='consent.readConsentStepSummary(this)')
     .more: a(href='#', onclick='edit.showDialog("step-more-' + stepId + '")') Learn more about this study first
   .next
-dialog.mdl-dialog(id='step-more-' + stepId)
+dialog.mdl-dialog.mdl-shadow--2dp(id='step-more-' + stepId)
   h4.mdl-dialog__title Learn more
   .mdl-dialog__content
     p.

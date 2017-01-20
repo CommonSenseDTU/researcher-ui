@@ -68,15 +68,30 @@ class Consent {
           title.textContent = step.title;
 
           if (step.summary) {
+            var currentSummary: string = step.summary;
             var summary: ?HTMLElement = fetched.querySelector('.summary');
             if (!summary) throw "Could not find summary element";
-            summary.textContent = (step: any).summary;
+            summary.textContent = currentSummary;
           }
 
-          if (step.content) {
-            var textarea: ?HTMLElement = fetched.querySelector('textarea');
-            if (!textarea) throw "Could not find textarea element";
-            textarea.textContent = (step: any).content;
+          if (step.type == "review") {
+            // summary should be set as content for review type dialogs
+            var textarea: ?HTMLElement = fetched.querySelector("textarea[content-attribute=summary]");
+            if (textarea && step.summary) {
+              textarea.textContent = step.summary;
+            }
+            textarea = fetched.querySelector("textarea[content-attribute=popup]");
+            if (textarea && step.popup) {
+              textarea.textContent = step.popup;
+            }
+          } else {
+            if (step.content) {
+              var currentContent: string = step.content;
+              var textarea: ?HTMLElement = fetched.querySelector('textarea');
+              if (textarea) {
+                textarea.textContent = currentContent;
+              }
+            }
           }
 
           var next: ?HTMLElement = fetched.querySelector('.next');
@@ -102,6 +117,13 @@ class Consent {
 
   showCurrentConsentSteps(first: boolean) {
     if (first) {
+      var content: ?HTMLElement = document.getElementById("consent-sections");
+      if (!content) {
+        throw "consent-sections element not found";
+      }
+      while (content.firstChild) {
+        content.removeChild(content.firstChild);
+      }
       this.completedStepCount = 0;
     }
     if (currentStudy.consent_document.sections.length > this.completedStepCount) {
@@ -129,6 +151,41 @@ class Consent {
     }
 
     this.edit.updateCurrentStudy();
+  }
+
+  /**
+   * Read popup content from review consent step and send it to backend.
+   *
+   * @param {HTMLTextAreaElement} textarea - The DOM element which holds the content
+   */
+  readConsentStepPopup(popup: HTMLTextAreaElement) {
+    for (var section: ConsentSection of currentStudy.consent_document.sections) {
+      var currentStepId: string = popup.attributes.getNamedItem("step-id").value;
+      if (section.id == currentStepId) {
+        section.popup = popup.value;
+        break;
+      }
+    }
+
+    this.edit.updateCurrentStudy();
+  }
+
+  /**
+   * Read summary content from review consent step and send it to backend.
+   *
+   * @param {HTMLTextAreaElement} textarea - The DOM element which holds the content
+   */
+  readConsentStepSummary(summary: HTMLTextAreaElement) {
+    for (var section: ConsentSection of currentStudy.consent_document.sections) {
+      var currentStepId: string = summary.attributes.getNamedItem("step-id").value;
+      if (section.id == currentStepId) {
+        section.summary = summary.value;
+        break;
+      }
+    }
+
+    this.edit.updateCurrentStudy();
+    this.showCurrentConsentSteps(true);
   }
 
   /**

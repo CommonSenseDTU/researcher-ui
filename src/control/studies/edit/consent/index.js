@@ -30,6 +30,7 @@ const readFile = promisify(fs.readFile, {multiArgs: true});
 class ConsentSections extends Controller {
 
   stepTemplate: Template;
+  reviewTemplate: Template;
 
   /**
    * Create a ConsentSections instance.
@@ -41,6 +42,7 @@ class ConsentSections extends Controller {
     super("./src/view/studies/edit/consent", opts);
 
     this.stepTemplate = this.compileFile('step.pug');
+    this.reviewTemplate = this.compileFile('review.pug');
 
     var self = this;
     this.router.get('/studies/:id/consent', function (ctx, next) {
@@ -161,11 +163,12 @@ class ConsentSections extends Controller {
       copy.image = "/dist/public/view/studies/edit/consent/" + ctx.params.type + ".png";
       ctx.body = this.stepTemplate(copy);
       break;
+    case 'review':
+      ctx.body = this.reviewTemplate(copy);
+      break;
     case 'signature':
       // TODO: add special case for this step type here
     case 'sharingoptions':
-      // TODO: add special case for this step type here
-    case 'review':
       // TODO: add special case for this step type here
     default:
       ctx.status = 406;

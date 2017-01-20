@@ -162,5 +162,8 @@ describe('## ConsentSections view', () => {
       testSectionTemplate("withdrawing", done);
     });
 
+    it('can create review template', async function (done) {
+      testSectionTemplate("review", done);
+    });
   });
 });

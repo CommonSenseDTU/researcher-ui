@@ -91,13 +91,19 @@ class Edit extends Controller {
       ctx.body = self.template(copy);
     }).catch(function (err) {
       winston.error('Something went wrong: ' + err);
-      var copy = naiveShallowCopy(self.opts);
-      Controller.setNoCacheHeaders(ctx);
-      copy.title = 'Edit Survey';
-      copy.survey = {};
-      copy.json = '{}';
-      copy.error = err;
-      ctx.body = self.template(copy);
+      winston.debug("code: " + err.response.statusCode);
+      if (err.response.statusCode >= 400 && err.response.statusCode < 500) {
+        // fall back to login page for all client errors
+        ctx.redirect('/join?return=' + ctx.path);
+      } else {
+        var copy = naiveShallowCopy(self.opts);
+        Controller.setNoCacheHeaders(ctx);
+        copy.title = 'Edit Survey';
+        copy.survey = {};
+        copy.json = '{}';
+        copy.error = err;
+        ctx.body = self.template(copy);
+      }
     });
   }
 

@@ -32,7 +32,13 @@ class Edit {
         'Authorization': 'Bearer ' + Cookies.get('bearer')
       },
       body: JSON.stringify(currentStudy)
-    }).catch(function(err) {
+    }).then(
+      function(response) {
+        if (response.status >= 400) {
+          throw response.statusText;
+        }
+      }
+    ).catch(function(err) {
       console.log('Fetch error: ' + err);
     });
   }

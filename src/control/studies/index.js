@@ -69,12 +69,17 @@ class Studies extends Controller {
       winston.debug('User has %d surveys', surveys.length);
       ctx.body = self.template(copy);
     }).catch(function (err) {
-      var copy = naiveShallowCopy(self.opts);
       winston.error('Call failed: ' + err);
-      Controller.setNoCacheHeaders(ctx);
-      copy.error = err;
-      copy.studies = [];
-      ctx.body = self.template(copy);
+      if (err.response.statusCode >= 400 && err.response.statusCode < 500) {
+        // fall back to login page for all client errors
+        ctx.redirect('/join?return=' + ctx.path);
+      } else {
+        var copy = naiveShallowCopy(self.opts);
+        Controller.setNoCacheHeaders(ctx);
+        copy.error = err;
+        copy.studies = [];
+        ctx.body = self.template(copy);
+      }
     });
   }
 

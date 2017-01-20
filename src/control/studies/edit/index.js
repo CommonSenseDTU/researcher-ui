@@ -92,8 +92,11 @@ class Edit extends Controller {
     }).catch(function (err) {
       winston.error('Something went wrong: ' + err);
       winston.debug("code: " + err.response.statusCode);
-      if (err.response.statusCode >= 400 && err.response.statusCode < 500) {
-        // fall back to login page for all client errors
+      if (err.response.statusCode == 404) {
+        // bubble file not found errors up
+        ctx.throw(404);
+      } else if (err.response.statusCode >= 400 && err.response.statusCode < 500) {
+        // fall back to login page for all other client errors
         ctx.redirect('/join?return=' + ctx.path);
       } else {
         var copy = naiveShallowCopy(self.opts);

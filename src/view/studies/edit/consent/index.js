@@ -290,7 +290,6 @@ class Consent {
     }
 
     this.edit.updateCurrentStudy();
-    this.showCurrentConsentSteps(true);
   }
 
   /**

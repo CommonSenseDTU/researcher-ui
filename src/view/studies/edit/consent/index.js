@@ -15,6 +15,11 @@ class Consent {
     this.edit = new Edit();
   }
 
+  /**
+   * Request a consent section from backend, add it to currentStudy and show it.
+   *
+   * @param {string} type - the consent section type
+   */
   addConsentStep(type: string) {
     var self: Consent = this;
     fetch('/studies/consent/step/create/' + type, {
@@ -39,6 +44,91 @@ class Consent {
     );
   }
 
+  /**
+   * Set title in consent step view.
+   *
+   * @param {ConsentSection} step - the object containing consent section properties
+   * @param {HTMLElement} fetched - the fetched html template to fill with section data
+   */
+  setConsentStepTitle(step: ConsentSection, fetched: HTMLElement) {
+    var title: ?HTMLElement = fetched.querySelector('.title');
+    if (!title) return;
+    title.textContent = step.title;
+  }
+
+  /**
+   * Set summary in consent step view.
+   *
+   * @param {ConsentSection} step - the object containing consent section properties
+   * @param {HTMLElement} fetched - the fetched html template to fill with section data
+   */
+  setConsentStepSummary(step: ConsentSection, fetched: HTMLElement) {
+    if (!step.summary) return;
+    var currentSummary: string = step.summary;
+    var summary: ?HTMLElement = fetched.querySelector('.summary');
+    if (summary) {
+      summary.textContent = currentSummary;
+    }
+  }
+
+  /**
+   * Set content in consent step view.
+   *
+   * @param {ConsentSection} step - the object containing consent section properties
+   * @param {HTMLElement} fetched - the fetched html template to fill with section data
+   */
+  setConsentStepContent(step: ConsentSection, fetched: HTMLElement) {
+    if (!step.content) return;
+    var currentContent: string = step.content;
+    var textarea: ?HTMLElement = fetched.querySelector('textarea');
+    if (textarea) {
+      textarea.textContent = currentContent;
+    }
+  }
+
+  /**
+   * Set content in review consent step view.
+   *
+   * @param {ConsentSection} step - the object containing consent section properties
+   * @param {HTMLElement} fetched - the fetched html template to fill with section data
+   */
+  setConsentReviewStepContent(step: ConsentSection, fetched: HTMLElement) {
+    // summary should be set as content for review type dialogs
+    var textarea: ?HTMLElement = fetched.querySelector("textarea[content-attribute=summary]");
+    if (textarea && step.summary) {
+      textarea.textContent = step.summary;
+    }
+    textarea = fetched.querySelector("textarea[content-attribute=popup]");
+    if (textarea && step.popup) {
+      textarea.textContent = step.popup;
+    }
+  }
+
+  /**
+   * Set next button title in consent step view.
+   *
+   * @param {ConsentSection} step - the object containing consent section properties
+   * @param {HTMLElement} fetched - the fetched html template to fill with section data
+   */
+  setConsentStepNextButton(fetched: HTMLElement) {
+    var next: ?HTMLElement = fetched.querySelector('.next');
+    if (!next) return;
+    if (this.completedStepCount == 1) {
+      next.textContent = "Get Started";
+    } else if (this.completedStepCount == currentStudy.consent_document.sections.length) {
+      next.textContent = "Done";
+    } else {
+      next.textContent = "Next";
+    }
+  }
+
+  /**
+   * Fetch consent step template, set appropriate data from given consent section.
+   * Iterate through following consent sections if the recursive flag is set.
+   *
+   * @param {ConsentSection} step - the object containing consent section properties
+   * @param {boolean} recursive - call showCurrentConsentSteps when done if true
+   */
   showConsentStep(step: ConsentSection, recursive: boolean) {
     var self: Consent = this;
     fetch('/studies/consent/steps/template/' + step.type + '?id=' + step.id, {
@@ -63,46 +153,19 @@ class Consent {
             throw "Could not find body in fetched template";
           }
 
-          var title: ?HTMLElement = fetched.querySelector('.title');
-          if (!title) throw "Could not find title element";
-          title.textContent = step.title;
+          self.setConsentStepTitle(step, fetched);
 
-          if (step.summary) {
-            var currentSummary: string = step.summary;
-            var summary: ?HTMLElement = fetched.querySelector('.summary');
-            if (!summary) throw "Could not find summary element";
-            summary.textContent = currentSummary;
-          }
+          self.setConsentStepSummary(step, fetched);
 
           if (step.type == "review") {
-            // summary should be set as content for review type dialogs
-            var textarea: ?HTMLElement = fetched.querySelector("textarea[content-attribute=summary]");
-            if (textarea && step.summary) {
-              textarea.textContent = step.summary;
-            }
-            textarea = fetched.querySelector("textarea[content-attribute=popup]");
-            if (textarea && step.popup) {
-              textarea.textContent = step.popup;
-            }
+            self.setConsentReviewStepContent(step, fetched);
           } else {
-            if (step.content) {
-              var currentContent: string = step.content;
-              var textarea: ?HTMLElement = fetched.querySelector('textarea');
-              if (textarea) {
-                textarea.textContent = currentContent;
-              }
-            }
+            self.setConsentStepContent(step, fetched);
           }
 
-          var next: ?HTMLElement = fetched.querySelector('.next');
-          if (!next) throw "Could not find next element";
-          if (self.completedStepCount == 1) {
-            next.textContent = "Get Started";
-          } else if (self.completedStepCount == currentStudy.consent_document.sections.length) {
-            next.textContent = "Done";
-          } else {
-            next.textContent = "Next";
           }
+
+          self.setConsentStepNextButton(fetched);
 
           while (fetched.childNodes.length > 0) {
             content.appendChild(fetched.childNodes[0]);
@@ -115,6 +178,14 @@ class Consent {
     );
   }
 
+  /**
+   * Show all consent sections.
+   * If first is true then remove all currently shown consent sections and
+   * start iteration through consent sections, otherwise show the next section
+   * based on the completedStepCount.
+   *
+   * @param {boolean} first - restart if true, continue if false
+   */
   showCurrentConsentSteps(first: boolean) {
     if (first) {
       var content: ?HTMLElement = document.getElementById("consent-sections");
@@ -132,6 +203,10 @@ class Consent {
     }
   }
 
+
+  /**
+   * Show all consent sections.
+   */
   showConsentNavigationCompletion() {
     this.showCurrentConsentSteps(true);
   }

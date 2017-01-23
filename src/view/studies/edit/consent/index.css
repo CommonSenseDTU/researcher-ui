@@ -82,6 +82,9 @@
 a.review {
   color: inherit;
 }
+a.review .step {
+  border: 1px solid rgb(217, 220, 226);
+}
 .step hr {
   display: block;
   height: 1px;

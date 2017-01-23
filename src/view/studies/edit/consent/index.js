@@ -123,6 +123,34 @@ class Consent {
   }
 
   /**
+   * Set sharing options in consent step view.
+   *
+   * @param {ConsentSection} step - the object containing consent section properties
+   * @param {HTMLElement} fetched - the fetched html template to fill with section data
+   */
+  setConsentStepSharingOptions(step: ConsentSection, fetched: HTMLElement) {
+    if (!step.options) return;
+    var shareAllContent: ?string = step.options[0];
+    var shareThisContent: ?string = step.options[1];
+    var doNotShareContent: ?string = step.options[2];
+
+    if (!shareAllContent) return;
+    var shareAll: ?HTMLElement = fetched.querySelector(".share-all");
+    if (!shareAll) return;
+    shareAll.textContent = shareAllContent;
+
+    if (!shareThisContent) return;
+    var shareThis: ?HTMLElement = fetched.querySelector(".share-this");
+    if (!shareThis) return;
+    shareThis.textContent = shareThisContent;
+
+    if (!doNotShareContent) return;
+    var doNotShare: ?HTMLElement = fetched.querySelector(".do-not-share");
+    if (!doNotShare) return;
+    doNotShare.textContent = doNotShareContent;
+  }
+
+  /**
    * Fetch consent step template, set appropriate data from given consent section.
    * Iterate through following consent sections if the recursive flag is set.
    *
@@ -163,6 +191,8 @@ class Consent {
             self.setConsentStepContent(step, fetched);
           }
 
+          if (step.type == "sharingoptions") {
+            self.setConsentStepSharingOptions(step, fetched);
           }
 
           self.setConsentStepNextButton(fetched);
@@ -273,6 +303,20 @@ class Consent {
     for (var section: ConsentSection of currentStudy.consent_document.sections) {
       if (section.id == stepId) {
         section.content = textarea.value;
+        break;
+      }
+    }
+
+    this.edit.updateCurrentStudy();
+  }
+
+  readShareOption(option: HTMLElement, index: number) {
+    var stepId: string = option.attributes.getNamedItem("step-id").value;
+    for (var section: ConsentSection of currentStudy.consent_document.sections) {
+      if (section.id == stepId) {
+        var options: ?string[] = section.options;
+        if (!options) break;
+        options[index] = option.textContent;
         break;
       }
     }

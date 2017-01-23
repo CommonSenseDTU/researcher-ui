@@ -1,0 +1,41 @@
+.mdl-cell.step
+  .statusbar Carrier &bull;&bull;&bull;&bull;&bull;
+  .statusbar.clock 3:30 PM
+  .statusbar.battery
+    i.material-icons battery_std
+  .content
+    img.centered(src=image)
+    .title Sharing Options
+    .summary(step-id=stepId, contenteditable='true', onblur='consent.readConsentStepSummary(this)')
+    hr
+    .full-width: .option
+      .share-all(step-id=stepId, contenteditable='true', onblur='consent.readShareOption(this, 0)')
+      .right-chevron: .center &gt;
+    hr
+    .full-width: .option
+      .share-this(step-id=stepId, contenteditable='true', onblur='consent.readShareOption(this, 1)')
+      .right-chevron: .center &gt;
+    hr
+    .full-width: .option
+      .do-not-share(step-id=stepId, contenteditable='true', onblur='consent.readShareOption(this, 2)')
+      .right-chevron: .center &gt;
+    hr
+    .more Learn more about this study first
+  .next
+dialog.mdl-dialog.mdl-shadow--2dp(id='step-more-' + stepId)
+  h4.mdl-dialog__title Learn more
+  .mdl-dialog__content
+    p.
+      The learn more page is shown when the user presses the "learn more" link below
+      the summary at a given step in a consent document. It should provide comprehensive
+      documentation of everything involved in consenting to this step in the consent
+      document.
+    p.
+      The content of this step of the consent document can take the form of plain text
+      or #[a(href='https://en.wikipedia.org/wiki/Markdown', target='_blank') markdown]
+      #[i.material-icons(style='font-size: 1em') launch] syntax.
+    textarea(step-id=stepId, style='width: 100%; min-height: 200px', onblur='consent.readConsentStepContent(this)')
+    //- div(id='step-editor-stepId', style='width: 100%; min-height: 200px')
+    .mdl-dialog__actions
+      button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Done
+script dialogPolyfill.registerDialog(document.getElementbyId("step-more-#{stedId}"));

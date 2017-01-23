@@ -9,7 +9,8 @@ export type ConsentSection = {
   title: string,
   summary?: string,
   content?: string,
-  popup?: string
+  popup?: string,
+  options?: string[]
 };
 
 export type ConsentDocument = {

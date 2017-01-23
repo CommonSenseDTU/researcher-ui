@@ -165,5 +165,9 @@ describe('## ConsentSections view', () => {
     it('can create review template', async function (done) {
       testSectionTemplate("review", done);
     });
+
+    it('can create sharingoptions template', async function (done) {
+      testSectionTemplate("sharingoptions", done);
+    });
   });
 });

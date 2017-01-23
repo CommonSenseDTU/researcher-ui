@@ -1,9 +1,11 @@
 {
-  "type": "review",
-  "title": "Review",
-  "summary": "Replace this with a description of sharing options.",
+  "type": "sharingoptions",
+  "title": "Sharing Options",
+  "summary": "<this study> will receive your study data from your participation if you choose so.\n\nSharing your coded study data more broadly may benefit this and future research.",
+  "content": "Describe how data is shared",
   "options": [
-      "Replace with description of some sharing option",
-      "Replace with description of another sharing option"
-    ]
+    "Share my data with <this study> and qualified researchers worldwide",
+    "Share my data with <this study>",
+    "Only store my data locally"
+  ]
 }

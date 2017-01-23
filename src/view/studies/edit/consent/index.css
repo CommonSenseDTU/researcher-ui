@@ -81,3 +81,40 @@
 a.review {
   color: inherit;
 }
+.step hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid rgb(217, 220, 226);
+  margin: 0.5em 0;
+  padding: 0;
+}
+.share-all, .share-this, .do-not-share {
+  font-size: 12px;
+  text-align: left;
+  font-weight: bolder;
+  padding-left: 10px;
+  display: table-cell;
+}
+.option {
+  display: table-row;
+}
+.right-chevron {
+  position: relative;
+  text-align: right;
+  display: table-cell;
+  width: 2em;
+  right: 0;
+}
+.right-chevron .center {
+  margin: 0;
+  padding-right: 2em;
+  padding-left: 1em;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.full-width {
+  display: table;
+  width: 100%;
+}

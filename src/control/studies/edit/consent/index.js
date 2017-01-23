@@ -31,6 +31,7 @@ class ConsentSections extends Controller {
 
   stepTemplate: Template;
   reviewTemplate: Template;
+  sharingoptionsTemplate: Template;
 
   /**
    * Create a ConsentSections instance.
@@ -43,6 +44,7 @@ class ConsentSections extends Controller {
 
     this.stepTemplate = this.compileFile('step.pug');
     this.reviewTemplate = this.compileFile('review.pug');
+    this.sharingoptionsTemplate = this.compileFile('sharingoptions.pug');
 
     var self = this;
     this.router.get('/studies/:id/consent', function (ctx, next) {
@@ -166,9 +168,10 @@ class ConsentSections extends Controller {
     case 'review':
       ctx.body = this.reviewTemplate(copy);
       break;
-    case 'signature':
-      // TODO: add special case for this step type here
     case 'sharingoptions':
+      ctx.body = this.sharingoptionsTemplate(copy);
+      break;
+    case 'signature':
       // TODO: add special case for this step type here
     default:
       ctx.status = 406;

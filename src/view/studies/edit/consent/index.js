@@ -324,6 +324,27 @@ class Consent {
     this.edit.updateCurrentStudy();
   }
 
+  /**
+   * Delete a consent step.
+   *
+   * @param {string} stepId - id of the consent section to delete
+   */
+  deleteStep(stepId: string) {
+    var dialog: ?any = document.getElementById('step-delete-' + stepId);
+    if (dialog) {
+      dialog.close();
+    }
+    var sections: ConsentSection[] = currentStudy.consent_document.sections;
+    for (var index: number = 0 ; index < currentStudy.consent_document.sections.length ; index++ ) {
+      if (sections[index].id == stepId) {
+        sections.splice(index, 1);
+        break;
+      }
+    }
+    this.edit.updateCurrentStudy();
+    this.showCurrentConsentSteps(true);
+  }
+
 }
 
 window.consent = new Consent();

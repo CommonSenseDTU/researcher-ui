@@ -85,6 +85,9 @@ a.review {
 a.review .step {
   border: 1px solid rgb(217, 220, 226);
 }
+a.review .summary {
+  text-align: left;
+}
 .step hr {
   display: block;
   height: 1px;

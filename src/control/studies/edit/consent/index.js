@@ -33,6 +33,7 @@ class ConsentSections extends Controller {
   stepTemplate: Template;
   reviewTemplate: Template;
   sharingoptionsTemplate: Template;
+  consentTemplate: Template;
 
   /**
    * Create a ConsentSections instance.
@@ -46,6 +47,7 @@ class ConsentSections extends Controller {
     this.stepTemplate = this.compileFile('step.pug');
     this.reviewTemplate = this.compileFile('review.pug');
     this.sharingoptionsTemplate = this.compileFile('sharingoptions.pug');
+    this.consentTemplate = this.compileFile('consent.pug');
 
     var self = this;
     this.router.get('/studies/:id/consent', function (ctx, next) {
@@ -93,6 +95,7 @@ class ConsentSections extends Controller {
       case 'withdrawing':
       case 'sharingoptions':
       case 'review':
+      case 'consent':
         const filename: string = this.dirname + "/" + ctx.params.type + ".json";
         await access(filename, fs.R_OK).then(
           async () => {
@@ -173,6 +176,9 @@ class ConsentSections extends Controller {
       break;
     case 'sharingoptions':
       ctx.body = this.sharingoptionsTemplate(copy);
+      break;
+    case 'consent':
+      ctx.body = this.consentTemplate(copy);
       break;
     case 'signature':
       // TODO: add special case for this step type here

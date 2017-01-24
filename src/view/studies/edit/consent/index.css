@@ -104,10 +104,17 @@ a.review .summary {
   margin: 0.5em 0;
   padding: 0;
 }
-.share-all, .share-this, .do-not-share {
+.share-all, .share-this, .do-not-share, .consent-name {
   font-size: 12px;
   text-align: left;
   font-weight: bolder;
+  padding-left: 10px;
+  display: table-cell;
+}
+.consent-value {
+  font-size: 12px;
+  text-align: left;
+  font-weight: lighter;
   padding-left: 10px;
   display: table-cell;
 }

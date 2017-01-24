@@ -10,6 +10,7 @@ import uuid from 'node-uuid';
 import fs from 'fs';
 import promisify from 'es6-promisify';
 import { naiveShallowCopy } from '../../../../lib/shallow-copy';
+import winston from 'winston';
 
 /**
  * Type declarations.
@@ -112,12 +113,14 @@ class ConsentSections extends Controller {
             );
           }
         ).catch(function (err) {
+          winston.error("Caught error: " + err);
           ctx.status = 500;
           ctx.type = 'application/json';
           ctx.body = JSON.stringify({
             error: err,
             type: ctx.params.type
           });
+          winston.debug("Setting body to: " + ctx.body);
         });
         break;
       case 'signature':

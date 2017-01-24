@@ -169,5 +169,9 @@ describe('## ConsentSections view', () => {
     it('can create sharingoptions template', async function (done) {
       testSectionTemplate("sharingoptions", done);
     });
+
+    it('can create signature template', async function (done) {
+      testSectionTemplate("signature", done);
+    });
   });
 });

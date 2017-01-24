@@ -34,6 +34,7 @@ class ConsentSections extends Controller {
   reviewTemplate: Template;
   sharingoptionsTemplate: Template;
   consentTemplate: Template;
+  signatureTemplate: Template;
 
   /**
    * Create a ConsentSections instance.
@@ -48,6 +49,7 @@ class ConsentSections extends Controller {
     this.reviewTemplate = this.compileFile('review.pug');
     this.sharingoptionsTemplate = this.compileFile('sharingoptions.pug');
     this.consentTemplate = this.compileFile('consent.pug');
+    this.signatureTemplate = this.compileFile('signature.pug');
 
     var self = this;
     this.router.get('/studies/:id/consent', function (ctx, next) {
@@ -96,6 +98,7 @@ class ConsentSections extends Controller {
       case 'sharingoptions':
       case 'review':
       case 'consent':
+      case 'signature':
         const filename: string = this.dirname + "/" + ctx.params.type + ".json";
         await access(filename, fs.R_OK).then(
           async () => {
@@ -125,18 +128,6 @@ class ConsentSections extends Controller {
           });
           winston.debug("Setting body to: " + ctx.body);
         });
-        break;
-      case 'signature':
-        var section: ConsentSection = {
-          id: uuid.v1(),
-          creation_date_time: (new Date()).toJSON(),
-          modification_date_time: (new Date()).toJSON(),
-          type: "signature",
-          title: "Signature",
-        };
-        ctx.body = section;
-        ctx.status = 201;
-        ctx.type = 'application/json';
         break;
       default:
         ctx.status = 406;
@@ -181,7 +172,9 @@ class ConsentSections extends Controller {
       ctx.body = this.consentTemplate(copy);
       break;
     case 'signature':
-      // TODO: add special case for this step type here
+      copy.image = "/dist/public/view/studies/edit/consent/signature.png";
+      ctx.body = this.signatureTemplate(copy);
+      break;
     default:
       ctx.status = 406;
       ctx.type = 'application/json';

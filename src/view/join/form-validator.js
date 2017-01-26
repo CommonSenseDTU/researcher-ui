@@ -44,7 +44,7 @@ class FormValidator {
       this.submitted = false;
       throw "Missing elements in form";
     }
-    fetch('/users', {
+    fetch('/v1/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -109,7 +109,7 @@ class FormValidator {
     formData.append('username', username.value);
     formData.append('password', userpass.value);
     var self = this;
-    fetch('/oauth/token', {
+    fetch('/v1/oauth/token', {
       method: 'POST',
       headers: {
         'Authorization': 'Basic ' + btoa(clientAuth)

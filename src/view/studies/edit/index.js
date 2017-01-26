@@ -25,7 +25,7 @@ class Edit {
     if (!Cookies.get('bearer')) {
       window.location.assign('/join?return=' + window.location.pathname);
     }
-    fetch('/surveys', {
+    fetch('/v1/surveys', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

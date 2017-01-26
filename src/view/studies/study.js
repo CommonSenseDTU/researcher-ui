@@ -6,7 +6,7 @@ import type { Survey } from '../../control/studies/survey.type';
 
 class Study {
   save(study: Survey) {
-    fetch('/surveys', {
+    fetch('/v1/surveys', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

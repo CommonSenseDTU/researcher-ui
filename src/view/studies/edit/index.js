@@ -173,7 +173,21 @@ class Edit {
     })(iconimg);
     reader.readAsDataURL(files[0]);
 
-    // TODO: upload image and set icon property of currentStudy
+    console.log("Uploading file...");
+    var formData: FormData = new FormData();
+    formData.append("file", files[0]);
+    fetch('/studies/' + currentStudy.id + '/icon', {
+      method: 'PUT',
+      credentials: 'include',
+      body: formData
+    }).then(function(response) {
+      return response.json();
+    }).then(function(icon) {
+      currentStudy.icon = icon.path;
+    }).catch(function(err) {
+      console.log('Fetch error: ' + err);
+    });
+
   }
 
   /**

@@ -18,6 +18,7 @@ import Join from './control/join';
 import Logout from './control/logout';
 import Studies from './control/studies';
 import Edit from './control/studies/edit';
+import Icon from './control/studies/edit/icon';
 import ConsentSections from './control/studies/edit/consent';
 
 /**
@@ -31,6 +32,8 @@ import type { Options } from './options.type';
 var opts: Options = {
   clientAuth: process.env.CLIENT_AUTH || "no:auth",
   resourceServer: process.env.RESOURCE_SERVER || "localhost:8083",
+  uploadFolder: process.cwd() + "/tmp",
+  uploadSizeLimit: "2mb",
   port: parseInt(process.env.PORT, 10) || 3000
 };
 
@@ -135,6 +138,7 @@ export function server() {
   // Add routes which require authorization
   addRouter(app, new Studies(opts));
   addRouter(app, new Edit(opts));
+  addRouter(app, new Icon(opts));
   addRouter(app, new ConsentSections(opts));
 
   winston.info('Ready and accepting connections!');

@@ -23,10 +23,9 @@ import type { Survey } from '../survey.type';
 class Edit extends Controller {
 
   infoTemplate: Template;
-  iconTemplate: Template;
 
   /**
-   * Create a Studies instance.
+   * Create an Edit instance.
    * Configure routes.
    *
    * @param {Options} opts - The options passed to pug when compiling
@@ -37,7 +36,6 @@ class Edit extends Controller {
     winston.info("Using resource server: " + opts.resourceServer);
 
     this.infoTemplate = this.compileFile('info.pug');
-    this.iconTemplate = this.compileFile('icon.pug');
 
     var self = this;
     this.router.get('/studies/:id', async (ctx, next) => {
@@ -46,10 +44,6 @@ class Edit extends Controller {
 
     this.router.get('/studies/:id/info', function (ctx, next) {
       self.info(ctx, next);
-    });
-
-    this.router.get('/studies/:id/icon', function (ctx, next) {
-      self.icon(ctx, next);
     });
 
     this.router.get('/studies/:id/tasks', function (ctx, next) {
@@ -121,19 +115,6 @@ class Edit extends Controller {
     var copy = naiveShallowCopy(this.opts);
     copy.surveyId = ctx.params.id;
     ctx.body = this.infoTemplate(copy);
-  }
-
-  /**
-   * Serve edit survey icon UI
-   * Handle /studies/:id/icon GET requests
-   *
-   * @param {Context} ctx - Koa context
-   * @param {Function} next - The next handler to proceed to after processing is complete
-   */
-  icon(ctx: any, next: Function) {
-    var copy = naiveShallowCopy(this.opts);
-    copy.studyId = ctx.params.id;
-    ctx.body = this.iconTemplate(copy);
   }
 }
 

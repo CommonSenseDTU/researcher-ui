@@ -9,6 +9,7 @@ logs
 .tags
 
 # Runtime data
+tmp
 pids
 *.pid
 *.seed

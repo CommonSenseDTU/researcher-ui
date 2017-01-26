@@ -1,5 +1,5 @@
 h4 Survey Icon
-form.iconupload(enctype='multipart/form-data' action='/studies/icon/' + studyId)
+form.iconupload(enctype='multipart/form-data' action='/studies/' + studyId + '/icon', method='PUT')
   p.
     The survey icon will be used as an App Store icon, iOS application icon,
     and web application icon. The icon must be 1024x1024 pixel size.

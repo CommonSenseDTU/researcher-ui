@@ -4,6 +4,7 @@
 /**
  * Module dependencies.
  */
+import http from 'http';
 import Koa from 'koa';
 import serve from 'koa-static-folder';
 import convert from 'koa-convert';
@@ -55,6 +56,7 @@ function addRouter(app: Koa, koaRouter: Controller) {
  */
 function requestTimer(ctx: any, next: any) {
   var start = new Date;
+  winston.debug("incoming connection %s %s", ctx.method, ctx.url);
   return next().then(() => {
     var ms = new Date - start;
     winston.info('%s %s - %sms', ctx.method, ctx.url, ms);
@@ -94,12 +96,14 @@ function configureLogger() {
   });
 }
 
+var connectionCount: number = 0;
+
 /**
  * Create a Koa instance, add routes and start listening on given port.
  */
 export function server() {
   configureLogger();
-  
+
   if (fs.existsSync('app.config.json')) {
     var readOpts: Options = JSON.parse(fs.readFileSync('app.config.json').toString());
     var key: string;
@@ -142,5 +146,18 @@ export function server() {
   addRouter(app, new ConsentSections(opts));
 
   winston.info('Ready and accepting connections!');
-  app.listen(opts.port);
+
+  var server = http.createServer(app.callback());
+
+  if (winston.level == "debug") {
+    server.on('connection', function(socket){
+      connectionCount++;
+      winston.debug("Open connection count: " + connectionCount);
+      socket.on('close', function(exception) {
+        connectionCount--;
+        winston.debug("Open connection count: " + connectionCount);
+      });
+    });
+  }
+  server.listen(opts.port);
 }

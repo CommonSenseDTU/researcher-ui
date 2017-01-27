@@ -155,6 +155,10 @@ class Edit {
    * @param {files} - The list of selected or dropped files.
    */
   handleFiles(files: FileList) {
+    if (!Cookies.get('bearer')) {
+      window.location.assign('/join?return=' + window.location.pathname);
+    }
+
     if (files.length == 0) {
       return;
     }

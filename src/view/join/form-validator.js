@@ -140,7 +140,7 @@ class FormValidator {
           }
           Cookies.set('bearer', data.access_token, { expires: data.expires_in });
           Cookies.set('refresh', data.refresh_token, { expires: Infinity });
-          Cookies.set('userid', username.value, { expires: data.expires_in });
+          Cookies.set('userid', username.value, { expires: Infinity });
           var urlParams: URLSearchParams = new URLSearchParams(window.location.search);
           if (urlParams.has('return')) {
             window.location.replace(urlParams.get('return'));
@@ -154,6 +154,43 @@ class FormValidator {
       self.submitted = false;
     });
     return false;
+  }
+
+  refresh() {
+    var refreshToken: ?string = Cookies.get('refresh');
+    if (!refreshToken) { return }
+    var main: ?HTMLElement = document.querySelector('main');
+    if (main) { main.style.display = 'none' }
+    var formData: FormData = new FormData();
+    formData.append('grant_type', 'refresh_token');
+    formData.append('refresh_token', refreshToken);
+    var self = this;
+    fetch('/v1/oauth/token', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + btoa(clientAuth)
+      },
+      body: formData
+    }).then(
+      function(response) {
+        if (response.status !== 200) { throw "Could not refresh" }
+        return response.json()
+      }
+    ).then(
+      function(data) {
+        Cookies.set('bearer', data.access_token, { expires: data.expires_in });
+        Cookies.set('refresh', data.refresh_token, { expires: Infinity });
+        var urlParams: URLSearchParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('return')) {
+          window.location.replace(urlParams.get('return'));
+        } else {
+          window.location.replace('/');
+        }
+      }
+    ).catch(function(err) {
+      console.log('Fetch error: ' + err);
+      if (main) { main.style.display = 'block' }
+    });
   }
 
   /**

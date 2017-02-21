@@ -1,0 +1,11 @@
+{
+  "type": "registration",
+  "title": "Account Registration",
+  "summary": "Please register at this point",
+  "options": [
+    "includeGivenName",
+    "includeFamilyName",
+    "includeGender",
+    "includeDOB"
+  ]
+}

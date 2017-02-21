@@ -104,12 +104,28 @@ a.review .summary {
   margin: 0.5em 0;
   padding: 0;
 }
-.share-all, .share-this, .do-not-share, .consent-name {
+.share-all, .share-this, .do-not-share, .consent-name, .additional-information {
   font-size: 12px;
   text-align: left;
   font-weight: bolder;
   padding-left: 10px;
   display: table-cell;
+}
+.additional-information {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.additional-information-disabled {
+  font-style: italic;
+  color: grey;
+}
+.additional-information-disabled::after {
+  font-style: italic;
+  color: grey;
+  content: " (Disabled)";
 }
 .consent-value {
   font-size: 12px;

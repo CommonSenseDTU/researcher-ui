@@ -323,6 +323,44 @@ class Consent {
     this.edit.updateCurrentStudy();
   }
 
+  toggleRegistrationOption(option: HTMLElement, key: string) {
+    var stepId: string = option.attributes.getNamedItem("step-id").value;
+    for (var section: ConsentSection of currentStudy.consent_document.sections) {
+      if (section.id == stepId) {
+        var options: ?string[] = section.options;
+        if (!options) break;
+        var index = options.indexOf(key);
+        if (index == -1) {
+          options.push(key);
+          option.classList.remove("additional-information-disabled");
+        } else {
+          options.splice(index, 1);
+          option.classList.add("additional-information-disabled");
+        }
+        section.options = options;
+        break;
+      }
+    }
+
+    this.edit.updateCurrentStudy();
+  }
+
+  loadRegistrationOption(option: HTMLElement, key: string) {
+    var stepId: string = option.attributes.getNamedItem("step-id").value;
+    var hasOption: boolean = false;
+    for (var section: ConsentSection of currentStudy.consent_document.sections) {
+      if (section.id == stepId) {
+        var options: ?string[] = section.options;
+        if (!options) break;
+        hasOption = options.includes(key);
+        break;
+      }
+    }
+    if (hasOption) {
+      option.classList.add("additional-information-disabled");
+    }
+  }
+
   /**
    * Delete a consent step.
    *

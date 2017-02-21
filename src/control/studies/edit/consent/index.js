@@ -35,6 +35,7 @@ class ConsentSections extends Controller {
   sharingoptionsTemplate: Template;
   consentTemplate: Template;
   signatureTemplate: Template;
+  registrationTemplate: Template;
 
   /**
    * Create a ConsentSections instance.
@@ -50,6 +51,7 @@ class ConsentSections extends Controller {
     this.sharingoptionsTemplate = this.compileFile('sharingoptions.pug');
     this.consentTemplate = this.compileFile('consent.pug');
     this.signatureTemplate = this.compileFile('signature.pug');
+    this.registrationTemplate = this.compileFile('registration.pug');
 
     var self = this;
     this.router.get('/studies/:id/consent', function (ctx, next) {
@@ -99,6 +101,7 @@ class ConsentSections extends Controller {
       case 'review':
       case 'consent':
       case 'signature':
+      case 'registration':
         const filename: string = this.dirname + "/" + ctx.params.type + ".json";
         await access(filename, fs.R_OK).then(
           async () => {
@@ -174,6 +177,15 @@ class ConsentSections extends Controller {
     case 'signature':
       copy.image = "/dist/public/view/studies/edit/consent/signature.png";
       ctx.body = this.signatureTemplate(copy);
+      break;
+    case 'registration':
+      copy.options = [
+        { key: "includeGivenName", text: "First Name" },
+        { key: "includeFamilyName", text: "Last Name" },
+        { key: "includeGender", text: "Gender" },
+        { key: "includeDOB", text: "Date of Birth" }
+      ];
+      ctx.body = this.registrationTemplate(copy);
       break;
     default:
       ctx.status = 406;

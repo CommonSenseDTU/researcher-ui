@@ -1,0 +1,23 @@
+.mdl-cell.step
+  .statusbar Carrier &bull;&bull;&bull;&bull;&bull;
+  .statusbar.clock 3:30 PM
+  .statusbar.battery
+    i.material-icons battery_std
+  .content
+    .title Account Registration
+    .summary(step-id=stepId, contenteditable='true', onblur='consent.readConsentStepSummary(this)')
+    each option in options
+      hr
+      .full-width: .option
+        .additional-information(step-id=stepId, onclick='consent.toggleRegistrationOption(this, "' + option.key + '")', onload='consent.loadRegistrationOption(this, "' + option.key + '")') #{option.text}
+    hr
+  .next
+button.mdl-button.mdl-button--icon.mdl-button--accent.delete-step(action='#', onclick='edit.showDialog("step-delete-' + stepId + '")'): i.material-icons highlight_off
+dialog.mdl-dialog.mdl-shadow--2dp(id='step-delete-' + stepId)
+  h4.mdl-dialog__title Delete Step
+  .mdl-dialog__content
+    p Registration is required. Deleting this step will default to standard registration options.
+    .mdl-dialog__actions
+      button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Cancel
+      button.mdl-button.mdl-button--colored.mdl-js-button(type='button', onclick='consent.deleteStep("' + stepId + '")') Delete
+script dialogPolyfill.registerDialog(document.getElementbyId("step-delete-#{stedId}"));

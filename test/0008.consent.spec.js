@@ -126,6 +126,9 @@ describe('## ConsentSections view', () => {
       testSectionType("signature", done);
     });
 
+    it('can create registration section', async function (done) {
+      testSectionType("registration", done);
+    });
   });
 
   describe('# Templates ', () => {
@@ -173,5 +176,10 @@ describe('## ConsentSections view', () => {
     it('can create signature template', async function (done) {
       testSectionTemplate("signature", done);
     });
+
+    it('can create registration template', async function (done) {
+      testSectionTemplate("registration", done);
+    });
+
   });
 });

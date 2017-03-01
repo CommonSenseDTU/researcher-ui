@@ -20,8 +20,10 @@ class Edit {
   /**
    * Send current study to backend, and redirect to login screen if session
    * is invalid.
+   *
+   * @param {?Function} completion - optional completion block executed after request.
    */
-  updateCurrentStudy() {
+  updateCurrentStudy(completion: ?Function) {
     if (!Cookies.get('bearer')) {
       window.location.assign('/join?return=' + window.location.pathname);
     }
@@ -36,6 +38,9 @@ class Edit {
       function(response) {
         if (response.status >= 400) {
           throw response.statusText;
+        }
+        if (completion) {
+          completion();
         }
       }
     ).catch(function(err) {

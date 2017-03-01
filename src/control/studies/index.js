@@ -78,6 +78,7 @@ class Studies extends Controller {
         Controller.setNoCacheHeaders(ctx);
         copy.error = err;
         copy.studies = [];
+        copy.title = 'Surveys';
         ctx.body = self.template(copy);
       }
     });

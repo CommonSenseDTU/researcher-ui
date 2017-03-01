@@ -70,7 +70,7 @@ class Studies extends Controller {
       ctx.body = self.template(copy);
     }).catch(function (err) {
       winston.error('Call failed: ' + err);
-      if (err.response.statusCode >= 400 && err.response.statusCode < 500) {
+      if (err.response && err.response.statusCode >= 400 && err.response.statusCode < 500) {
         // fall back to login page for all client errors
         ctx.redirect('/join?return=' + ctx.path);
       } else {

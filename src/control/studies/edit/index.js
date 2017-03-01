@@ -46,10 +46,6 @@ class Edit extends Controller {
       self.info(ctx, next);
     });
 
-    this.router.get('/studies/:id/tasks', function (ctx, next) {
-      ctx.body = 'Task info here';
-    });
-
     this.router.get('/studies/:id/test', function (ctx, next) {
       ctx.body = 'Test flight info here';
     });

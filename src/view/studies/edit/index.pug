@@ -11,9 +11,10 @@ html(lang="en")
     script(src='/dist/public/node_modules/dialog-polyfill/dialog-polyfill.js')
     script(src='/dist/public/studies/edit/index.js')
     script(src='/dist/public/studies/edit/consent/index.js')
+    script(src='/dist/public/studies/edit/tasks/index.js')
     script var currentStudy = !{json};
     script.
-      var noCompletion = function () {}
+      var noCompletion = function () {};
       var load = function () {
         getmdlSelect.init('.getmdl-select');
         document.addEventListener("DOMNodeInserted", function (ev) {
@@ -25,6 +26,7 @@ html(lang="en")
       include ../index.css
       include index.css
       include consent/index.css
+      include tasks/index.css
   body(onload='load()')
     .mdl-layout.mdl-js-layout
       //- /* Show header with a back button */

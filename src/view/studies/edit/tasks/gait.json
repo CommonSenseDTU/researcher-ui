@@ -1,0 +1,6 @@
+{
+  "title": "Gait and Balance",
+  "type": "gait",
+  "sensors": ["gps", "gyroscope", "stepCount"],
+  "settings": {}
+}

@@ -21,6 +21,7 @@ import Studies from './control/studies';
 import Edit from './control/studies/edit';
 import Icon from './control/studies/edit/icon';
 import ConsentSections from './control/studies/edit/consent';
+import Tasks from './control/studies/edit/tasks';
 
 /**
  * Type declarations.
@@ -144,6 +145,7 @@ export function server() {
   addRouter(app, new Edit(opts));
   addRouter(app, new Icon(opts));
   addRouter(app, new ConsentSections(opts));
+  addRouter(app, new Tasks(opts));
 
   winston.info('Ready and accepting connections!');
 

@@ -1,0 +1,42 @@
+h4 Tasks
+p.
+  Add tasks below. Active tasks are tasks which are performed while the
+  application is open and running in the foreground. Each active task can have
+  a number of sensors configured which run in the background, either while the
+  application is open or continously, even when the application is backgrounded.
+p.
+  Task title, number of running sensors and other settings can be configured in
+  the settings (#[i.material-icons(style='font-size: 1em; transform: translateY(0.2em)') settings]) for each
+  task.
+button.mdl-button.mdl-button--colored.mdl-js-button(id='addtask') Add new task
+ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu(for='addtask')
+  a(href='#', onclick='task.addTask("gait")'): li.mdl-menu__item Gait and balance
+  a(href='#', onclick='task.addTask("tappingspeed")'): li.mdl-menu__item Tapping speed
+  a(href='#', onclick='task.addTask("fitness")'): li.mdl-menu__item Fitness
+  a(href='#', onclick='task.addTask("timedwalk")'): li.mdl-menu__item Timed walk
+  a(href='#', onclick='task.addTask("custom")'): li.mdl-menu__item Custom task
+
+tasklist(style='margin-top: 10px')
+  taskpropertylist
+    taskproperty.order Order
+    taskproperty.type Type
+    taskproperty.title Title
+    taskproperty.settings Settings
+    taskproperty.action Action
+  each task, index in tasks
+    taskinfo
+      taskproperty.order= index + 1
+      taskproperty.type= task.type
+      taskproperty.title(contenteditable='true', onblur='task.setStepTitle("' + task.id + '", this)')= task.title
+      taskproperty.settings: a(href='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks/' + task.id + '", noCompletion)'): i.material-icons.align-line settings
+      taskproperty.action: button.mdl-button.mdl-button--icon.mdl-button--accent(action='#', onclick='edit.showDialog("task-delete-' + task.id + '")'): i.material-icons highlight_off
+
+each task in tasks
+  dialog.mdl-dialog.mdl-shadow--2dp(id='task-delete-' + task.id)
+    h4.mdl-dialog__title Delete Task
+    .mdl-dialog__content
+      p Are you sure you want to delete the #{task.title} task?
+      .mdl-dialog__actions
+        button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Cancel
+        button.mdl-button.mdl-button--colored.mdl-js-button(type='button', onclick='task.deleteStep("' + task.id + '")') Delete
+  script dialogPolyfill.registerDialog(document.getElementbyId("task-delete-#{task.id}"));

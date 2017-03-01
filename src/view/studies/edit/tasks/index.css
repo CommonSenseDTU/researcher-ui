@@ -1,0 +1,44 @@
+tasklist {
+  display: table;
+  width: 100%;
+  border: 1px solid rgb(217, 220, 226);
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+taskpropertylist {
+  display: table-header-group;
+  font-weight: bolder;
+}
+taskinfo {
+  display: table-row;
+}
+taskinfo:nth-child(even) {
+  background: #fff;
+}
+taskinfo:nth-child(odd) {
+  background: #ddd;
+}
+taskproperty {
+  display: table-cell;
+}
+taskproperty.order {
+  width: 7em;
+  padding-left: 10px;
+}
+taskproperty.settings {
+  width: 10em;
+  text-align: center;
+}
+taskproperty.action {
+  width: 8em;
+  text-align: center;
+}
+taskproperty.type {
+  width: 10em;
+}
+taskproperty.title {
+  width: auto;
+}
+i.align-line {
+  transform: translateY(0.3em);
+}

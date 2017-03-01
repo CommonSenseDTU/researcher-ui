@@ -13,7 +13,8 @@ CLIENT_DIST = dist/public/join/index.js \
 	dist/public/logout/index.js \
 	dist/public/studies/index.js \
 	dist/public/studies/edit/index.js \
-	dist/public/studies/edit/consent/index.js
+	dist/public/studies/edit/consent/index.js \
+	dist/public/studies/edit/tasks/index.js
 
 browserify = node_modules/browserify/bin/cmd.js
 flow = npm run flow
@@ -70,6 +71,10 @@ dist/public/studies/edit/index.js: $(wildcard src/view/studies/edit/*.js)
 	$(flow) && $(browserify) $^ -o $@ -t babelify
 
 dist/public/studies/edit/consent/index.js: $(wildcard src/view/studies/edit/consent/*.js)
+	mkdir -p $(shell dirname $@)
+	$(flow) && $(browserify) $^ -o $@ -t babelify
+
+dist/public/studies/edit/tasks/index.js: $(wildcard src/view/studies/edit/tasks/*.js)
 	mkdir -p $(shell dirname $@)
 	$(flow) && $(browserify) $^ -o $@ -t babelify
 

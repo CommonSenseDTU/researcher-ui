@@ -20,6 +20,13 @@ export type ConsentDocument = {
   sections: ConsentSection[]
 };
 
+export type Step = {
+  id: string,
+  type: string,
+  title: string,
+  settings?: ?any
+};
+
 export type Task = {
   id: string,
   steps: any[]

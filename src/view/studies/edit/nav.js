@@ -54,4 +54,6 @@ class Navigation {
   }
 }
 
+export default Navigation;
+
 window.nav = new Navigation();

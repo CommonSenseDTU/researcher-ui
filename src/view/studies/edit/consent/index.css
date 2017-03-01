@@ -117,6 +117,7 @@ a.review .summary {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  cursor: cell;
 }
 .additional-information-disabled {
   font-style: italic;

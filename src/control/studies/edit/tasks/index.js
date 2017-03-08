@@ -45,10 +45,6 @@ class Task extends Controller {
       await self.list(ctx, next);
     });
 
-    this.router.get('/studies/:surveyId/tasks/:taskId', async (ctx, next) => {
-      await self.task(ctx, next);
-    });
-
     this.router.get('/studies/tasks/step/create/:type', async (ctx, next) => {
       await self.createTaskStep(ctx, next);
     });
@@ -107,44 +103,14 @@ class Task extends Controller {
    * @param {Function} next - The next handler to proceed to after processing is complete
    */
   async list(ctx: any, next: Function) {
-    var copy = naiveShallowCopy(this.opts);
-    copy.surveyId = ctx.params.id;
-
     var self = this;
     await request(
       self.surveyRequest(ctx, ctx.params.id)
     ).then(function (survey) {
-      var copy = naiveShallowCopy(self.opts);
       Controller.setNoCacheHeaders(ctx);
+      var copy = naiveShallowCopy(self.opts);
+      copy.surveyId = ctx.params.id;
       copy.tasks = survey.task.steps;
-      ctx.body = self.template(copy);
-    }).catch(function (err) {
-      self.surveyRequestError(ctx, err);
-    });
-  }
-
-  /**
-   * Asynchronously serve edit survey task settings UI
-   * Handle /studies/:surveyId/tasks/:taskId GET requests
-   *
-   * @param {Context} ctx - Koa context
-   * @param {Function} next - The next handler to proceed to after processing is complete
-   */
-  async task(ctx: any, next: Function) {
-    var copy = naiveShallowCopy(this.opts);
-    copy.surveyId = ctx.params.surveyId;
-
-    var self = this;
-    await request(
-      self.surveyRequest(ctx, ctx.params.surveyId)
-    ).then(function (survey) {
-      var copy = naiveShallowCopy(self.opts);
-      Controller.setNoCacheHeaders(ctx);
-      for (var task: Task of survey.task.steps) {
-        if (task.id == ctx.params.taskId) {
-          copy.tasks = task;
-        }
-      }
       ctx.body = self.template(copy);
     }).catch(function (err) {
       self.surveyRequestError(ctx, err);

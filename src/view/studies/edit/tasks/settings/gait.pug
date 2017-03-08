@@ -1,0 +1,16 @@
+h4 Gait Task Settings
+.mdl-card
+  form(action='', onsubmit='')
+    .mdl-card__supporting-text
+      .mdl-textfield.mdl-js-textfield
+        p Intended use description
+        textarea(id='intendedUseDescription', step-id=stepId, style='width: 100%; min-height: 200px', onblur='')
+      .mdl-textfield.mdl-js-textfield
+        input.mdl-textfield__input(type='text', id='walkDuration', pattern='[0-9]+')
+        label.mdl-textfield__label(for='walkDuration') Walk duration (in seconds)
+        span.mdl-textfield__error(id='walkerror') Only numbers, please!
+      .mdl-textfield.mdl-js-textfield
+        input.mdl-textfield__input(type='text', id='restDuration', pattern='[0-9]+')
+        label.mdl-textfield__label(for='restDuration') Rest duration (in seconds)
+        span.mdl-textfield__error(id='resterror') Only numbers, please!
+p: button.mdl-button.mdl-button--colored.mdl-js-button(action='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks", noCompletion)') Back

@@ -2,5 +2,9 @@
   "title": "Gait and Balance",
   "type": "gait",
   "sensors": ["gps", "gyroscope", "stepCount"],
-  "settings": {}
+  "settings": {
+    "intendedUseDescription": "",
+    "walkDuration": 0,
+    "restDuration": 0
+  }
 }

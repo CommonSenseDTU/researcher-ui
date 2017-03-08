@@ -22,6 +22,7 @@ import Edit from './control/studies/edit';
 import Icon from './control/studies/edit/icon';
 import ConsentSections from './control/studies/edit/consent';
 import Tasks from './control/studies/edit/tasks';
+import TaskSettings from './control/studies/edit/tasks/settings';
 
 /**
  * Type declarations.
@@ -146,6 +147,7 @@ export function server() {
   addRouter(app, new Icon(opts));
   addRouter(app, new ConsentSections(opts));
   addRouter(app, new Tasks(opts));
+  addRouter(app, new TaskSettings(opts));
 
   winston.info('Ready and accepting connections!');
 

@@ -8,13 +8,25 @@ import Controller from '../../../../../base.controller';
 import request from 'request-promise';
 import uuid from 'node-uuid';
 import winston from 'winston';
+import koaBody from 'koa-body';
+import fs from 'fs';
+import promisify from 'es6-promisify';
 import { naiveShallowCopy } from '../../../../../lib/shallow-copy';
+
+/**
+ * Promise based version of fs methods.
+ */
+const access = promisify(fs.access, {multiArgs: true});
+const writeFile = promisify(fs.writeFile, {multiArgs: true});
+const mkdir = promisify(fs.mkdir, {multiArgs: true});
+const unlink = promisify(fs.unlink);
 
 /**
  * Type declarations.
  */
 import type { Options } from '../../../../../options.type';
 import type { Template } from '../../../../../template.type';
+import type { Survey } from '../../../survey.type';
 import type { Step } from '../../../survey.type';
 
 /**
@@ -23,6 +35,7 @@ import type { Step } from '../../../survey.type';
 class TaskSettings extends Controller {
 
   gaitTemplate: Template;
+  customTemplate: Template;
 
   /**
    * Create a TaskSettings instance.
@@ -34,10 +47,19 @@ class TaskSettings extends Controller {
     super("./src/view/studies/edit/tasks/settings", opts);
 
     this.gaitTemplate = this.compileFile('gait.pug');
+    this.customTemplate = this.compileFile('custom.pug');
 
     var self = this;
     this.router.get('/studies/:surveyId/tasks/:taskId', async (ctx, next) => {
       await self.settings(ctx, next);
+    });
+
+    this.router.post('/studies/:surveyId/tasks/:taskId/clientSource',
+        koaBody({
+          multipart: true
+        }),
+        async (ctx, next) => {
+      await self.uploadSource(ctx, next);
     });
   }
 
@@ -53,6 +75,8 @@ class TaskSettings extends Controller {
     switch (step.type) {
       case "gait":
         return this.gaitTemplate(opts);
+      case "custom":
+        return this.customTemplate(opts);
       default:
         return this.template(opts);
     }
@@ -97,6 +121,138 @@ class TaskSettings extends Controller {
         ctx.body = self.template(copy);
       }
     });
+  }
+
+  /**
+   * Create folder if it doesn't exist.
+   *
+   * @param {string} name - folder name
+   */
+  async mkFolder(name: string) {
+    await access(name, fs.X_OK).catch(async (error) => {
+      // If folder isn't executable
+      await mkdir(name).catch(function (error) {
+        winston.error("Failed making folder %s: %s", name, error);
+        throw error;
+      });
+    });
+  }
+
+  /**
+   * Asynchronously handle file uploads
+   * Handle /studies/:surveyId/tasks/:taskId/clientSource POST requests
+   *
+   * @param {Context} ctx - Koa context
+   * @param {Function} next - The next handler to proceed to after processing is complete
+   */
+  async uploadSource(ctx: any, next: Function) {
+    var self: TaskSettings = this;
+    var studyId: string = ctx.params.surveyId;
+    var stepId: string = ctx.params.taskId;
+    var bearer: string = ctx.cookies.get('bearer');
+
+    try {
+      // Throw errors for various not acceptable reasons (caught below)
+      if (!ctx.request.body.fields) throw "Missing fields";
+      var contents = ctx.request.body.fields.clientCode;
+      if (!contents) throw "Missing code";
+
+      // Verify that survey belongs to user before performing any file operations
+      await request({
+        uri: 'http://' + self.opts.resourceServer + '/v1.0.M1/surveys/my',
+        qs: {
+          schema_version: "1.0"
+        },
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + bearer
+        },
+        transform: function (body, response, resolveWithFullResponse) {
+          var surveys: ?Survey[] = JSON.parse(body);
+          if (!surveys) throw "Could not parse reponse";
+          for (var current: Survey of surveys) {
+            // Find the survey in the list of my surveys
+            if (current.id == studyId) {
+              return current;
+            }
+          }
+          throw "Survey not found";
+        }
+      }).then(async (survey) => {
+        var targetName: string = uuid.v1() + ".flow.js";
+
+        /* Create a folder with format <prefix>/aa/bb/ given a uuid
+         * aabbccdd-xxxx-xxxx-xxxx-xxxxxxxxxxxx to attempt to ensure that
+         * files are evenly distributed into folder and that each folder
+         * does not contain too many files.
+         */
+        var targetFolder: string = self.opts.uploadFolder;
+        await self.mkFolder(targetFolder);
+        targetFolder += "/files";
+        await self.mkFolder(targetFolder);
+        targetFolder += "/" + targetName.substr(0, 2);
+        await self.mkFolder(targetFolder);
+        targetFolder += "/" + targetName.substr(2, 2);
+        await self.mkFolder(targetFolder);
+
+        await writeFile(targetFolder + "/" + targetName, contents).then(
+          async () => {
+            var contentPath: string = "/files/" +
+              targetName.substr(0, 2) + "/" +
+              targetName.substr(2, 2) + "/" +
+              targetName;
+
+            if (!survey) throw "Missing survey";
+            var steps: Step[] = survey.task.steps;
+            for (var index: number = 0 ; index < steps.length ; index++ ) {
+              if (steps[index].id == stepId) {
+                var step = steps[index];
+                var settings = step.settings;
+                if (!settings) {
+                  settings = {};
+                  step.settings = settings;
+                }
+                settings["client"] = contentPath;
+                break;
+              }
+            }
+
+            await request({
+              uri: 'http://' + self.opts.resourceServer + '/v1.0.M1/surveys',
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + bearer,
+                'Content-Type': 'application/json'
+              },
+              resolveWithFullResponse: true,
+              body: JSON.stringify(survey)
+            }).then(function (response) {
+              ctx.status = response.statusCode;
+              ctx.body = JSON.stringify({
+                path: contentPath
+              });
+            });
+          }
+        );
+      }).catch(function (error) {
+        // Return error if the survey does not belong to the current user
+        ctx.status = 403;
+        ctx.type = 'application/json';
+        ctx.body = JSON.stringify({
+          error: "Survey not owned by user",
+          causedBy: error
+        });
+        winston.debug("error body: ", ctx.body);
+      });
+    } catch (error) {
+      // Handle not acceptable responses
+      ctx.status = 406;
+      ctx.type = 'application/json';
+      ctx.body = JSON.stringify({
+        error: error
+      });
+    }
   }
 }
 

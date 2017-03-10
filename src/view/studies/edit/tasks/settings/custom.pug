@@ -1,0 +1,15 @@
+h4 Custom task settings
+form(action='/studies/' + surveyId + '/tasks/' + step.id + '/clientSource', onsubmit='return false')
+  p.
+    A custom step can have custom code running on the client while the
+    current step is in progress. Client code is written in #[a(href="https://flowtype.org/", target="_blank") flowtype]
+    and is transpiled to ECMAScript 2015 which is run on the client.
+  .mdl-card__supporting-text
+    .mdl-textarea.mdl-js-textarea
+      p Client source code
+      textarea(id='clientCode', step-id=step.id, style='width: 100%; min-height: 200px', onblur='settings.uploadSource(this)')
+    p.
+      For easy reference, a default implementation is shown below
+      #[button.mdl-button.mdl-button--colored.mdl-js-button(action='#', onclick='settings.toggleShowCode(this)') Show]
+    p: #default-client-code
+p: button.mdl-button.mdl-button--colored.mdl-js-button(action='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks", noCompletion)') Back

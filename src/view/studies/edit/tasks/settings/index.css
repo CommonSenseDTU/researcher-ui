@@ -1,0 +1,7 @@
+#default-client-code {
+  white-space: pre;
+  height: 100px;
+}
+#default-client-code.open {
+  height: auto;
+}

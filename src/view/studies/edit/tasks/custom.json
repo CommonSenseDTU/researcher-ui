@@ -1,0 +1,9 @@
+{
+  "title": "Custom",
+  "type": "custom",
+  "sensors": [],
+  "settings": {
+    "client": "/dist/public/studies/edit/tasks/settings/client-interface.js.txt",
+    "server": ""
+  }
+}

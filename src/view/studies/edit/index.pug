@@ -8,10 +8,13 @@ html(lang="en")
     link(rel='stylesheet', href='/dist/public/stylesheet/static-header.css')
     link(rel='stylesheet', href='/dist/public/node_modules/getmdl-select/getmdl-select.min.css')
     link(rel='stylesheet', href='/dist/public/node_modules/dialog-polyfill/dialog-polyfill.css')
+    link(rel='stylesheet', href='/dist/public/stylesheet/highlight.min.css')
     script(src='/dist/public/node_modules/dialog-polyfill/dialog-polyfill.js')
     script(src='/dist/public/studies/edit/index.js')
     script(src='/dist/public/studies/edit/consent/index.js')
     script(src='/dist/public/studies/edit/tasks/index.js')
+    script(src='/dist/public/studies/edit/tasks/settings/index.js')
+    script(src='/dist/public/javascript/highlight.pack.js')
     script var currentStudy = !{json};
     script.
       var noCompletion = function () {};
@@ -27,6 +30,7 @@ html(lang="en")
       include index.css
       include consent/index.css
       include tasks/index.css
+      include tasks/settings/index.css
   body(onload='load()')
     .mdl-layout.mdl-js-layout
       //- /* Show header with a back button */

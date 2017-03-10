@@ -1,0 +1,187 @@
+// @flow
+"use strict";
+
+type LaunchOptions = {
+  /// The presence of this key indicates that the app was launched in order to open a URL. The value of this key is a url object containing the URL to open.
+  url?: string,
+
+  /// The presence of this key identifies the app that requested the launch of your app. The value of this key is a string object that represents the bundle ID of the app that made the request.
+  sourceApplication?: string,
+
+  /// The presence of this key indicates that a remote notification is available for the app to process. The value of this key is an object containing the payload of the remote notification.
+  remoteNotification?: any,
+
+  /// The presence of this key indicates that custom data was provided by the app that requested the opening of the URL. The value of this key is a property-list object containing the custom data.
+  annotation?: any,
+
+  /// The presence of this key indicates that the app previously had one or more CBCentralManager objects and was relaunched by the Bluetooth system to continue actions associated with those objects. The value of this key is an array object containing one or more strings.
+  bluetoothCentrals?: string[],
+
+  /// The presence of this key indicates that the app previously had one or more CBPeripheralManager objects and was relaunched by the Bluetooth system to continue actions associated with those objects. The value of this key is an array object containing one or more strings.
+  bluetoothPeripherals?: string[],
+}
+
+type DataPointAcquisitionProvenance = {
+  source_name: string,
+  creation_date_time: Date,
+  modality: string // Either "sensed" or "self reported"
+};
+
+type DataPointHeader = {
+  id: string,
+  creation_date_time: Date,
+  body_schema_id: string,
+  aquisition_provenance: DataPointAcquisitionProvenance,
+};
+
+type DataPoint = {
+  id: string,
+  header: DataPointHeader,
+  body: any
+};
+
+type Step = {
+  id: string,
+  type: string,
+  title: string,
+  settings?: ?any
+};
+
+/**
+ * This class is made available at runtime and is responsible for handling interactions between
+ * the handler and the calling application.
+ */
+declare class Controller {
+
+  /// @return {Step} current step
+  currentStep(): Step;
+
+  /**
+   * Advance to the next step or to a step identified by the given id.
+   * The next step in the survey is used if no step id is given.
+   * Control never returns from this method.
+   *
+   * @param {string} stepId - the step which should be advanced to.
+   */
+  advance(stepId?: string);
+
+  /**
+   * Replace the view of the current step with the given html.
+   * A new Handler instance will be initialized with the given argument
+   * in the context of the new view.
+   * Control never returns from this method.
+   *
+   * @param {string} html - html which is rendered as the step view
+   * @param {?any} argument - optional argument which is passed to the new Handler instance
+   */
+  setView(html: string, argument: ?any);
+
+  /**
+   * Update the meta data associated with the current user's participation in the current survey.
+   *
+   * @param {?any} metaData - object to associate with the current user's participation in the current survey
+   */
+  update(metaData: ?any);
+
+  /**
+   * Create a new data point and serialize it, either to local storage or to the server.
+   *
+   * @param {DataPoint} dataPoint - the new data point to be saved
+   */
+  create(dataPoint: DataPoint);
+
+  /**
+   * Set the currently active sensors.
+   *
+   * @param {string[]} sensors - an array of sensor names such as "gps" or "accelerometer"
+   */
+  setActiveSensors(sensors: string[]);
+
+  /**
+   * Set configration parameters for a named sensor.
+   * The configuration parameters depends on the sensor.
+   *
+   * @param {string} sensor - the name of the sensor
+   * @param {any} configuration - the configuration parameters to set for the sensor
+   */
+  setSensorConfiguration(sensor: string, configuration: any);
+}
+
+/// The Controller instance
+declare var controller: Controller;
+
+/**
+ * This class handles events going to and from the storage mechanism, be that local storage, or
+ * sending data to the server.
+*/
+class Handler {
+
+  // Declare whatever local instance variables you need here
+  // ex:
+  // myNumber: number
+  // myString: string
+
+  /**
+   * This constructor is called when the application is launched and the step which class is associated with
+   * is the current step.
+   *
+   * @param {LaunchOptions} options - the launch options given to the application
+   * @param {?any} metaData - optional meta data associated with the current user's participation in the current survey
+   */
+  constructor(options: LaunchOptions, metaData: ?any) {
+    // Insert initialization code here.
+  }
+
+  /**
+   * This constructor is called after the Handler instance is created in a new view context.
+   * This only gets called is Controller#setView() is called.
+   *
+   * @param {?any} metaData - optional meta data associated with the current user's participation in the current survey
+   * @param {?any} argument - optional argument passed to Controller#setView()
+   */
+  constructor(metaData: ?any, argument: ?any) {
+    // Insert initialization code here.
+  }
+
+  /**
+   * This method is called before the step is about to be shown and before any animations are configured for showing the view. \
+   *
+   * @param {Step} step - the step which is about to be started
+   * @param {?any} metaData - any meta data which is associated with the current user's participation in the current survey
+   */
+  stepWillStart(step: Step, metaData: ?any) {
+    // Insert code to be executed before a step starts here
+  }
+
+  /**
+   * Notifies the handler that its step has completed.
+   *
+   *
+   * @param {Step} step - the step which is about to be started
+   * @param {?any} metaData - any meta data which is associated with the current user's participation in the current survey
+   */
+  stepDidEnd((step: Step, metaData: ?any) {
+    // Insert code to be executed after a step ends here
+  }
+
+  /**
+   * Pre-process a data point before it is serialized and sent either to local storage or to the server.
+   *
+   * @param {DataPoint} dataPoint - the data point which was just created
+   * @return {DataPoint} the data point, potentially with modified data
+   */
+  dataPoint(dataPoint: DataPoint): DataPoint {
+    // Insert code to perform any pre-processing of a data point here
+    return dataPoint;
+  }
+
+  /**
+   * This method is called whenever data is made available by a sensor.
+   * The class of the data depends on the sensors which are currently active.
+   *
+   * @param {any} sensed - the data which is sensed
+   */
+  sensed(data: any) {
+    // Insert sensor event handler here
+  }
+}

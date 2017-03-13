@@ -35,6 +35,7 @@ import type { Options } from './options.type';
 var opts: Options = {
   clientAuth: process.env.CLIENT_AUTH || "no:auth",
   resourceServer: process.env.RESOURCE_SERVER || "localhost:8083",
+  rabbitMQ: "localhost",
   uploadFolder: process.cwd() + "/tmp",
   uploadSizeLimit: "2mb",
   port: parseInt(process.env.PORT, 10) || 3000

@@ -12,6 +12,7 @@ import koaBody from 'koa-body';
 import fs from 'fs';
 import promisify from 'es6-promisify';
 import { naiveShallowCopy } from '../../../../../lib/shallow-copy';
+import amqp from 'amqplib/callback_api';
 
 /**
  * Promise based version of fs methods.
@@ -19,7 +20,11 @@ import { naiveShallowCopy } from '../../../../../lib/shallow-copy';
 const access = promisify(fs.access, {multiArgs: true});
 const writeFile = promisify(fs.writeFile, {multiArgs: true});
 const mkdir = promisify(fs.mkdir, {multiArgs: true});
-const unlink = promisify(fs.unlink);
+
+/**
+ * Promise based version of amqp methods
+ */
+const amqp_connect = promisify(amqp.connect);
 
 /**
  * Type declarations.
@@ -45,6 +50,8 @@ class TaskSettings extends Controller {
    */
   constructor(opts: Options) {
     super("./src/view/studies/edit/tasks/settings", opts);
+
+    winston.info("Using RabbitMQ server: " + opts.rabbitMQ);
 
     this.gaitTemplate = this.compileFile('gait.pug');
     this.customTemplate = this.compileFile('custom.pug');
@@ -227,10 +234,38 @@ class TaskSettings extends Controller {
               },
               resolveWithFullResponse: true,
               body: JSON.stringify(survey)
-            }).then(function (response) {
-              ctx.status = response.statusCode;
-              ctx.body = JSON.stringify({
-                path: contentPath
+            }).then(async (response) => {
+              await amqp_connect("amqp://" + self.opts.rabbitMQ).then(function (connection) {
+                ctx.status = 201;
+                ctx.type = 'application/json';
+                ctx.body = JSON.stringify({
+                  path: contentPath
+                });
+                connection.createChannel(function (err, channel) {
+                  if (err) {
+                    winston.error("amqp create channel error:", err);
+                    return;
+                  }
+                  var q = 'babel';
+                  channel.assertQueue(q, {durable: true});
+                  if (!stepId) {
+                    winston.error("Missing step id - bailing out");
+                    return;
+                  }
+                  channel.sendToQueue(q, Buffer.from(JSON.stringify({
+                    surveyId: survey.id,
+                    stepId: stepId,
+                    path: contentPath
+                  })));
+                  winston.info("Sent " + contentPath + " to babel queue");
+                });
+            }).catch(function (err) {
+                winston.error("amqp connect error:", err);
+                ctx.status = 500;
+                ctx.type = 'application/json';
+                ctx.body = JSON.stringify({
+                  error: err
+                });
               });
             });
           }

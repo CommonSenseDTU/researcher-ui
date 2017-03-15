@@ -29,7 +29,7 @@ tasklist(style='margin-top: 10px')
       taskproperty.order= index + 1
       taskproperty.type= task.type
       taskproperty.title(contenteditable='true', onblur='task.setStepTitle("' + task.id + '", this)')= task.title
-      taskproperty.settings: a(href='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks/' + task.id + '", noCompletion)'): i.material-icons.align-line settings
+      taskproperty.settings: a(href='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks/' + task.id + '", function() {settings.showStepForm("' + task.id + '")})'): i.material-icons.align-line settings
       taskproperty.action: button.mdl-button.mdl-button--icon.mdl-button--accent(action='#', onclick='edit.showDialog("task-delete-' + task.id + '")'): i.material-icons highlight_off
 
 each task in tasks

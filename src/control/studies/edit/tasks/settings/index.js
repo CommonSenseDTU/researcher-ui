@@ -40,6 +40,7 @@ import type { Step } from '../../../survey.type';
 class TaskSettings extends Controller {
 
   gaitTemplate: Template;
+  formTemplate: Template;
   customTemplate: Template;
 
   /**
@@ -55,6 +56,7 @@ class TaskSettings extends Controller {
 
     this.gaitTemplate = this.compileFile('gait.pug');
     this.customTemplate = this.compileFile('custom.pug');
+    this.formTemplate = this.compileFile('form.pug');
 
     var self = this;
     this.router.get('/studies/:surveyId/tasks/:taskId', async (ctx, next) => {
@@ -82,6 +84,8 @@ class TaskSettings extends Controller {
     switch (step.type) {
       case "gait":
         return this.gaitTemplate(opts);
+      case "form":
+        return this.formTemplate(opts);
       case "custom":
         return this.customTemplate(opts);
       default:

@@ -1,0 +1,74 @@
+h4 Form Task Settings
+form(action='', onsubmit='')
+  p Does this answer contain sensitive information (like name or personal id number)?
+  p
+    input(type='radio', name='private', value='true')
+    | Yes
+    br
+    input(type='radio', name='private', value='false')
+    | No
+    br
+  p Which sensors should be running in the background while this form is shown?
+  p
+    input(type='checkbox', name='sensors', value='gps')
+    | Location
+    br
+    input(type='checkbox', name='sensors', value='motion')
+    | Motion
+    br
+    input(type='checkbox', name='sensors', value='accel')
+    | Accelerometer
+    br
+    input(type='checkbox', name='sensors', value='gyro')
+    | Gyroscope
+    br
+    input(type='checkbox', name='sensors', value='audio')
+    | Audio recorder
+    br
+    input(type='checkbox', name='sensors', value='blescan')
+    | Bluetooth device scanner
+    br
+
+h4 Form Items
+button.mdl-button.mdl-button--colored.mdl-js-button(id='addtask') Add new form item
+ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu(for='addtask')
+  a(href='#', onclick='settings.addItemInStep("horizontalscale", "' + step.id + '")'): li.mdl-menu__item Horizontal scale
+  a(href='#', onclick='settings.addItemInStep("boolean", "' + step.id + '")'): li.mdl-menu__item Boolean
+  a(href='#', onclick='settings.addItemInStep("picker", "' + step.id + '")'): li.mdl-menu__item Picker
+  a(href='#', onclick='settings.addItemInStep("singletextchoice", "' + step.id + '")'): li.mdl-menu__item Single text choice
+  a(href='#', onclick='settings.addItemInStep("multitextchoice", "' + step.id + '")'): li.mdl-menu__item Multi text choice
+  a(href='#', onclick='settings.addItemInStep("numeric", "' + step.id + '")'): li.mdl-menu__item Numeric
+  a(href='#', onclick='settings.addItemInStep("timeofday", "' + step.id + '")'): li.mdl-menu__item Time of day
+  a(href='#', onclick='settings.addItemInStep("date", "' + step.id + '")'): li.mdl-menu__item Date
+  a(href='#', onclick='settings.addItemInStep("textarea", "' + step.id + '")'): li.mdl-menu__item Text (unlimited)
+  a(href='#', onclick='settings.addItemInStep("textinput", "' + step.id + '")'): li.mdl-menu__item Text (limited)
+  a(href='#', onclick='settings.addItemInStep("validated", "' + step.id + '")'): li.mdl-menu__item Validated
+  a(href='#', onclick='settings.addItemInStep("verticalscale", "' + step.id + '")'): li.mdl-menu__item Vertical scale
+  a(href='#', onclick='settings.addItemInStep("email", "' + step.id + '")'): li.mdl-menu__item Email
+  a(href='#', onclick='settings.addItemInStep("location", "' + step.id + '")'): li.mdl-menu__item Location
+
+p
+  tasklist(style='margin-top: 10px')
+    taskpropertylist
+      taskproperty.order Order
+      taskproperty.type Type
+      taskproperty.title Title
+      taskproperty.settings Settings
+      taskproperty.action Action
+    each item, index in step.items
+      taskinfo
+        taskproperty.order= index + 1
+        taskproperty.type= item.format
+        taskproperty.title(contenteditable='true', onblur='settings.setQuestionInStepItem("' + step.id + '", "' + item.id + '", this)')= item.question
+        taskproperty.settings: a(href='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks/' + step.id + '/item/' + item.id + '", function() {settings.showItemForm("' + item.id + '")})'): i.material-icons.align-line settings
+        taskproperty.action: button.mdl-button.mdl-button--icon.mdl-button--accent(action='#', onclick='edit.showDialog("item-delete-' + item.id + '")'): i.material-icons highlight_off
+each item in step.items
+  dialog.mdl-dialog.mdl-shadow--2dp(id='item-delete-' + item.id)
+    h4.mdl-dialog__title Delete Item
+    .mdl-dialog__content
+      p Are you sure you want to delete the "#{item.question}" item?
+      .mdl-dialog__actions
+        button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Cancel
+        button.mdl-button.mdl-button--colored.mdl-js-button(type='button', onclick='settings.deleteStepItem("' + step.id + '", "' + item.id + '")') Delete
+  script dialogPolyfill.registerDialog(document.getElementbyId("task-delete-#{task.id}"));
+p: button.mdl-button.mdl-button--colored.mdl-js-button(action='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks", noCompletion)') Back

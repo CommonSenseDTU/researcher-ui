@@ -127,6 +127,7 @@ class Task extends Controller {
   async createTaskStep(ctx: any, next: Function) {
     switch (ctx.params.type) {
       case 'gait':
+      case 'form':
       case 'custom':
         const filename: string = this.dirname + "/" + ctx.params.type + ".json";
         await access(filename, fs.R_OK).then(

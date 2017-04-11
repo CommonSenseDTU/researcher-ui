@@ -60,8 +60,8 @@ class Icon extends Controller {
 
     this.router.put('/studies/:id/icon',
         koaBody({
-          multipart: true//,
-          //formLimit: opts.uploadSizeLimit
+          multipart: true,
+          formLimit: opts.uploadSizeLimit
         }),
         async (ctx, next) => {
       await self.uploadIcon(ctx, next);

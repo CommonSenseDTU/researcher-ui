@@ -38,6 +38,9 @@ class TaskSettings {
           case "custom":
             this.showCustomStepForm(step);
             break;
+          case "form":
+            this.showFormStepForm(step);
+            break;
           default:
             console.log("Unknown step type: " + step.type);
             break;
@@ -45,6 +48,19 @@ class TaskSettings {
         break;
       }
     }
+  }
+
+  /**
+    Find an input element with the given name and value and set its checked state.
+
+    @param {string} inputName - the name of the input element
+    @param {string} inputValue - the value of the input element
+    @param {boolean} checked - the checked state to set on the element
+  */
+  setInputChecked(inputName: string, inputValue: string, checked: boolean) {
+    var element: ?HTMLInputElement = ((document.querySelector("input[name='" + inputName + "'][value='" + inputValue + "']"): ?any): ?HTMLInputElement);
+    if (!element) { return }
+    element.checked = checked;
   }
 
   setValue(step: Step, key: string) {
@@ -88,6 +104,21 @@ class TaskSettings {
     }).catch(function(err) {
       console.log('Fetch error: ' + err);
     });
+  }
+
+  showFormStepForm(step: Step) {
+    if (!step.settings) { return }
+    /*
+      Set private/public data sensitivity type.
+      This wil eventually be used to determine if the data should be stored in
+      the dataPoint database or in the private database.
+    */
+    var isPrivate: ?boolean = step.settings["private"];
+    if (isPrivate) {
+      this.setInputChecked("private", "true", true);
+    } else {
+      this.setInputChecked("private", "false", true);
+    }
   }
 
   toggleShowCode(button: HTMLElement) {

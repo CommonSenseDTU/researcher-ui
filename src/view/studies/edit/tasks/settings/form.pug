@@ -2,30 +2,30 @@ h4 Form Task Settings
 form(action='', onsubmit='')
   p Does this answer contain sensitive information (like name or personal id number)?
   p
-    input(type='radio', name='private', value='true')
+    input(type='radio', name='private', value='true', onchange='settings.setFormPrivate("' + step.id + '", true)')
     | Yes
     br
-    input(type='radio', name='private', value='false')
+    input(type='radio', name='private', value='false', onchange='settings.setFormPrivate("' + step.id + '", false)')
     | No
     br
   p Which sensors should be running in the background while this form is shown?
   p
-    input(type='checkbox', name='sensors', value='gps')
+    input(type='checkbox', name='sensors', value='gps', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
     | Location
     br
-    input(type='checkbox', name='sensors', value='motion')
+    input(type='checkbox', name='sensors', value='motion', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
     | Motion
     br
-    input(type='checkbox', name='sensors', value='accel')
+    input(type='checkbox', name='sensors', value='accel', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
     | Accelerometer
     br
-    input(type='checkbox', name='sensors', value='gyro')
+    input(type='checkbox', name='sensors', value='gyro', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
     | Gyroscope
     br
-    input(type='checkbox', name='sensors', value='audio')
+    input(type='checkbox', name='sensors', value='audio', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
     | Audio recorder
     br
-    input(type='checkbox', name='sensors', value='blescan')
+    input(type='checkbox', name='sensors', value='blescan', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
     | Bluetooth device scanner
     br
 

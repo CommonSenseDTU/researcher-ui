@@ -1,6 +1,7 @@
 // @flow
 'use strict';
 
+import includes from 'array-includes';
 import { Cookies } from '../../../../lib/cookies';
 import type { Survey } from '../../../../../control/studies/survey.type';
 import type { Step } from '../../../../../control/studies/survey.type';
@@ -22,31 +23,42 @@ class TaskSettings {
   }
 
   /**
+    Get a step in currentStudy with a given step id.
+
+    @param {string} stepId - the id of the step to find
+    @return {?Step} the step matching the id (or nil if not found)
+  */
+  getStep(stepId: string): ?Step {
+    var steps: Step[] = currentStudy.task.steps;
+    for (var index: number = 0 ; index < steps.length ; index++ ) {
+      if (steps[index].id == stepId) {
+        return steps[index];
+      }
+    }
+    return null;
+  }
+
+  /**
    * Find the current step and call the correct function based on the step type.
    *
    * @param {string} stepId - the id of the step to use for filling form content
    */
   showStepForm(stepId: string) {
-    var steps: Step[] = currentStudy.task.steps;
-    for (var index: number = 0 ; index < steps.length ; index++ ) {
-      if (steps[index].id == stepId) {
-        var step = steps[index];
-        switch (step.type) {
-          case "gait":
-            this.showGaitStepForm(step);
-            break;
-          case "custom":
-            this.showCustomStepForm(step);
-            break;
-          case "form":
-            this.showFormStepForm(step);
-            break;
-          default:
-            console.log("Unknown step type: " + step.type);
-            break;
-        }
+    var step = this.getStep(stepId);
+    if (!step) { return }
+    switch (step.type) {
+      case "gait":
+        this.showGaitStepForm(step);
         break;
-      }
+      case "custom":
+        this.showCustomStepForm(step);
+        break;
+      case "form":
+        this.showFormStepForm(step);
+        break;
+      default:
+        console.log("Unknown step type: " + step.type);
+        break;
     }
   }
 
@@ -107,18 +119,47 @@ class TaskSettings {
   }
 
   showFormStepForm(step: Step) {
-    if (!step.settings) { return }
     /*
       Set private/public data sensitivity type.
       This wil eventually be used to determine if the data should be stored in
       the dataPoint database or in the private database.
     */
-    var isPrivate: ?boolean = step.settings["private"];
-    if (isPrivate) {
+    if (step.private) {
       this.setInputChecked("private", "true", true);
     } else {
       this.setInputChecked("private", "false", true);
     }
+
+    if (step.sensors) {
+      for (var sensor of step.sensors) {
+        this.setInputChecked("sensors", sensor, true);
+      }
+    }
+  }
+
+  setFormPrivate(stepId: string, isPrivate: boolean) {
+    var step = this.getStep(stepId);
+    if (!step) { return }
+    step.private = isPrivate;
+    this.edit.updateCurrentStudy();
+  }
+
+  toggleSensorEnabled(stepId: string, element: HTMLInputElement) {
+    var sensor: string = element.value;
+    var step = this.getStep(stepId);
+    if (!step) { return }
+    if (!step.sensors) { return }
+
+    if (element.checked) {
+      if (!step.sensors.includes(sensor)) {
+        if (!step.sensors) { return }
+        step.sensors.push(sensor);
+      }
+    } else {
+      // Remove sensor from list of sensors
+      step.sensors = step.sensors.filter(item => item !== sensor)
+    }
+    this.edit.updateCurrentStudy();
   }
 
   toggleShowCode(button: HTMLElement) {

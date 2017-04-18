@@ -24,7 +24,11 @@ export type Step = {
   id: string,
   type: string,
   title: string,
-  settings?: ?any
+  settings?: ?any,
+  sensors?: string[],
+  private?: boolean,
+  items?: any[],
+  skippable?: boolean
 };
 
 export type Task = {

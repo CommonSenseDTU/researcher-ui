@@ -5,8 +5,11 @@ import includes from 'array-includes';
 import { Cookies } from '../../../../lib/cookies';
 import type { Survey } from '../../../../../control/studies/survey.type';
 import type { Step } from '../../../../../control/studies/survey.type';
+import type { StepItem } from '../../../../../control/studies/survey.type';
+
 
 import Edit from '../../index';
+import Navigation from '../../nav';
 
 declare var currentStudy: Survey;
 declare var hljs: any;
@@ -17,9 +20,11 @@ declare var hljs: any;
 class TaskSettings {
 
   edit: Edit;
+  nav: Navigation;
 
   constructor() {
     this.edit = new Edit();
+    this.nav = new Navigation();
   }
 
   /**
@@ -33,6 +38,18 @@ class TaskSettings {
     for (var index: number = 0 ; index < steps.length ; index++ ) {
       if (steps[index].id == stepId) {
         return steps[index];
+      }
+    }
+    return null;
+  }
+
+  getItem(step: Step, itemId: string): ?StepItem {
+    var items = step.items;
+    if (!items) { return }
+
+    for (var index: number = 0 ; index < items.length ; index++ ) {
+      if (items[index].id == itemId) {
+        return items[index];
       }
     }
     return null;
@@ -144,6 +161,18 @@ class TaskSettings {
     this.edit.updateCurrentStudy();
   }
 
+  setQuestionInStepItem(stepId: string, itemId: string, element: HTMLElement) {
+    var step = this.getStep(stepId);
+    if (!step) { return }
+
+    var item = this.getItem(step, itemId);
+    if (!item) { return }
+
+    item.question = element.textContent;
+    this.edit.updateCurrentStudy();
+  }
+
+
   toggleSensorEnabled(stepId: string, element: HTMLInputElement) {
     var sensor: string = element.value;
     var step = this.getStep(stepId);
@@ -172,6 +201,53 @@ class TaskSettings {
       element.classList.add("open");
       button.textContent = "Hide";
     }
+  }
+
+  addItemInStep(type: string, stepId: string) {
+    var self: TaskSettings = this;
+    fetch('/studies/tasks/step/item/create/' + type, {
+      credentials: "include"
+    }).then(
+      function(response) {
+        if (response.status >= 400) {
+          throw response.statusText;
+        }
+        return response.json();
+      }
+    ).then(
+      function(json) {
+        var step = self.getStep(stepId);
+        if (!step) { return }
+
+        if (!step.items) {
+          step.items = Array();
+        }
+
+        step.items.push(json);
+
+        self.edit.updateCurrentStudy(function () {
+          self.nav.setContent("/studies/" + currentStudy.id + "/tasks/" + stepId, function () {});
+        });
+      }
+    ).catch(
+      function(err) {
+        console.log('Fetch error: ' + err);
+      }
+    );
+  }
+
+  deleteStepItem(stepId: string, itemId: string) {
+    var step = this.getStep(stepId);
+    if (!step) { return }
+    if (!step.items) { return }
+
+    // Remove item from list of items
+    step.items = step.items.filter(item => item.id !== itemId);
+
+    var self: TaskSettings = this;
+    this.edit.updateCurrentStudy(function () {
+      self.nav.setContent("/studies/" + currentStudy.id + "/tasks/" + stepId, function () {});
+    });
   }
 
   uploadSource(textarea: HTMLInputElement) {

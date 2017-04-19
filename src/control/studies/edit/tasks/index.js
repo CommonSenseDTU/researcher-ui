@@ -48,6 +48,11 @@ class Task extends Controller {
     this.router.get('/studies/tasks/step/create/:type', async (ctx, next) => {
       await self.createTaskStep(ctx, next);
     });
+
+    this.router.get('/studies/tasks/step/item/create/:type', function (ctx, next) {
+      self.createTaskStepItem(ctx, next);
+    });
+
   }
 
   /**
@@ -163,6 +168,24 @@ class Task extends Controller {
         ctx.body = JSON.stringify({ error: 'Unknown type: ' + ctx.params.type });
         return;
     }
+  }
+
+  /**
+   * Create a new task step item.
+   * Handle /studies/tasks/step/item/create/:type GET requests.
+   *
+   * @param {Context} ctx - Koa context
+   * @param {Function} next - The next handler to proceed to after processing is complete
+   */
+  createTaskStepItem(ctx: any, next: Function) {
+    var item = {
+      id: uuid.v1(),
+      format: ctx.params.type,
+      question: "<Ask a question here>"
+    };
+    ctx.body = item;
+    ctx.status = 201;
+    ctx.type = 'application/json';
   }
 }
 

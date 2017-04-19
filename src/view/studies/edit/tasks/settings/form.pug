@@ -53,14 +53,14 @@ p
       taskproperty.order Order
       taskproperty.type Type
       taskproperty.title Title
-      taskproperty.settings Settings
+      //- taskproperty.settings Settings
       taskproperty.action Action
     each item, index in step.items
       taskinfo
         taskproperty.order= index + 1
         taskproperty.type= item.format
         taskproperty.title(contenteditable='true', onblur='settings.setQuestionInStepItem("' + step.id + '", "' + item.id + '", this)')= item.question
-        taskproperty.settings: a(href='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks/' + step.id + '/item/' + item.id + '", function() {settings.showItemForm("' + item.id + '")})'): i.material-icons.align-line settings
+        //- taskproperty.settings: a(href='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks/' + step.id + '/item/' + item.id + '", function() {settings.showItemForm("' + item.id + '")})'): i.material-icons.align-line settings
         taskproperty.action: button.mdl-button.mdl-button--icon.mdl-button--accent(action='#', onclick='edit.showDialog("item-delete-' + item.id + '")'): i.material-icons highlight_off
 each item in step.items
   dialog.mdl-dialog.mdl-shadow--2dp(id='item-delete-' + item.id)
@@ -70,5 +70,5 @@ each item in step.items
       .mdl-dialog__actions
         button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Cancel
         button.mdl-button.mdl-button--colored.mdl-js-button(type='button', onclick='settings.deleteStepItem("' + step.id + '", "' + item.id + '")') Delete
-  script dialogPolyfill.registerDialog(document.getElementbyId("task-delete-#{task.id}"));
-p: button.mdl-button.mdl-button--colored.mdl-js-button(action='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks", noCompletion)') Back
+  script dialogPolyfill.registerDialog(document.getElementbyId("task-delete-#{step.id}"));
+p: button.mdl-button.mdl-button--colored.mdl-js-button(action='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks/' + step.id + '", noCompletion)') Back

@@ -20,6 +20,12 @@ export type ConsentDocument = {
   sections: ConsentSection[]
 };
 
+export type StepItem = {
+  id: string,
+  format: string,
+  question: string
+}
+
 export type Step = {
   id: string,
   type: string,

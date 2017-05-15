@@ -5,3 +5,24 @@
 #default-client-code.open {
   height: auto;
 }
+.delete-image {
+  background-color: #fff5;
+  z-index: 3;
+  margin-right: -30px;
+  left: 202px;
+  top: -231px;
+}
+div.itemimage {
+  width: 192px;
+  height: 192px;
+  margin: 24px;
+  border: 1px solid rgb(217, 220, 226);
+}
+div.itemimage img {
+  max-width: 100%;
+  max-height: 100%;
+  height: inherit !important;
+}
+.hidden {
+  display: none;
+}

@@ -134,6 +134,7 @@ class Task extends Controller {
       case 'gait':
       case 'form':
       case 'custom':
+      case 'imagechoice':
         const filename: string = this.dirname + "/" + ctx.params.type + ".json";
         await access(filename, fs.R_OK).then(
           async () => {

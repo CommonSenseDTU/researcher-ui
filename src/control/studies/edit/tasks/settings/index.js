@@ -42,6 +42,7 @@ class TaskSettings extends Controller {
   gaitTemplate: Template;
   formTemplate: Template;
   customTemplate: Template;
+  imageChoiceTemplate: Template;
 
   /**
    * Create a TaskSettings instance.
@@ -57,6 +58,7 @@ class TaskSettings extends Controller {
     this.gaitTemplate = this.compileFile('gait.pug');
     this.customTemplate = this.compileFile('custom.pug');
     this.formTemplate = this.compileFile('form.pug');
+    this.imageChoiceTemplate = this.compileFile('imagechoice.pug');
 
     var self = this;
     this.router.get('/studies/:surveyId/tasks/:taskId', async (ctx, next) => {
@@ -77,7 +79,7 @@ class TaskSettings extends Controller {
    * The step type determines which settings template should be used.
    *
    * @param {Step} step - the step to get the type for
-   * @param {Options} opt - the runtime options to pass to the compiled template
+   * @param {Options} opts - the runtime options to pass to the compiled template
    * @return {string} body from compiled template with the given options
    */
   bodyForStep(step: Step, opts: Options): string {
@@ -86,6 +88,8 @@ class TaskSettings extends Controller {
         return this.gaitTemplate(opts);
       case "form":
         return this.formTemplate(opts);
+      case "imagechoice":
+        return this.imageChoiceTemplate(opts);
       case "custom":
         return this.customTemplate(opts);
       default:

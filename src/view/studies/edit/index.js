@@ -2,7 +2,7 @@
 'use strict';
 
 import { Cookies } from '../../lib/cookies';
-import type { Survey } from '../../../control/studies/survey.type';
+import type { Survey, Step } from '../../../control/studies/survey.type';
 
 /**
  * Ensure that global header variable is defined.
@@ -16,6 +16,22 @@ declare var dialogPolyfill: any;
  * Study management class.
  */
 class Edit {
+
+  /**
+    Get a step in currentStudy with a given step id.
+
+    @param {string} stepId - the id of the step to find
+    @return {?Step} the step matching the id (or nil if not found)
+  */
+  getStep(stepId: string): ?Step {
+    var steps: Step[] = currentStudy.task.steps;
+    for (var index: number = 0 ; index < steps.length ; index++ ) {
+      if (steps[index].id == stepId) {
+        return steps[index];
+      }
+    }
+    return null;
+  }
 
   /**
    * Send current study to backend, and redirect to login screen if session

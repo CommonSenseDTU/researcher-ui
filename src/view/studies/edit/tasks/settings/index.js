@@ -10,6 +10,7 @@ import type { StepItem } from '../../../../../control/studies/survey.type';
 
 import Edit from '../../index';
 import Navigation from '../../nav';
+import ImageChoice from './imagechoice';
 
 declare var currentStudy: Survey;
 declare var hljs: any;
@@ -21,26 +22,12 @@ class TaskSettings {
 
   edit: Edit;
   nav: Navigation;
+  imagechoice: ImageChoice;
 
   constructor() {
     this.edit = new Edit();
     this.nav = new Navigation();
-  }
-
-  /**
-    Get a step in currentStudy with a given step id.
-
-    @param {string} stepId - the id of the step to find
-    @return {?Step} the step matching the id (or nil if not found)
-  */
-  getStep(stepId: string): ?Step {
-    var steps: Step[] = currentStudy.task.steps;
-    for (var index: number = 0 ; index < steps.length ; index++ ) {
-      if (steps[index].id == stepId) {
-        return steps[index];
-      }
-    }
-    return null;
+    this.imagechoice = new ImageChoice();
   }
 
   getItem(step: Step, itemId: string): ?StepItem {
@@ -61,7 +48,7 @@ class TaskSettings {
    * @param {string} stepId - the id of the step to use for filling form content
    */
   showStepForm(stepId: string) {
-    var step = this.getStep(stepId);
+    var step = this.edit.getStep(stepId);
     if (!step) { return }
     switch (step.type) {
       case "gait":
@@ -72,6 +59,14 @@ class TaskSettings {
         break;
       case "form":
         this.showFormStepForm(step);
+        break;
+      case "imagechoice":
+        this.imagechoice.showImageForm();
+        if (step.sensors) {
+          for (var sensor of step.sensors) {
+            this.setInputChecked("sensors", sensor, true);
+          }
+        }
         break;
       default:
         console.log("Unknown step type: " + step.type);
@@ -155,14 +150,14 @@ class TaskSettings {
   }
 
   setFormPrivate(stepId: string, isPrivate: boolean) {
-    var step = this.getStep(stepId);
+    var step = this.edit.getStep(stepId);
     if (!step) { return }
     step.private = isPrivate;
     this.edit.updateCurrentStudy();
   }
 
   setQuestionInStepItem(stepId: string, itemId: string, element: HTMLElement) {
-    var step = this.getStep(stepId);
+    var step = this.edit.getStep(stepId);
     if (!step) { return }
 
     var item = this.getItem(step, itemId);
@@ -175,7 +170,7 @@ class TaskSettings {
 
   toggleSensorEnabled(stepId: string, element: HTMLInputElement) {
     var sensor: string = element.value;
-    var step = this.getStep(stepId);
+    var step = this.edit.getStep(stepId);
     if (!step) { return }
     if (!step.sensors) { return }
 
@@ -216,7 +211,7 @@ class TaskSettings {
       }
     ).then(
       function(json) {
-        var step = self.getStep(stepId);
+        var step = self.edit.getStep(stepId);
         if (!step) { return }
 
         if (!step.items) {
@@ -237,7 +232,7 @@ class TaskSettings {
   }
 
   deleteStepItem(stepId: string, itemId: string) {
-    var step = this.getStep(stepId);
+    var step = this.edit.getStep(stepId);
     if (!step) { return }
     if (!step.items) { return }
 

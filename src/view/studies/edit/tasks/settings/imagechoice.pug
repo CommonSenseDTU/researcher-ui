@@ -1,0 +1,26 @@
+h4 Image Choice Settings
+form.iconupload(enctype='multipart/form-data' action='/studies/' + studyId + '/icon', method='PUT')
+  include sensors.pug
+  p.
+    A set of icons will be displayed for the user to choose from. Select images
+    using the button below, or drag an image anywhere on this page to start 
+    uploading.
+  img.hidden#iconimg(step-id=step.id, src='/dist/public/transparent.png')
+  button.left.mdl-button.mdl-button--colored.mdl-js-button(id='fileSelect', action='/studies/' + studyId) Choose image
+  input(id='fileElement', type='file', name='file', accept='image/png,image/jpeg', style='opacity: 0', onchange="edit.handleFiles(this.files)")
+.mdl-grid
+  each item in step.items
+    .mdl-cell
+      .itemimage
+        img.centered(src=item.src)
+      button.mdl-button.mdl-button--icon.mdl-button--accent.delete-image(action='#', onclick='edit.showDialog("image-delete-' + item.id + '")'): i.material-icons highlight_off
+each item in step.items
+  dialog.mdl-dialog.mdl-shadow--2dp(id='image-delete-' + item.id)
+    h4.mdl-dialog__title Delete Item
+    .mdl-dialog__content
+      p Are you sure you want to delete the "#{item.question}" image?
+      .mdl-dialog__actions
+        button.mdl-button.mdl-button--colored.mdl-js-button.close(type='button') Cancel
+        button.mdl-button.mdl-button--colored.mdl-js-button(type='button', onclick='settings.deleteStepItem("' + step.id + '", "' + item.id + '")') Delete
+  script dialogPolyfill.registerDialog(document.getElementbyId("image-delete-#{step.id}"));
+p: button.mdl-button.mdl-button--colored.mdl-js-button(action='#', onclick='nav.setContent("/studies/' + surveyId + '/tasks", noCompletion)') Back

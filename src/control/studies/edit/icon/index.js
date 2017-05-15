@@ -64,7 +64,7 @@ class Icon extends Controller {
           formLimit: opts.uploadSizeLimit
         }),
         async (ctx, next) => {
-      await self.uploadIcon(ctx, next);
+      await self.uploadIcon(ctx, next, true);
     });
   }
 
@@ -166,8 +166,9 @@ class Icon extends Controller {
    *
    * @param {Context} ctx - Koa context
    * @param {Function} next - The next handler to proceed to after processing is complete
+   * @param {boolean} uopdateSurvey - true if survey should be updated with uploaded icon
    */
-  async uploadIcon(ctx: any, next: Function) {
+  async uploadIcon(ctx: any, next: Function, updateSurvey: boolean) {
     var self: Icon = this;
     var studyId: string = ctx.params.id;
     var bearer: string = ctx.cookies.get('bearer');
@@ -179,7 +180,20 @@ class Icon extends Controller {
       if (!ctx.request.body.files) throw "Missing files";
       var file: ?KoaBodyFile = ctx.request.body.files.file;
       if (!file) throw "Missing file";
-      if (file.type != "image/png") throw "Unsupported file type";
+      var extension: ?string;
+      switch (file.type) {
+        case "image/png":
+          extension = ".png";
+          break;
+        case "image/jpeg":
+          extension = ".jpg";
+          break;
+        case "application/pdf":
+          extension = ".pdf";
+          break;
+        default:
+          throw "Unsupported file type";
+      }
       var filename: string = file.path;
 
       // Verify that survey belongs to user before performing any file operations
@@ -208,7 +222,7 @@ class Icon extends Controller {
 
         await access(filename, fs.R_OK).then(
           async () => {
-            var targetName: string = uuid.v1() + ".png";
+            var targetName: string = uuid.v1() + extension;
 
             /* Create a folder with format <prefix>/aa/bb/ given a uuid
              * aabbccdd-xxxx-xxxx-xxxx-xxxxxxxxxxxx to attempt to ensure that
@@ -231,25 +245,34 @@ class Icon extends Controller {
                   targetName.substr(2, 2) + "/" +
                   targetName;
 
-                if (!survey) throw "Missing survey";
-                survey.icon = iconPath;
+                if (updateSurvey) {
+                  if (!survey) throw "Missing survey";
+                  survey.icon = iconPath;
 
-                await request({
-                  uri: 'http://' + self.opts.resourceServer + '/v1.0.M1/surveys',
-                  method: 'POST',
-                  headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + bearer,
-                    'Content-Type': 'application/json'
-                  },
-                  resolveWithFullResponse: true,
-                  body: JSON.stringify(survey)
-                }).then(function (response) {
-                  ctx.status = response.statusCode;
+                  await request({
+                    uri: 'http://' + self.opts.resourceServer + '/v1.0.M1/surveys',
+                    method: 'POST',
+                    headers: {
+                      'Accept': 'application/json',
+                      'Authorization': 'Bearer ' + bearer,
+                      'Content-Type': 'application/json'
+                    },
+                    resolveWithFullResponse: true,
+                    body: JSON.stringify(survey)
+                  }).then(function (response) {
+                    ctx.status = response.statusCode;
+                    ctx.type = 'application/json';
+                    ctx.body = JSON.stringify({
+                      path: iconPath
+                    });
+                  });
+                } else {
+                  ctx.status = 201;
+                  ctx.type = 'application/json';
                   ctx.body = JSON.stringify({
                     path: iconPath
                   });
-                });
+                }
               }
             );
           }

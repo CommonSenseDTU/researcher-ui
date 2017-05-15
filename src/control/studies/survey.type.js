@@ -23,7 +23,8 @@ export type ConsentDocument = {
 export type StepItem = {
   id: string,
   format: string,
-  question: string
+  question: ?string,
+  src: ?string
 }
 
 export type Step = {

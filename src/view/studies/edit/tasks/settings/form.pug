@@ -8,26 +8,7 @@ form(action='', onsubmit='')
     input(type='radio', name='private', value='false', onchange='settings.setFormPrivate("' + step.id + '", false)')
     | No
     br
-  p Which sensors should be running in the background while this form is shown?
-  p
-    input(type='checkbox', name='sensors', value='gps', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
-    | Location
-    br
-    input(type='checkbox', name='sensors', value='motion', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
-    | Motion
-    br
-    input(type='checkbox', name='sensors', value='accel', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
-    | Accelerometer
-    br
-    input(type='checkbox', name='sensors', value='gyro', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
-    | Gyroscope
-    br
-    input(type='checkbox', name='sensors', value='audio', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
-    | Audio recorder
-    br
-    input(type='checkbox', name='sensors', value='blescan', onchange='settings.toggleSensorEnabled("' + step.id + '", this)')
-    | Bluetooth device scanner
-    br
+  include sensors.pug
 
 h4 Form Items
 button.mdl-button.mdl-button--colored.mdl-js-button(id='addtask') Add new form item

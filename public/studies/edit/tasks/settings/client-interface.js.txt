@@ -63,7 +63,7 @@ declare class Controller {
    *
    * @param {string} stepId - the step which should be advanced to.
    */
-  advance(stepId?: string);
+  advance(stepId: ?string);
 
   /**
    * Replace the view of the current step with the given html.
@@ -98,7 +98,7 @@ declare class Controller {
   setActiveSensors(sensors: string[]);
 
   /**
-   * Set configration parameters for a named sensor.
+   * Set configuration parameters for a named sensor.
    * The configuration parameters depends on the sensor.
    *
    * @param {string} sensor - the name of the sensor
